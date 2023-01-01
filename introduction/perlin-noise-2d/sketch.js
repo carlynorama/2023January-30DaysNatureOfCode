@@ -5,7 +5,7 @@ let inc = 0.01;
 function setup() {
   createCanvas(200, 200);
   pixelDensity(1);
-  noiseDetail(8, 0.5);
+  noiseDetail(4, 0.5);
 }
 
 function draw() {
@@ -28,5 +28,5 @@ function draw() {
     yoff += inc;
   }
   updatePixels();
-  //noLoop();
+  noLoop();
 }
