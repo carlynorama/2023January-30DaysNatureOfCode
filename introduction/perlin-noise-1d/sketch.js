@@ -10,8 +10,10 @@ function setup() {
 function draw() {
   background(51);
 
+
+
   //sin wave generator.
-  stroke(255);
+  stroke(0, 0, 255);
   noFill();
   beginShape();
   yoff = start;
@@ -24,10 +26,11 @@ function draw() {
   }
   endShape();
 
-  start += inc;
+  // -> do this once below
+  //start += inc;
 
   //One dimensional terain generator.
-  stroke(255);
+  stroke(255, 0, 0);
   noFill();
   beginShape();
   yoff = start;
@@ -36,6 +39,25 @@ function draw() {
     var y = noise(yoff) * height;
 
     vertex(x, y);
+    yoff += inc;
+  }
+  endShape();
+
+  //ADD the two.
+  stroke(255);
+  noFill();
+  beginShape();
+  yoff = start;
+  for (let x = 0; x < width; x++) {
+    let n = map(noise(yoff), 0, 1, -50, 50);
+    let s = map(sin(yoff), -1, 1, 50, height-50);  //compress it a little s y fits.
+    let y = s + n;
+
+    // let y = random(height);
+    // let y = height / 2 + sin(xoff) * height / 2;
+    // let y = noise(xoff) * 100 + height / 2 + sin(xoff) * height / 2;
+    vertex(x, y);
+
     yoff += inc;
   }
   endShape();
