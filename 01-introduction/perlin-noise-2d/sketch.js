@@ -33,5 +33,6 @@ function draw() {
   }
   start += inc;
   updatePixels();
-  //noLoop();
+  //pulls a lot of power when loop runs but the clouds will drift. 
+  noLoop();
 }
