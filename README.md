@@ -14,10 +14,14 @@ I will likely move some of the more successful sketches over there, but much of 
 Misc Coding Train / Shiffman Links
 - https://www.youtube.com/@TheCodingTrain
 - https://shiffman.net/
--
 
 
 ## Why all the HTML files?
 
+p5js is web embeddable focused, so why not build this as a website?
 
-`python3 -m http.server`
+I cd into the the directory that has this repo and do `python3 -m http.server` to navigate through it on my home computer. 
+
+## What static site generator are you using?
+
+Nothing yet. All hand coded. Pretty obvious from how rough it is!
