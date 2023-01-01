@@ -1,33 +1,47 @@
-//https://editor.p5js.org/codingtrain/sketches/N-qqe1ExZ
+// Daniel Shiffman
+// http://codingtra.in
+// https://youtu.be/bqF9w9TTfeo
+// https://thecodingtrain.com/CodingChallenges/053-random-walk-levy.html
 
-let x;
-let y;
+//Compare to:
+// https://editor.p5js.org/codingtrain/sketches/L24X90MBH
+
+let pos;
+let prev;
 
 function setup() {
   createCanvas(400, 400);
-  x = width / 2;
-  y = height / 2;
+  pos = createVector(width/2, height/2);
+  prev = pos.copy();
   background(51);
 }
 
-
 function draw() {
-  stroke(255, 100);
-  strokeWeight(2);
-  point(x, y);
-  const r = floor(random(4));
-  switch (r) {
-    case 0:
-      x = x + 1;
-      break;
-    case 1:
-      x = x - 1;
-      break;
-    case 2:
-      y = y + 1;
-      break;
-    case 3:
-      y = y - 1;
-      break;
+
+  stroke(0,0,255);
+  strokeWeight(9);
+  point(pos.x, pos.y);
+
+  stroke(255);
+strokeWeight(1);
+  line(pos.x, pos.y, prev.x, prev.y);
+  prev.set(pos);
+
+  var step = p5.Vector.random2D();
+
+  var r = random(100);
+  if (r < 1) {
+    step.mult(random(25, 100));
+  } else {
+    step.setMag(2);
   }
+
+  pos.add(step);
+  //shunts it back to the middle if off screen
+  if (pos.x < width && pos.x > 0 && pos.y < height && pos.y > 0) {
+    //do nothing... what is the sytax for not again?
+  } else {
+    pos = createVector(width/2, height/2);
+  }
+
 }
