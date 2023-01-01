@@ -13,7 +13,7 @@ function draw() {
 
 
   //sin wave generator.
-  stroke(0, 0, 255);
+  stroke(0, 204, 204);
   noFill();
   beginShape();
   yoff = start;
@@ -30,7 +30,7 @@ function draw() {
   //start += inc;
 
   //One dimensional terain generator.
-  stroke(255, 0, 0);
+  stroke(204, 204, 0);
   noFill();
   beginShape();
   yoff = start;

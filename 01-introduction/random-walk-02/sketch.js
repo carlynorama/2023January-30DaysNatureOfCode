@@ -18,12 +18,13 @@ function setup() {
 
 function draw() {
 
-  stroke(0,0,255);
-  strokeWeight(9);
-  point(pos.x, pos.y);
+  stroke(0,204,204);
+  strokeWeight(1);
+  fill(204,204,204);
+  circle(pos.x, pos.y, 9,9);
 
   stroke(255);
-strokeWeight(1);
+  strokeWeight(3);
   line(pos.x, pos.y, prev.x, prev.y);
   prev.set(pos);
 

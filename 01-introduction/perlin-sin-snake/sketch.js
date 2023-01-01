@@ -11,7 +11,9 @@ function draw() {
   background(51);
 
   //ADD the two.
-  stroke(255);
+  //stroke(204, 0, 204);
+  //stroke(204, 102, 0);
+  stroke(204, 204, 0);
   noFill();
   beginShape();
   yoff = start;

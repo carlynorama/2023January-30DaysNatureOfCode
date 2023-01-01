@@ -12,7 +12,7 @@ function setup() {
 
 
 function draw() {
-  stroke(255, 100);
+  stroke(255, 255, 255, 10);
   strokeWeight(2);
   point(x, y);
   const r = floor(random(4));
