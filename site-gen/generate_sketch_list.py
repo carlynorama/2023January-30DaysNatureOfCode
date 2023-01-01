@@ -5,7 +5,7 @@ import sys
 import os
 
 #one level only. for recursive use os.walk.
-def getDirectoryNames(directory):
+def get_directory_names(directory):
     folder_names = []
     for entry_name in os.listdir(directory):
         entry_path = os.path.join(directory, entry_name)
@@ -16,7 +16,7 @@ def getDirectoryNames(directory):
     return folder_names
 
 def list(directory):
-    folder_names = getDirectoryNames(directory)
+    folder_names = get_directory_names(directory)
     markdown_file_name = directory + '/' + 'directory_list.md'
     html_file_name = directory + '/' + 'directory-list.html'
     with open(markdown_file_name, 'bw+') as f:
