@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 
-#https://www.digitalocean.com/community/tutorials/how-to-use-python-markdown-to-convert-markdown-text-to-html
-# python --version     <-- if not 3 add the three
-# python3 --version
-# python3 -m pip --version
-# python3 -m pip install markdown
-
 import markdown
 import sys
 
