@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
 
-#https://www.digitalocean.com/community/tutorials/how-to-use-python-markdown-to-convert-markdown-text-to-html
-# python --version     <-- if not 3 add the three
-# python3 --version
-# python3 -m pip --version
-# python3 -m pip install markdown
-
 import markdown
 import sys
 import os
 
-#one level only. for recursive use walk.
+#one level only. for recursive use os.walk.
 def getDirectoryNames(directory):
     folder_names = []
     for entry_name in os.listdir(directory):
