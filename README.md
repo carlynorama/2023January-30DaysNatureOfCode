@@ -9,19 +9,23 @@ One way to do this would be the use the fabulous editors:
 - https://p5js.org
 - https://openprocessing.org/
 
-I will likely move some of the more successful sketches over there, but much of this code already lives there, I'm following along with videos after all.
+The meat of much of this code already lives there in Coding Train accounts.
 
-Misc Coding Train / Shiffman Links
+- https://editor.p5js.org/codingtrain/
+
+## Misc Other Resources
 - https://www.youtube.com/@TheCodingTrain
+- https://thecodingtrain.com
 - https://shiffman.net/
+- https://github.com/nature-of-code <- includes syllabus for course taught at NYU/ITP
 
 
 ## Why all the HTML files?
 
 p5js is web embeddable focused, so why not build this as a website?
 
-I cd into the the directory that has this repo and do `python3 -m http.server` to navigate through it on my home computer. 
+I cd into the the directory that has this repo and do `python3 -m http.server` to navigate through it on my home computer.
 
-## What static site generator are you using?
+Nice side effect, it's immediately available as a website.
 
-Nothing yet. All hand coded. Pretty obvious from how rough it is!
+https://carlynorama.github.io/2023Genuary-NatureOfCode/
