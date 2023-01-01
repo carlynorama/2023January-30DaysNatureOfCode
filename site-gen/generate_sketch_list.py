@@ -17,12 +17,14 @@ def getDirectoryNames(directory):
 
 def list(directory):
     folder_names = getDirectoryNames(directory)
-    with open('directoryList.md', 'bw+') as f:
+    markdown_file_name = directory + '/' + 'directory_list.md'
+    html_file_name = directory + '/' + 'directory-list.html'
+    with open(markdown_file_name, 'bw+') as f:
         for i,item in enumerate(folder_names):
             f.write('{}. [{}]({})\n'.format(i+1,item,item).encode('utf-8'))
         f.seek(0)
-        markdown.markdownFromFile(input=f, output='directoryList.html')
-    with open('directoryList.html', 'ab') as f:
+        markdown.markdownFromFile(input=f, output=html_file_name)
+    with open(html_file_name, 'ab') as f:
         f.write("\n\n".encode('utf-8'))
         f.write('<div class="grid-container">\n'.encode('utf-8'))
         for item in folder_names:
