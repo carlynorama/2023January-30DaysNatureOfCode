@@ -1,10 +1,12 @@
 class Mover {
-  constructor(x, y) {
+  constructor(x, y, c) {
     this.startx = x;
     this.starty = y;
     this.pos = createVector(x, y);
     this.diameter = random(10, 30);
     this.mass = this.diameter/3;
+    this.color = c;
+    this.color.setAlpha(map(this.diameter, 10, 30, 50, 5));
 
     this.acceleration = p5.Vector.random2D();
 
@@ -33,7 +35,7 @@ class Mover {
   }
 
   clearExternalForces(force) {
-    this.acceleration = p5.Vector.random2D();
+    this.acceleration = p5.Vector.random2D().div(this.mass);
     //this.acceleration.setMag(0.01);
   }
 
@@ -50,7 +52,7 @@ class Mover {
   }
 
   render() {
-    fill(255,255,255,15);
+    fill(this.color);
     noStroke();
     //strokeWeight(2);
     ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
