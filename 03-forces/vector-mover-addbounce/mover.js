@@ -5,11 +5,8 @@ class Mover {
     this.pos = createVector(x, y);
     this.diameter = random(10, 30);
 
-    this.hlowerBound = 0;
-    this.hupperBound = width;
-
-    this.vlowerBound = 0;
-    this.vupperBound = height;
+    this.hBounds = createVector(0, width);
+    this.vBounds = createVector(0, height);
 
     this.velocity = p5.Vector.random2D().mult(random(3));
   }
@@ -20,16 +17,24 @@ class Mover {
 
     this.velocity.add(this.acceleration);
     this.velocity.limit(2);   //<--- relative to this changes quality of motion
-
-    if ((this.pos.x > this.hupperBound) || (this.pos.x  < this.hlowerBound)) {
-        this.velocity.x = this.velocity.x * -1;
-    }
-    if ((this.pos.y > this.vupperBound) || (this.pos.y  < this.vlowerBound)) {
-        this.velocity.y = this.velocity.y * -1;
-    }
+    //console.log(this.velocity);
+    this.velocity = this.checkEdges(this.pos, this.velocity, this.hBounds, this.vBounds);
+    //console.log(this.velocity);
 
     this.pos.add(this.velocity);
 
+  }
+
+  checkEdges(position, velocity, hBounds, vBounds) {
+    let newVelocity = createVector(velocity.x, velocity.y);
+
+    if ((position.x < hBounds.x) || (position.x > hBounds.y)) {
+        newVelocity.x = newVelocity.x * -1;
+    }
+    if ((position.y < vBounds.x) || (position.y > vBounds.y)) {
+        newVelocity.y = newVelocity.y * -1;
+    }
+    return newVelocity
   }
 
   render() {
