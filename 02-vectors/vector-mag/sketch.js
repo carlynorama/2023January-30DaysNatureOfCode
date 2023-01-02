@@ -1,15 +1,15 @@
 function setup() {
 
   let canvas = createCanvas(400, 400);
-  canvas.mousePressed(doStuff);
+  //canvas.mousePressed(doStuff);
   background(51);
   canvas.mouseOver(run);
   canvas.mouseOut(stop);
 }
 
-function doStuff() {
-  console.log('clicked on canvas');
-}
+// function doStuff() {
+//   console.log('clicked on canvas');
+// }
 
 function run() {
   if (runFlag == false) {
