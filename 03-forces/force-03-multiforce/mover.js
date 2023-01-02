@@ -9,9 +9,9 @@ class Mover {
     this.color.setAlpha(map(this.diameter, 10, 30, 255, 50));
 
     this.acceleration = p5.Vector.random2D();
-
-    this.hBounds = createVector(0, width);
-    this.vBounds = createVector(0, height);
+    let r = this.diameter/2
+    this.hBounds = createVector(0 + r, width - r);
+    this.vBounds = createVector(0 + r, height - r);
 
     this.velocity = p5.Vector.random2D().mult(random(3));
   }
@@ -35,7 +35,9 @@ class Mover {
   }
 
   clearExternalForces(force) {
-    this.acceleration = p5.Vector.random2D().div(this.mass);
+    //tmp - no internal motivation
+    this.acceleration = createVector(0,0);
+    //this.acceleration = p5.Vector.random2D().div(this.mass);
     //this.acceleration.setMag(0.01);
   }
 
