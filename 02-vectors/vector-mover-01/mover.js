@@ -1,22 +1,23 @@
-class Walker {
+class Mover {
   constructor(x, y, s) {
     this.startx = x;
     this.starty = y;
     this.pos = createVector(x, y);
     this.diameter = random(10, 30);
-    this.velocity = createVector(s*this.diameter, -s*this.diameter);
+
+    this.velocity = p5.Vector.random2D().mult(random(this.diameter));
+
     //this.speed = s*this.diameter;
   }
 
   update() {
-    //old way
-    //this.pos.x = this.pos.x + random(-this.speed, this.speed);
-    //this.pos.y = this.pos.y + random(-this.speed, this.speed);
-    this.pos.add(this.velocity);
-    //also
-    //newPos = p5.Vector.add(pos, velocity)
+    this.acceleration = p5.Vector.random2D();
+    //this.acceleration.setMag(0.01);
 
-    //Hotel California the walker.
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(2);
+    this.pos.add(this.velocity);
+
     if (this.pos.x < width && this.pos.x > 0 && this.pos.y < height && this.pos.y > 0) {
       //do nothing... what is the sytax for not again?
     } else {

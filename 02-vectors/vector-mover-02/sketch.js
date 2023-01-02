@@ -2,7 +2,7 @@ let mover;
 
 function setup() {
   createCanvas(400, 400);
-  mover = new Mover(200, 200, 0.8);
+  mover = new Mover(0, 0);
   background(51);
 }
 
