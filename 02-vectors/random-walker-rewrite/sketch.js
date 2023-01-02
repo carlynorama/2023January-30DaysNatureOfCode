@@ -19,6 +19,9 @@ function setup() {
   let canvas = createCanvas(400, 400);
   canvas.mouseOver(run);
   canvas.mouseOut(stop);
+
+
+
   walker = new Walker(200, 200, 0.8);
   background(51);
 }
