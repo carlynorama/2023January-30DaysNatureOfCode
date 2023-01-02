@@ -31,7 +31,8 @@ class Mover {
   }
 
   applyForce(force) {
-    this.acceleration.add(force.div(this.mass));
+    let f = p5.Vector.div(force, this.mass);
+    this.acceleration.add(f);
   }
 
   clearExternalForces(force) {

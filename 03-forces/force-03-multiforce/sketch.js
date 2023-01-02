@@ -20,7 +20,7 @@ function draw() {
     let wind = createVector(0.5,0);
     let gravity = createVector(0,0.1);
     background(51);
-    
+
     if (mouseIsPressed) {
       movers.forEach(mover => {
         mover.applyForce(wind);
@@ -33,7 +33,8 @@ function draw() {
     }
 
     movers.forEach(mover => {
-      mover.applyForce(gravity);
+      let weight = p5.Vector.mult(gravity, mover.mass);
+      mover.applyForce(weight);
       mover.update();
       mover.render();
     });

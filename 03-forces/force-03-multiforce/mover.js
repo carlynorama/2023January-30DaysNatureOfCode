@@ -3,22 +3,28 @@ class Mover {
     this.startx = x;
     this.starty = y;
     this.pos = createVector(x, y);
-    this.diameter = random(10, 30);
-    this.mass = this.diameter/3;
-    this.color = c;
-    this.color.setAlpha(map(this.diameter, 10, 30, 255, 50));
 
-    this.acceleration = p5.Vector.random2D();
+    this.diameter = random(10, 30);
+    this.mass = map(this.diameter, 10, 30, 20, 40);
+    this.color = c;
+    this.color.setAlpha(map(this.diameter, 10, 30, 200, 10));
+    //this.color.setAlpha(10);
+
+    //this.acceleration = p5.Vector.random2D(); //<--- confuses the phyics
+    this.velocity = createVector(0,0);//p5.Vector.random2D().mult(random(3));
+    this.acceleration = createVector(0,0);
+
+    //BOUNDS
     let r = this.diameter/2
     this.hBounds = createVector(0 + r, width - r);
     this.vBounds = createVector(0 + r, height - r);
 
-    this.velocity = p5.Vector.random2D().mult(random(3));
+
   }
 
   update() {
 
-    //this.acceleration.setMag(0.01); //<--- changeing this
+    this.acceleration.setMag(0.01); //<--- changeing this
 
     this.velocity.add(this.acceleration);
     this.velocity.limit(2);   //<--- relative to this changes quality of motion
@@ -31,7 +37,8 @@ class Mover {
   }
 
   applyForce(force) {
-    this.acceleration.add(force.div(this.mass));
+    let f = p5.Vector.div(force, this.mass);
+    this.acceleration.add(f);
   }
 
   clearExternalForces(force) {
@@ -45,10 +52,10 @@ class Mover {
     let newVelocity = createVector(velocity.x, velocity.y);
 
     if ((position.x < hBounds.x) || (position.x > hBounds.y)) {
-        newVelocity.x = newVelocity.x * -1.2;
+        newVelocity.x = newVelocity.x * -1;
     }
     if ((position.y < vBounds.x) || (position.y > vBounds.y)) {
-        newVelocity.y = newVelocity.y * -1.2;
+        newVelocity.y = newVelocity.y * -1;
     }
     return newVelocity
   }
