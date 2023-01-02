@@ -10,6 +10,8 @@ class Walker {
   update() {
     this.pos.x = this.pos.x + random(-this.speed, this.speed);
     this.pos.y = this.pos.y + random(-this.speed, this.speed);
+
+    //keep it in bounds
     if (this.pos.x < width && this.pos.x > 0 && this.pos.y < height && this.pos.y > 0) {
       //do nothing... what is the sytax for not again?
     } else {
