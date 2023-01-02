@@ -1,8 +1,8 @@
 
 runFlag = true;
 
-function setup() {
-  let canvas = createCanvas(400, 400);
+function createControlledCanvas(x ,y) {
+  let canvas = createCanvas(x, y);
   //let myParent = canvas.parent();
   let selection = select('#embedded-p5js');
   if (selection) {
@@ -14,6 +14,10 @@ function setup() {
     console.log("I am not embedded");
     runFlag = true;
   }
+}
+
+function setup() {
+  createControlledCanvas(400,400);
   //let grandParent = myParent.parent();
   //console.log(myParent);
 
