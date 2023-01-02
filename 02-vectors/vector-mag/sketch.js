@@ -1,10 +1,36 @@
 function setup() {
-  createCanvas(400, 400);
+
+  let canvas = createCanvas(400, 400);
+  canvas.mousePressed(doStuff);
   background(51);
+  canvas.mouseOver(run);
+  canvas.mouseOut(stop);
 }
 
+function doStuff() {
+  console.log('clicked on canvas');
+}
+
+function run() {
+  if (runFlag == false) {
+    console.log('running');
+    runFlag = true;
+  }
+}
+
+function stop() {
+  if (runFlag == true) {
+    console.log('stopping');
+    runFlag = false;
+  }
+}
+
+let runFlag = true;
 function draw() {
   //background(51);
+  if (runFlag) {
+
+
   translate(width/2, height/2);
   strokeWeight(4);
 
@@ -29,4 +55,6 @@ function draw() {
 
   stroke(102, 51, 204, 255);
   line(0,0,n.x, n.y);
+  }
+
 }
