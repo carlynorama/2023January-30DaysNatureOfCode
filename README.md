@@ -1,4 +1,4 @@
-# 2023 Genuary Project
+# 2023 January Project
 
 There is an official [Genuary](https://genuary.art) process that involves lots of really cool prompts, etc, but I'm too rusty. What better way to get back into the creative coding groove than follow along with Daniel Shiffman's Nature of Code 2 playlist?
 
