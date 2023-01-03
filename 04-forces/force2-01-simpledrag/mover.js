@@ -85,7 +85,8 @@ class Mover {
   applyDrag(rho) {
     let inverseVelocity = this.velocity.copy().mult(-1);
     let magSqr = inverseVelocity.magSq();
-    let c = rho * this.dragNumber
+    inverseVelocity.normalize();
+    let c = rho * this.dragNumber;
     let drag = inverseVelocity.mult(c*magSqr);
     this.acceleration.add(drag);
   }
