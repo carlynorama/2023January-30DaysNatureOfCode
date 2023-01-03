@@ -52,7 +52,7 @@ class Mover {
     }
 
 
-    this.applyGravity();
+    //this.applyGravity();
     this.velocity.add(this.acceleration);
 
     this.pos.add(this.velocity);
@@ -129,8 +129,6 @@ class Mover {
   render() {
     fill(this.color);
     stroke(153);
-    //strokeWeight(2);
     ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
-    //ellipse(this.x, this.y, this.diameter, this.diameter);
   }
 }

@@ -23,10 +23,8 @@ function draw() {
     let color1 = color(204, 204, 0, 255);
     let color2 = color(0, 204, 204, 255);
     let color3 = color(204);
-    
-    let wind = createVector(0.5,0);
 
-    //let gravity = createVector(0,0.1);
+    let wind = createVector(0.5,0);
 
     background(51);
 
@@ -49,7 +47,11 @@ function draw() {
         } else {
         mover.color = color1;
        }
-
+       
+      //mover knows its weight, but so not have to claculate it every loop
+      //if is a stored property.
+      //if gravity changes use updateGravity();
+      mover.applyGravity();
       mover.update();
       mover.render();
     });
