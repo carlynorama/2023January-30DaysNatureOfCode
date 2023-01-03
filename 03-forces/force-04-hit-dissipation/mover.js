@@ -18,8 +18,8 @@ class Mover {
     this.hBounds = createVector(r, width - r);
     this.vBounds = createVector(r, height - r);
 
+    //WORLD PROFILE
     this.wallDeceleration = 0.95;
-
   }
 
   update() {
