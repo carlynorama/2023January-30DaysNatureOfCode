@@ -1,13 +1,13 @@
 class Mover {
-  constructor(x, y, c) {
-    this.startx = x;
-    this.starty = y;
+  constructor(x, y, m, c) {
+    // this.startx = x;
+    // this.starty = y;
     this.pos = createVector(x, y);
 
-    this.diameter = random(10, 30);
-    this.mass = map(this.diameter, 10, 30, 20, 40);
+    this.mass = m;
+    let r = sqrt(this.mass) * 10;
+    this.diameter = r*2;
     this.color = c;
-    this.color.setAlpha(map(this.diameter, 10, 30, 200, 10));
     //this.color.setAlpha(10);
 
     //this.acceleration = p5.Vector.random2D(); //<--- confuses the phyics
@@ -15,25 +15,28 @@ class Mover {
     this.acceleration = createVector(0,0);
 
     //BOUNDS
-    let r = this.diameter/2
-    this.hBounds = createVector(0 + r, width - r);
-    this.vBounds = createVector(0 + r, height - r);
+    this.hBounds = createVector(r, width - r);
+    this.vBounds = createVector(r, height - r);
 
 
   }
 
   update() {
-
-    this.acceleration.setMag(0.01); //<--- changeing this
+    this.velocity = this.checkEdges(this.pos, this.velocity, this.hBounds, this.vBounds);
+    if (this.pos.y < this.vBounds.x) {
+      this.pos.y = this.vBounds.x
+    } else if (this.pos.y > this.vBounds.y) {
+      this.pos.y = this.vBounds.y
+    }
+    if (this.pos.x < this.hBounds.x) {
+      this.pos.x = this.hBounds.x
+    } else if (this.pos.x > this.hBounds.y) {
+      this.pos.x = this.hBounds.y
+    }
 
     this.velocity.add(this.acceleration);
-    this.velocity.limit(2);   //<--- relative to this changes quality of motion
-    //console.log(this.velocity);
-    this.velocity = this.checkEdges(this.pos, this.velocity, this.hBounds, this.vBounds);
-    //console.log(this.velocity);
-
     this.pos.add(this.velocity);
-
+    this.clearExternalForces();
   }
 
   applyForce(force) {
@@ -41,9 +44,11 @@ class Mover {
     this.acceleration.add(f);
   }
 
-  clearExternalForces(force) {
+  clearExternalForces() {
     //tmp - no internal motivation
-    this.acceleration = createVector(0,0);
+    //this.acceleration = createVector(0,0);
+    this.acceleration.set(0,0);
+
     //this.acceleration = p5.Vector.random2D().div(this.mass);
     //this.acceleration.setMag(0.01);
   }
