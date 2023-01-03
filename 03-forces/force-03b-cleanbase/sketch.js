@@ -3,6 +3,8 @@ let numMovers = 12;
 
 function setup() {
   createControlledCanvas(400, 400);
+  background(51);
+
   let color1 = color(204, 204, 0, 255);
   let color2 = color(0, 204, 204, 255);
   for (let i = 0; i < numMovers; i++) {
