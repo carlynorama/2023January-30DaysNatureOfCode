@@ -68,8 +68,6 @@ class Mover {
   render() {
     fill(this.color);
     noStroke();
-    //strokeWeight(2);
     ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
-    //ellipse(this.x, this.y, this.diameter, this.diameter);
   }
 }
