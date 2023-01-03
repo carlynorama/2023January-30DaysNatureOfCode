@@ -87,10 +87,9 @@ class Mover {
     let friction = this.velocity.copy().normalize().mult(-1);
     let weightMu = this.weight.copy().mult(mu);
 
+    //(TODO:explain reasons here for not using dot product) 
     friction.x *= weightMu.y;
     friction.y *= weightMu.x;
-    //horizontal lines don't apply y friction
-
 
     this.acceleration.add(friction);
   }
