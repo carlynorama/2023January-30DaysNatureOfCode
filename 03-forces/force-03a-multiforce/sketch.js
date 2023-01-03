@@ -10,7 +10,7 @@ function setup() {
   //mover1 = new Mover(200, 200, color1);
   //mover2 = new Mover(200, 200, color2);
   for (let i = 0; i < numMovers; i++) {
-    movers[i] = new Mover(200, 200, color1);
+    movers[i] = new Mover(200, 200, color2);
   }
 
 }
