@@ -5,10 +5,11 @@ function setup() {
   createControlledCanvas(400, 400);
   background(51);
 
-  let color1 = color(153, 255, 102, 200);
-  let color2 = color(0, 204, 255, 200);
-  //mover1 = new Mover(200, 200, color1);
-  //mover2 = new Mover(200, 200, color2);
+  //let color1 = color(153, 255, 102, 200);
+  //let color2 = color(0, 204, 255, 200);
+  let color1 = color(204, 204, 0, 200);
+  let color2 = color(0, 204, 204, 200);
+
   for (let i = 0; i < numMovers; i++) {
     if (i % 2 == 0) {
       console.log('even');
