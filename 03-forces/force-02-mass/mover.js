@@ -6,7 +6,7 @@ class Mover {
     this.diameter = random(10, 30);
     this.mass = this.diameter/3;
     this.color = c;
-    this.color.setAlpha(map(this.diameter, 10, 30, 50, 5));
+    this.color.setAlpha(map(this.diameter, 10, 30, 40, 5));
 
     this.acceleration = p5.Vector.random2D();
 
