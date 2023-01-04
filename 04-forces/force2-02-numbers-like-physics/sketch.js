@@ -9,14 +9,8 @@ let sandRho = liquidRho * 10000000;
 
 //multiply v every round. TODO: Move this into drag function.
 //energy lost due to drag=𝐅𝐝𝐫𝐚𝐠⋅displacement which is volume.
-// let energyDissapationAir = 1.0;
-// let energyDissapationLiquid = 0.001;
-// let energyDissapationTransition = 0.00001;
-// let energyDissapationSand = 0.0000000001;
-
 let energyDissapationAir = 1.0;
 let energyDissapationLiquid = 0.001;
-let energyDissapationTransition = 0.00001;
 let energyDissapationSand = 0.0000000001;
 
 
@@ -29,7 +23,7 @@ function setup() {
   background(51);
   let gravity = createVector(0,9.8);
   for (let i = 0; i < numMovers; i++) {
-    movers[i] = new Mover(random(0, width), 0, random(0.0004,0.004), color2, gravity);
+    movers[i] = new Mover(random(0, width), 0, random(0.001,0.008), color2, gravity);
   }
 }
 
@@ -64,7 +58,7 @@ function draw() {
       if (mover.pos.y > height-(radius)) {
         mover.color = color2;
 
-        mover.velocity.y *= 1/(this.volume*energyDissapationSand);
+        mover.velocity.y *= energyDissapationSand;
         mover.applyDrag(sandRho);
 
         mover.applyReverseGravity(); //<-- this is a bit of a cheat.
@@ -75,7 +69,7 @@ function draw() {
         mover.color = color3;
         //energy dissipates in sound, etc. TODO RealEQ
         //rain drops do bounce on the surface, etc.
-        mover.velocity.y *= 1/(this.volume*energyDissapationLiquid);
+        mover.velocity.y *= energyDissapationLiquid;
         mover.applyDrag(liquidRho);
         //console.log("liquid:", mover.velocity.y)
       }
@@ -96,15 +90,15 @@ function draw() {
 
         let drag = airPercent*airRho + liquidPercent*liquidRho;
 
-        mover.velocity.y *= 1/(this.volume*energyDissapationLiquid);
+        mover.velocity.y *= energyDissapationLiquid;
         mover.applyDrag(drag);
         //console.log("transistion:", mover.velocity.y, airPercent, drag)
       }
       //default air.
       else {
-        console.log("air:", mover.velocity.y)
+        //console.log("air:", mover.velocity.y)
         mover.color = color1;
-        mover.velocity.y *= 1/(this.volume*energyDissapationAir);
+        mover.velocity.y *= energyDissapationAir;
         mover.applyDrag(airRho);
       }
 

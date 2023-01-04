@@ -5,7 +5,7 @@ class Mover {
 
 
     this.mass = m;
-    let r = sqrt(this.mass) * 250;
+    let r = sqrt(this.mass) * 150;
     this.diameter = r*2;
     this.color = c;
 
