@@ -1,13 +1,11 @@
 class Mover {
   constructor(x, y, m, c, g) {
-    // this.startx = x;
-    // this.starty = y;
+
 
 
     this.mass = m;
-    let r = sqrt(this.mass) * 300;
+    let r = sqrt(this.mass) * 20;
     this.diameter = r*2;
-    //this.inflated = this.diameter * 20;
     this.color = c;
 
     //this.color.setAlpha(10);
@@ -15,6 +13,8 @@ class Mover {
     // if (y < r) {  y += r }
     this.pos = createVector(x, y);
     this.lastpos = createVector(x, y);
+
+
 
     //BOUNDS
     this.hBounds = createVector(r, width - r);
@@ -57,30 +57,7 @@ class Mover {
     this.acceleration.add(this.gravity.copy().mult(-1));
   }
 
-  dissipate(factor) {
-    this.velocity.y *= factor;
-  }
 
-  dissipate_experimental(factor) {
-    let mag = this.velocity.mag;
-    let dist = this.pos.dist(this.lastpos);
-    let energydiss = (this.volume * dist * factor)
-    if (mag > 0) {
-      newMag = mag - energydiss;
-      newMag = constrain(newMag, 0, 0.5)
-      this.velocity.setMag(newMag);
-    }
-  }
-  //
-  // dissipate_experimental() {
-  //   let mag = this.velocity.mag;
-  //   let dist = this.pos.dist(this.lastpos);
-  //   if (mag > 0) {
-  //     newMag = mag - (this.volume*dist*factor);
-  //     //newMag = constrain(newMag, 0, 1)
-  //     this.velocity.setMag(newMag);
-  //   }
-  // }
 
   update() {
 
@@ -107,11 +84,29 @@ class Mover {
     let magSqr = inverseVelocity.magSq();
     inverseVelocity.normalize();
     let c = rho * this.dragNumber * magSqr;
-    let drag = inverseVelocity.mult(c); //not a copy so drag is a ref
+    let drag = inverseVelocity.mult(c);
     this.acceleration.add(drag);
-    //remove energy?
-
   }
+
+
+  // dissipate(factor) {
+  //       this.velocity.setMag(this.velocity.mag*0.01);
+  // }
+
+  // dissipate(factor) {
+  //       this.velocity.setMag(this.velocity.mag*(1/factor));
+  // }
+
+    dissipate(factor) {
+      let mag = this.velocity.mag();
+      let dist = this.pos.dist(this.lastpos);
+      let energydiss = (this.volume * dist * factor)
+      if (mag > 0) {
+        let newMag = mag - energydiss;
+        newMag = constrain(newMag, 0, 0.5)
+        this.velocity.setMag(newMag);
+      }
+    }
 
 
 

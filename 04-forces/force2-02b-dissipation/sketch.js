@@ -14,14 +14,14 @@ let sandRho = liquidRho * 10000;
 // let energyDissapationTransition = 0.00001;
 // let energyDissapationSand = 0.00001;
 
-let energyDissapationAir = 10;
-let energyDissapationLiquid = 100;
-let energyDissapationTransition = 100;
-let energyDissapationSand = 1000.0;
+let energyDissapationAir = 1;
+let energyDissapationLiquid = 1;
+let energyDissapationTransition = 1;
+let energyDissapationSand = 1;
 
 
 function setup() {
-  frameRate(5);
+  frameRate(12);
   //let color1 = color(204, 204, 0, 255);
   let color2 = color(0, 204, 204, 255);
   //let color3 = color(204);
@@ -30,7 +30,7 @@ function setup() {
   background(51);
   let gravity = createVector(0,9.8);
   for (let i = 0; i < numMovers; i++) {
-    movers[i] = new Mover(random(0, width), 0, random(0.01,0.01), color2, gravity);
+    movers[i] = new Mover(random(0, width), 0, random(0.1,0.8), color2, gravity);
   }
 }
 
@@ -65,10 +65,10 @@ function draw() {
       if (mover.pos.y > height-(radius)) {
         mover.color = color2;
 
-        mover.dissipate_experimental(energyDissapationSand);
+        mover.dissipate(energyDissapationSand);
         mover.applyDrag(sandRho);
 
-        //mover.applyReverseGravity(); //<-- this is a bit of a cheat.
+        mover.applyReverseGravity(); //<-- this is a bit of a cheat.
         console.log("sand:", mover.velocity.y)
       }
       //fully in the liquid.
@@ -76,7 +76,7 @@ function draw() {
         mover.color = color3;
         //energy dissipates in sound, etc. TODO RealEQ
         //rain drops do bounce on the surface, etc.
-        mover.dissipate_experimental(energyDissapationLiquid);
+        mover.dissipate(energyDissapationLiquid);
         mover.applyDrag(liquidRho);
         console.log("liquid:", mover.velocity.y)
       }
@@ -97,7 +97,7 @@ function draw() {
 
         let drag = airPercent*airRho + liquidPercent*liquidRho;
 
-        mover.dissipate_experimental(energyDissapationTransition);
+        mover.dissipate(energyDissapationTransition);
         mover.applyDrag(drag);
         console.log("transistion:", mover.velocity.y, airPercent, drag)
       }
@@ -106,7 +106,7 @@ function draw() {
         console.log("air:", mover.velocity.y)
         mover.color = color1;
 
-        mover.dissipate_experimental(energyDissapationAir);
+        mover.dissipate(energyDissapationAir);
         mover.applyDrag(airRho);
       }
 
