@@ -5,7 +5,7 @@ class Mover {
 
 
     this.mass = m;
-    let r = sqrt(this.mass) * 10;
+    let r = sqrt(this.mass) * 250;
     this.diameter = r*2;
     this.color = c;
 
@@ -39,6 +39,7 @@ class Mover {
     this.crossSection = r*r*PI; //πr2
     //0.5 is the 1/2 from drag eq
     this.dragNumber =  this.crossSection * this.dragCo * 0.5;
+    this.volume = 4*PI*r*r*r/3;
   }
 
   updateGravity(gravity) {
@@ -78,8 +79,10 @@ class Mover {
     let magSqr = inverseVelocity.magSq();
     inverseVelocity.normalize();
     let c = rho * this.dragNumber * magSqr;
-    let drag = inverseVelocity.mult(c);
+    let drag = inverseVelocity.mult(c); //not a copy so drag is a ref
     this.acceleration.add(drag);
+    //remove energy?
+
   }
 
 
@@ -134,6 +137,6 @@ class Mover {
   render() {
     fill(this.color);
     stroke(153);
-    ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
+    ellipse(this.pos.x, this.pos.y, this.diameter*2);
   }
 }
