@@ -1,17 +1,17 @@
 class Mover {
-  constructor(x, y, m, c) {
+  constructor(x, y, vx, vy, m, c) {
     this.pos = createVector(x, y);
     this.mass = m;
     let r = sqrt(this.mass);
     this.diameter = r*2;
     this.color = c;
-    this.velocity = p5.Vector.random2D().mult(random(3));
+    this.velocity = createVector(vx,vy);
     this.acceleration = createVector(0,0);
   }
 
   update() {
     this.velocity.add(this.acceleration);
-    this.pos.add(this.velocity.copy().mult(0.2));
+    this.pos.add(this.velocity);
     this.clearForces();
   }
 
@@ -22,8 +22,8 @@ class Mover {
   //runge-kitta
   attract(mover) {
     let force = p5.Vector.sub(this.pos, mover.pos);
-    let distanceSq = constrain(force.magSq(), 25, 2000);
-    let G = 1;
+    let distanceSq = constrain(force.magSq(), 100, 1000);
+    let G = 0.1;
     let strength = G * (this.mass * mover.mass) / distanceSq;
     force.setMag(strength);
     mover.applyForce(force);
