@@ -8,7 +8,7 @@ function setup() {
   background(51);
 
   mover = new Mover(0,0,50,color1);
-  attractor = new Attractor(200,200,50,color2);
+  attractor = new Attractor(200,200,500,color2);
 
 }
 
