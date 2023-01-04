@@ -56,20 +56,6 @@ class Mover {
     this.acceleration.add(this.gravity.copy().mult(-1));
   }
 
-  dissipate(factor) {
-    this.velocity.y *= factor;
-  }
-
-  dissipate_experimental() {
-    let mag = this.velocity.mag;
-    let dist = this.pos.dist(this.lastpos);
-    if (mag > 0) {
-      newMag = mag - (this.volume*dist*factor);
-      //newMag = constrain(newMag, 0, 1)
-      this.velocity.setMag(newMag);
-    }
-  }
-
   update() {
 
     // this.velocity = this.checkEdges(this.pos, this.velocity, this.hBounds, this.vBounds, this.wallDeceleration);
