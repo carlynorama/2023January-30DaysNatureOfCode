@@ -1,9 +1,9 @@
 let movers = [];
-let NumMovers = 5;
+let numMovers = 5;
 
 function setup() {
   createCanvas(400, 400);
-  // for (let i = 0; i < NumMovers; i++) {
+  // for (let i = 0; i < numMovers; i++) {
   //   let x = random(width);
   //   let y = random(height);
   //   let v = p5.Vector.random2D();
