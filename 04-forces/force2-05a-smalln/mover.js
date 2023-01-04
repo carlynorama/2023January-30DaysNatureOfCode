@@ -1,33 +1,19 @@
-
+// Gravitational Attraction
+// The Nature of Code
+// The Coding Train / Daniel Shiffman
+// https://youtu.be/EpgB3cNhKPM
+// https://thecodingtrain.com/learning/nature-of-code/2.5-gravitational-attraction.html
+// https://editor.p5js.org/codingtrain/sketches/MkLraatd
 
 class Mover {
   constructor(x, y, vx, vy, m, c) {
     this.position = createVector(x, y);
+    this.velocity = createVector(vx, vy);
+    this.acceleration = createVector(0, 0);
     this.mass = m;
-    let r = sqrt(this.mass);
-    this.diameter = r*2;
+    this.r = sqrt(this.mass) * 2;
+    this.diameter = this.r * 2;
     this.color = c;
-    this.velocity = createVector(vx,vy);
-    this.acceleration = createVector(0,0);
-  }
-
-  update() {
-    this.velocity.add(this.acceleration);
-    this.pos.add(this.velocity.copy().mult(0.2));
-    this.clearForces();
-  }
-
-  //https://en.wikipedia.org/wiki/Gravitational_constant
-  //https://en.wikipedia.org/wiki/Two-body_problem
-  //leap frog
-  //verlet
-  //runge-kitta
-  attract(mover) {
-    let force = p5.Vector.sub(this.pos, mover.pos);
-    let distanceSq = constrain(force.magSq(), 25, 2000);
-    let strength = G * (this.mass * mover.mass) / distanceSq;
-    force.setMag(strength);
-    mover.applyForce(force);
   }
 
   applyForce(force) {
@@ -35,13 +21,24 @@ class Mover {
     this.acceleration.add(f);
   }
 
-  clearForces() {
-    this.acceleration.set(0,0);
+  attract(mover) {
+    let force = p5.Vector.sub(this.position, mover.position);
+    let distanceSq = constrain(force.magSq(), 100, 1000);
+    let G = 25;
+    let strength = (G * (this.mass * mover.mass)) / distanceSq;
+    force.setMag(strength);
+    mover.applyForce(force);
+  }
+
+  update() {
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    this.acceleration.set(0, 0);
   }
 
   render() {
     fill(this.color);
     stroke(153);
-    ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
+    ellipse(this.position.x, this.position.y, this.diameter);
   }
 }
