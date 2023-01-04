@@ -1,44 +1,58 @@
-// Derived from Gravitational Attraction
-// The Nature of Code
-// The Coding Train / Daniel Shiffman
-// https://youtu.be/EpgB3cNhKPM
-// https://thecodingtrain.com/learning/nature-of-code/2.5-gravitational-attraction.html
-// https://editor.p5js.org/codingtrain/sketches/MkLraatd
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
 
-class Mover {
-  constructor(x, y, vx, vy, m, c) {
-    this.position = createVector(x, y);
-    this.velocity = createVector(vx, vy);
-    this.acceleration = createVector(0, 0);
-    this.mass = m;
-    this.r = sqrt(this.mass) * 2;
-    this.diameter = this.r * 2;
-    this.color = c;
+class Size {
+  constructor(w, h) {
+    this.width = w;
+    this.height = h;
+  }
+}
+
+class Range {
+  constructor(l, u) {
+    this.lowerbounds = l;
+    this.upperbounds = u;
   }
 
-  applyForce(force) {
-    let f = p5.Vector.div(force, this.mass);
-    this.acceleration.add(f);
+  inclusiveContains() {
+
   }
 
-  attract(mover) {
-    let force = p5.Vector.sub(this.position, mover.position);
-    let distanceSq = constrain(force.magSq(), 100, 1000);
-    let G = 25;
-    let strength = (G * (this.mass * mover.mass)) / distanceSq;
-    force.setMag(strength);
-    mover.applyForce(force);
+  exclusiveContains() {
+
   }
 
-  update() {
-    this.velocity.add(this.acceleration);
-    this.position.add(this.velocity);
-    this.acceleration.set(0, 0);
+  includeLowerContains() {
+
   }
 
-  render() {
-    fill(this.color);
-    stroke(153);
-    ellipse(this.position.x, this.position.y, this.diameter);
+  includeUpperContains() {
+
   }
+}
+
+class Bounds {
+  constructor(x, y, w, h) {
+    this.origin = new Point(x,y);
+    this.size = new Size(w,h);
+  }
+
+  contains(x, y) {
+    let result = false;
+
+    return result;
+  }
+
+  contains(point) {
+    return contains(x,y);
+  }
+}
+
+
+class QuadTree {
+
 }

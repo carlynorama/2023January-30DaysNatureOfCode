@@ -13,7 +13,8 @@ class Mover {
     this.mass = m;
     this.r = sqrt(this.mass) * 2;
     this.diameter = this.r * 2;
-    this.color = c;
+    this.color_start = c;
+    this.color_tmp = c;
   }
 
   applyForce(force) {
@@ -37,7 +38,7 @@ class Mover {
   }
 
   render() {
-    fill(this.color);
+    fill(this.color_tmp);
     stroke(153);
     ellipse(this.position.x, this.position.y, this.diameter);
   }
