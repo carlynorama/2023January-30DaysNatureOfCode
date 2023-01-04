@@ -1,8 +1,7 @@
-// Mutual Attract// The Nature of Code
-
 let movers = [];
 
 function setup() {
+
   let color1 = color(204, 204, 0, 255);
   let color2 = color(0, 204, 204, 255);
   let color3 = color(204, 0, 204, 255);
@@ -16,10 +15,23 @@ function setup() {
   //   let m = random(25, 100);
   //   movers[i] = new Mover(x, y, v.x, v.y, m);
   // }
-  movers[0] = new Mover(300, 200, 0, 5, 10, color1);
-  movers[1] = new Mover(100, 200, 0, -5, 10, color2);
-  movers[2] = new Mover(200, 300, -5, 0, 10, color3);
-  movers[3] = new Mover(200, 100, 5, 0, 10, color4);
+
+
+  // //2, placed a pair
+  // movers[0] = new Mover(100, 200, 0, 5, 10, color1);
+  // movers[1] = new Mover(300, 200, 0, -5, 10, color3);
+
+  //3, one in the center.
+  movers[0] = new Mover(100, 200, 0, 5, 10, color1);
+  movers[1] = new Mover(300, 200, 0, -5, 10, color2);
+  movers[2] = new Mover(200, 200, 0, 0, 10, color3);
+
+  //4, places at corners of a square.
+  // movers[0] = new Mover(300, 200, 0, 5, 10, color1);
+  // movers[1] = new Mover(100, 200, 0, -5, 10, color2);
+  // movers[2] = new Mover(200, 300, -5, 0, 10, color3);
+  // movers[3] = new Mover(200, 100, 5, 0, 10, color4);
+
   background(0);
 }
 
