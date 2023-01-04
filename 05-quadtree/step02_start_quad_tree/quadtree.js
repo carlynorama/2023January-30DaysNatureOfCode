@@ -16,6 +16,7 @@ class QuadTree {
       return false;
     } else {
       this.points.push(point);
+      return true;
     }
 
 
