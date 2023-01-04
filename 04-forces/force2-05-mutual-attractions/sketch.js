@@ -8,7 +8,7 @@ function setup() {
   createControlledCanvas(400, 400);
   background(51);
 
-  // for (let i = 0; i < 5; i++) {
+  // for (let i = 0; i < numMovers; i++) {
   //   let x = random(width);
   //   let y = random(height);
   //   let v = p5.Vector.random2D();
