@@ -1,5 +1,5 @@
 let movers = [];
-let numMovers = 1;
+let numMovers = 10;
 
 let liquidBoundary = 0;
 //https://sciencenotes.org/table-of-density-of-common-materials/
@@ -14,10 +14,10 @@ let sandRho = liquidRho * 10000;
 // let energyDissapationTransition = 0.00001;
 // let energyDissapationSand = 0.00001;
 
-let energyDissapationAir = 1;
-let energyDissapationLiquid = 1;
-let energyDissapationTransition = 1;
-let energyDissapationSand = 1;
+let energyDissapationAir = airRho;
+let energyDissapationLiquid = liquidRho;
+let energyDissapationTransition = liquidRho;
+let energyDissapationSand = sandRho;
 
 
 function setup() {

@@ -103,7 +103,7 @@ class Mover {
       let energydiss = (this.volume * dist * factor)
       if (mag > 0) {
         let newMag = mag - energydiss;
-        newMag = constrain(newMag, 0, 0.5)
+        newMag = constrain(newMag, 0, 1000)
         this.velocity.setMag(newMag);
       }
     }
