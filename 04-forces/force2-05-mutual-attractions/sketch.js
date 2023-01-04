@@ -39,11 +39,12 @@ function draw() {
             mover.attract(other);
           }
         });
-      mover.update();
+
 
     });
 
     movers.forEach(mover => {
+      mover.update();
       mover.render();
     });
 
