@@ -44,9 +44,9 @@ function draw() {
        if (mover.pos.y > liquidBoundary) {
          mover.color = color3;
          //energy dissipates in sound, etc. TODO RealEQ
-         //When the delta is 100x, this value needs to be at MAX 0.30;
+         //When the delta is 100x, this value needs to be at MAX 0.30 to prevent jitter.
          //When the delta is 1000x, this value needs to be ~0.1;
-         mover.velocity.y *= 0.09;
+         mover.velocity.y *= 0.03;
          mover.applyDrag(liquidRho);
         } else {
           mover.color = color1;
