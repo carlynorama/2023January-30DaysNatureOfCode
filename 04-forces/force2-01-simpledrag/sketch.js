@@ -3,7 +3,7 @@ let numMovers = 12;
 
 let liquidBoundary = 0;
 //https://sciencenotes.org/table-of-density-of-common-materials/
-let liquidRho = 0.0005; //(water is about 1000 times more dense than air)
+let liquidRho = 0.001; //(water is about 1000 times more dense than air)
 let airRho = 0.00001;
 //let mu = 0.1;
 
