@@ -1,26 +1,24 @@
 let movers = [];
-let numMovers = 12;
+
+let G = 100;
 
 function setup() {
   let color1 = color(204, 204, 0, 255);
   let color2 = color(0, 204, 204, 255);
-  let color3 = color(204);
+  let color3 = color(204, 0, 204, 255);
+  let color4 = color(204);
   createControlledCanvas(400, 400);
   background(51);
 
-  for (let i = 0; i < numMovers; i++) {
-    let x = random(width);
-    let y = random(height);
-    let m = random(5,100);
-    if (i % 2 == 0) {
+  // movers[0] = new Mover(300, 200, 0, 0.1, 1, color1);
+  // movers[1] = new Mover(100, 200, 0, -0.1, 1, color2);
+  // movers[2] = new Mover(200, 300, -0.1, 0, 1, color3);
+  // movers[3] = new Mover(200, 100, 0.1, 0, 1, color4);
 
-      movers[i] = new Mover(x, y, m, color1);
-    } else {
-      movers[i] = new Mover(x, y, m, color2);
-    }
-
-  }
-  attractor = new Mover(width/2,height/2,500,color3);
+  movers[0] = new Mover(300, 200, 0, 5, 10, color1);
+  movers[1] = new Mover(100, 200, 0, -5, 10, color2);
+  movers[2] = new Mover(200, 300, -5, 0, 10, color3);
+  movers[3] = new Mover(200, 100, 5, 0, 10, color4);
 
 }
 
@@ -33,10 +31,10 @@ function draw() {
 
 
     movers.forEach(mover => {
-      attractor.attract(mover);
       movers.forEach(other => {
           if (other !== mover) {
             mover.attract(other);
+            line(mover.position.x, mover.position.y, other.position.x, other.position.y);
           }
         });
       mover.update();
@@ -46,9 +44,5 @@ function draw() {
     movers.forEach(mover => {
       mover.render();
     });
-
-    attractor.render();
-
-
   }
 }
