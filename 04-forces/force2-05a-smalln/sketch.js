@@ -8,6 +8,9 @@ function setup() {
   let color4 = color(204, 102,0);
 
   createControlledCanvas(400, 400);
+  background(51);
+
+  //vide suggestion for random
   // for (let i = 0; i < 5; i++) {
   //   let x = random(width);
   //   let y = random(height);
@@ -31,13 +34,11 @@ function setup() {
   // movers[1] = new Mover(100, 200, 0, -5, 10, color2);
   // movers[2] = new Mover(200, 300, -5, 0, 10, color3);
   // movers[3] = new Mover(200, 100, 5, 0, 10, color4);
-
-  background(0);
 }
 
 function draw() {
   if (runFlag) {
-    background(0, 10);
+    background(51, 10);
 
         movers.forEach(mover => {
           movers.forEach(other => {

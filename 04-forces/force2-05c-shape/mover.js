@@ -1,4 +1,4 @@
-// Gravitational Attraction
+// Derived from Gravitational Attraction
 // The Nature of Code
 // The Coding Train / Daniel Shiffman
 // https://youtu.be/EpgB3cNhKPM
