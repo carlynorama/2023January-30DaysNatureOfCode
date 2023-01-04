@@ -89,24 +89,25 @@ class Mover {
   }
 
 
-  // dissipate(factor) {
-  //       this.velocity.setMag(this.velocity.mag*0.01);
-  // }
+  dissipate(factor) {
+        this.velocity.setMag(this.velocity.mag()*0.1);
+  }
 
   // dissipate(factor) {
-  //       this.velocity.setMag(this.velocity.mag*(1/factor));
+  //       let mag = this.velocity.mag();
+  //       this.velocity.setMag(mag/factor);
   // }
 
-    dissipate(factor) {
-      let mag = this.velocity.mag();
-      let dist = this.pos.dist(this.lastpos);
-      let energydiss = (this.volume * dist * factor)
-      if (mag > 0) {
-        let newMag = mag - energydiss;
-        newMag = constrain(newMag, 0, 1000)
-        this.velocity.setMag(newMag);
-      }
-    }
+    // dissipate(factor) {
+    //   let mag = this.velocity.mag();
+    //   let dist = this.pos.dist(this.lastpos);
+    //   let energydiss = (this.volume * dist * factor)
+    //   if (mag > 0) {
+    //     let newMag = mag - energydiss;
+    //     newMag = constrain(newMag, 0, 1000)
+    //     this.velocity.setMag(newMag);
+    //   }
+    // }
 
 
 
