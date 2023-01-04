@@ -75,8 +75,8 @@ class Bounds {
     //return true;
   }
 
-  contains(point) {
-    return contains(point.x,point.y);
-  }
+  // contains(point) {
+  //   return this.contains(point.x,point.y);
+  // }
 
 }

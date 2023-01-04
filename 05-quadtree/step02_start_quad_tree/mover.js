@@ -40,6 +40,7 @@ class Mover {
   render() {
     fill(this.color_tmp);
     stroke(153);
+    ellipseMode(CENTER);
     ellipse(this.position.x, this.position.y, this.diameter);
   }
 }
