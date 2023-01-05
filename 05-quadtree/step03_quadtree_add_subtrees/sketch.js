@@ -16,23 +16,26 @@ function setup() {
   background(51);
 
   //vide suggestion for random
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 1000; i++) {
     let x = random(width);
     let y = random(height);
     let v = p5.Vector.random2D();
     let m = random(25, 100);
-    movers[i] = new Mover(x, y, v.x, v.y, m, color(204, 50));
+    movers[i] = new Mover(x, y, 0, 0, 3, color(204, 50));
   }
-  qTree = new QuadTree(100,100,200,200, 50);
+  qTree = new QuadTree(100,100,200,200, 1);
   qtDisplay = new QuadTreeDrawer(qTree);
 
-  console.log("4");
+  console.log("5");
+
+  subdivideTest(qTree);
 
 }
 
 function draw() {
 
-  frameRate(12);
+
+  frameRate(5);
   if (runFlag) {
     background(51);
     qTree.points = [];
@@ -44,6 +47,8 @@ function draw() {
 
     qtDisplay.drawBounds();
 
+
+
     let box = qTree.bounds;
     movers.forEach(mover => {
       if (box.contains(mover.position.x, mover.position.y)) {
@@ -54,14 +59,16 @@ function draw() {
         mover.color_tmp = mover.color_start;
       }
 
-      movers.forEach(other => {
-        if (mover !== other) {
-          stroke(204);
-          mover.attract(other);
-          //line(mover.position.x, mover.position.y, other.position.x, other.position.y);
-          mover.render();
-        }
-      });
+      mover.render();
+
+      // movers.forEach(other => {
+      //   if (mover !== other) {
+      //     stroke(204);
+      //     mover.attract(other);
+      //     //line(mover.position.x, mover.position.y, other.position.x, other.position.y);
+      //     //mover.render();
+      //   }
+      // });
 
     });
 
@@ -69,7 +76,11 @@ function draw() {
       mover.update();
     });
 
+
+    //drawSubTrees(qTree);
     qtDisplay.drawPoints();
+
+    noLoop();
 
   }
 }
