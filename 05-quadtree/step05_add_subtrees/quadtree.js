@@ -6,8 +6,9 @@ class QuadTree {
     this.subTrees = []; //[ne,se,sw,nw];
   }
 
-  addPoint(x, y) {
+  addPoint(x, y, pointSuccess) {
     if (!this.contains(x,y)) {
+      console.log(x,y,"not in here")
       return false;
     } else {
       if (this.subTrees.length != 0) {
@@ -16,6 +17,7 @@ class QuadTree {
      else if ((this.points.length < this.limit) && (this.subTrees.length == 0)) {
               let point = new Point(x,y);
               this.points.push(point);
+              pointSuccess(this.limit);
               return true;
       }
       else {
@@ -27,23 +29,17 @@ class QuadTree {
   }
 
   subdivide() {
-    let minX = this.bounds.origin.x;
-    let minY = this.bounds.origin.y;
-    //these are also our widths and heights
-    let width = this.bounds.size.width/2;
-    let height = this.bounds.size.height/2;
-
-    let midX = width + minX;
-    let midY = height + minY;
-
-    let ne  = new QuadTree(midX, minY, width, height, this.limit);
-    let se  = new QuadTree(midX, midY, width, height, this.limit);
-    let sw  = new QuadTree(minX, midY, width, height, this.limit);
-    let nw  = new QuadTree(minX, minY, width, height, this.limit);
-
-    this.subTrees = [ne,se,sw,nw];
+    if (this.subTrees.length == 0) {
+      for (let bounds of this.bounds.quads()) {
+        this.subTrees.push(new QuadTree(bounds.x, bounds.y, bounds.width, bounds.height, this.limit));
+      }
+    } else {
+      console.log("ERROR: subdivide() should never be called if subtrees exists.");
+    }
   }
 
+  //this is only called if point is KNOWN to be in the bounds. It should
+  //never faile to find a home.
   addPointToSubTree(x,y) {
     let west = new Range(this.bounds.origin.x,this.bounds.size.width/2);
     let north = new Range(this.bounds.origin.y, this.bounds.size.height/2);
@@ -66,7 +62,6 @@ class QuadTree {
       let tree = this.subTrees[2];
       //console.log(tree.bounds.origin.x);
       drawBounds(tree);
-
       return tree.addPoint(x,y);
     } else {
       let tree = this.subTrees[3];
@@ -75,6 +70,7 @@ class QuadTree {
       return tree.addPoint(x,y);
     }
 
+    console.log("If statement failure.");
     return false;
 
   }

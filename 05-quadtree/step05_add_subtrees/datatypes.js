@@ -61,22 +61,45 @@ class Bounds {
     return this.origin.y + this.size.height;
   }
 
+  midX() {
+    return this.size.width/2 + this.minX();
+  }
+
+  midY() {
+    return this.size.height/2 + this.minY();
+  }
+
   contains(x, y) {
-    let xRange = new Range(this.minX(), this.maxX());
+
+    let xRange = new Range(this.origin.x, this.origin.x + this.size.width);
 
     let xCheck = xRange.upperInclusiveContains(x);
-    //console.log("x", this.minX(), this.maxX(), x, xCheck);
+    console.log("x", xRange.l, xRange.u, x, xCheck);
 
     let yRange = new Range(this.minY(), this.maxY());
     let yCheck = yRange.upperInclusiveContains(y);
-    //console.log("y", this.minY(), this.maxY(), y, yCheck);
+    console.log("y", this.minY(), this.maxY(), y, yCheck);
     return (xCheck && yCheck);
 
     //return true;
   }
 
-  // contains(point) {
-  //   return this.contains(point.x,point.y);
-  // }
+  quads() {
+    let minX = this.origin.x;
+    let minY = this.origin.y;
+
+    let w = this.size.width/2;
+    let h = this.size.height/2;
+
+    let midX = w + minX;
+    let midY = h + minY;
+
+    let ne  = new Bounds(midX, minY, w, h);
+    let se  = new Bounds(midX, midY, w, h);
+    let sw  = new Bounds(minX, midY, w, h);
+    let nw  = new Bounds(minX, minY, w, h);
+
+    return [ne,se,sw,nw];
+  }
 
 }

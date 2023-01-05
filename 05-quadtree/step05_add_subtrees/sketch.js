@@ -2,6 +2,8 @@ let movers = [];
 let qTree;
 let qtDisplay;
 
+let numberOfPointsInTree = 0;
+
 function setup() {
 
   let colors = [
@@ -15,20 +17,14 @@ function setup() {
   createControlledCanvas(400, 400);
   background(51);
 
-  //vide suggestion for random
-  for (let i = 0; i < 1000; i++) {
-    let x = random(width);
-    let y = random(height);
-    let v = p5.Vector.random2D();
-    let m = random(25, 100);
-    movers[i] = new Mover(x, y, 0, 0, 3, color(204, 50));
-  }
-  qTree = new QuadTree(100,100,200,200, 1);
+  //generateMoverSet(100);
+  movers = loadMoverSet();
+
+  qTree = new QuadTree(100,100,200,200, 50);
   qtDisplay = new QuadTreeDrawer(qTree);
 
   console.log("5");
-
-
+  noLoop();
 
 }
 
@@ -41,19 +37,18 @@ function draw() {
     qTree.points = [];
     qTree.subtrees = [];
 
-    fill(102);
-    stroke(153);
-
-
+    // fill(102);
+    // stroke(153);
     //qtDisplay.drawBounds();
 
 
 
     let box = qTree.bounds;
+    stroke(153);
     movers.forEach(mover => {
       if (box.contains(mover.position.x, mover.position.y)) {
         mover.color_tmp = color(204, 102, 102);
-        let y = qTree.addPoint(mover.position.x, mover.position.y);
+        let y = qTree.addPoint(mover.position.x, mover.position.y, testFunction);
         console.log("sketch addpoint", y);
       }
       else {
@@ -77,11 +72,25 @@ function draw() {
       mover.update();
     });
 
-
-    //drawSubTrees(qTree);
+    console.log(qTree.points.length);
+    console.log(qTree.subTrees)
+    stroke(255,0,0);
+    drawSubTrees(qTree);
     //qtDisplay.drawPoints();
-    subdivideTest(qTree);
-    noLoop();
+
+
 
   }
+}
+
+function testFunction(row_limit) {
+  //numberOfPointsInTree +=1;
+  let limit = constrain(row_limit, 1, 25);
+  let y = (floor(numberOfPointsInTree/limit) * 15) + 5;
+  let x = (numberOfPointsInTree % limit * 15) + 5;
+  numberOfPointsInTree +=1;
+
+  stroke(204, 102, 102);
+  fill(51);
+  rect(x, y, 10, 10);
 }
