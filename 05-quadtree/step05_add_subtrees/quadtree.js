@@ -10,6 +10,20 @@ class QuadTree {
     this.subTrees = []; //[ne,se,sw,nw];
   }
 
+  static walkTree(parent, level) {
+    let thisLevel = level;
+    console.log(thisLevel, parent.bounds.pretty());
+    let nextLevel = level + 1;
+    if (parent.subTrees.length > 0) {
+      console.log("I am a NOT a leaf!", parent.points.length);
+      for (let subtree of parent.subTrees) {
+        QuadTree.walkTree(subtree, nextLevel);
+      }
+    } else {
+      console.log("I am a leaf!", parent.points.length);
+    }
+  }
+
   // static createEmptyTree(bounds, count) {
   //   if (!(typeof(bounds) === 'Bounds' && typeof(c) === 'number')) {
   //     //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
@@ -38,11 +52,11 @@ class QuadTree {
       if (this.subTrees.length != 0) {
         return this.addPointToSubTree(x,y,pointSuccess);
       }
-     else if ((this.points.length < this.limit) && (this.subTrees.length === 0)) {
-              let point = new Point(x,y);
-              this.points.push(point);
-              pointSuccess(this.limit);
-              return true;
+      else if ((this.points.length < this.limit) && (this.subTrees.length === 0)) {
+        let point = new Point(x,y);
+        this.points.push(point);
+        pointSuccess(this.limit);
+        return true;
       }
       else {
         console.log("SUBDIVIDING!");
@@ -50,6 +64,8 @@ class QuadTree {
         //distributePoints(); ??
         return this.addPointToSubTree(x,y,pointSuccess);
       }
+      throw new Error('QuadTree.addPoint: case not handled.');
+
     }
   }
 
@@ -104,6 +120,10 @@ class QuadTree {
     return this.bounds.contains(x,y);
   }
 
+
+  walk(level) {
+    QuadTree.walkTree(this, level);
+  }
 }
 
 

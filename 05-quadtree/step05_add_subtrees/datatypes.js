@@ -146,11 +146,11 @@ class Bounds {
   }
 
   pretty() {
-    return `Bounds(x:${this.origin.x}, y:${this.origin.y},w:${this.size.width}, h:${this.size.height})`
+    return `Bounds(x:${this.origin.x}, y:${this.origin.y}, w:${this.size.width}, h:${this.size.height})`
   }
 
   minmaxstring() {
-    return `Bounds(minX:${this.minX}, maxX:${this.maxX},minY:${this.minY}, maxY:${this.maxY})`
+    return `Bounds(minX:${this.minX}, maxX:${this.maxX}, minY:${this.minY}, maxY:${this.maxY})`
   }
 
 }

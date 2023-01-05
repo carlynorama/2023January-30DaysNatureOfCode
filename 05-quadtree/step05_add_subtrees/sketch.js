@@ -35,8 +35,6 @@ function setup() {
 
 
 function draw() {
-
-
   frameRate(5);
   if (runFlag) {
     //background(51);
@@ -47,8 +45,6 @@ function draw() {
     stroke(102);
     qtDisplay.drawBounds();
 
-
-
     let box = qTree.bounds;
     //stroke(153);
     noStroke();
@@ -57,23 +53,9 @@ function draw() {
         displayFound(qTree.limit);
         mover.color_tmp = color(204, 102, 102);
         let y = qTree.addPoint(mover.position.x, mover.position.y, displayAdded);
-        //console.log("sketch addpoint", y);
       }
-      else {
-        mover.color_tmp = mover.color_start;
-      }
-
+      else {  mover.color_tmp = mover.color_start; }
       mover.render();
-
-      // movers.forEach(other => {
-      //   if (mover !== other) {
-      //     stroke(204);
-      //     mover.attract(other);
-      //     //line(mover.position.x, mover.position.y, other.position.x, other.position.y);
-      //     //mover.render();
-      //   }
-      // });
-
     });
 
     movers.forEach(mover => {
@@ -81,9 +63,20 @@ function draw() {
     });
 
 
+
     stroke(204, 102, 102);
-    drawSubTrees(qTree);
-    qtDisplay.drawPoints();
+    drawSubTrees(qTree, 0);
+
+    let test = color(204);
+    //console.log(test);
+    drawSubPoints(qTree, 0,test);
+    //qtDisplay.drawPoints();
+
+    //YES! Everyone is in there!
+    // console.log("instance walk");
+    // qTree.walk(0);
+    console.log("static walk");
+    QuadTree.walkTree(qTree, 0);
 
   }
 }
