@@ -30,12 +30,15 @@ class QuadTreeDrawer {
   }
 
   drawPoint(point) {
+    rectMode(CENTER);
     rect(point.x, point.y, 10, 10);
   }
 
   drawPoints() {
     rectMode(CENTER);
-    fill(102);
+    //fill(102);
+    noFill();
+    stroke(204);
     this.tree.points.forEach(point => {
       this.drawPoint(point);
     });

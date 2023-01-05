@@ -25,17 +25,7 @@ function setup() {
   qTree = new QuadTree(100,100,200,200, 5);
   qtDisplay = new QuadTreeDrawer(qTree);
 
-  // let throwingX = 277.6318366730977;
-  // let throwingY = 186.80057493258775;
-  let throwingX = 120.04105975672697;
-  let throwingY = 285.2761365342877;
 
-  let result = testSubTreeBounds(qTree, throwingX, throwingY);
-   if (!result) {
-     throw new Error("Should of passed.");
-   } else {
-     console.log("working check.")
-   }
 
   console.log("--------- End of Setup ---------");
   noLoop();
@@ -53,14 +43,15 @@ function draw() {
     qTree.points = [];
     qTree.subtrees = [];
 
-    // fill(102);
-    // stroke(153);
-    //qtDisplay.drawBounds();
+    fill(75);
+    stroke(102);
+    qtDisplay.drawBounds();
 
 
 
     let box = qTree.bounds;
-    stroke(153);
+    //stroke(153);
+    noStroke();
     movers.forEach(mover => {
       if (box.contains(mover.position.x, mover.position.y)) {
         displayFound(qTree.limit);
@@ -89,11 +80,10 @@ function draw() {
       mover.update();
     });
 
-    console.log(qTree.points.length);
-    //console.log(qTree.subTrees)
-    stroke(255,0,0);
-    // drawSubTrees(qTree);
-    //qtDisplay.drawPoints();
+
+    stroke(204, 102, 102);
+    drawSubTrees(qTree);
+    qtDisplay.drawPoints();
 
   }
 }
@@ -122,6 +112,14 @@ function displayFound(row_limit) {
   rect(x, y, 10, 10);
 }
 
+
+  // USAGE:
+  // let result = testSubTreeBounds(qTree, throwingX, throwingY);
+  //  if (!result) {
+  //    throw new Error("Should of passed.");
+  //  } else {
+  //    console.log("working check.")
+  //  }
 function testSubTreeBounds(tree, throwingX, throwingY) {
   //let throwingX = 277.6318366730977;
   //let throwingY = 186.80057493258775;
