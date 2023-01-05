@@ -61,6 +61,14 @@ class Bounds {
     return this.origin.y + this.size.height;
   }
 
+  midX() {
+    return this.size.width/2 + this.minX();
+  }
+
+  midY() {
+    return this.size.height/2 + this.minY();
+  }
+
   contains(x, y) {
     let xRange = new Range(this.minX(), this.maxX());
 
@@ -75,8 +83,22 @@ class Bounds {
     //return true;
   }
 
-  // contains(point) {
-  //   return this.contains(point.x,point.y);
-  // }
+  quads() {
+    let minX = this.origin.x;
+    let minY = this.origin.y;
+
+    let w = this.size.width/2;
+    let h = this.size.height/2;
+
+    let midX = w + minX;
+    let midY = h + minY;
+
+    let ne  = new Bounds(midX, minY, w, h);
+    let se  = new Bounds(midX, midY, w, h);
+    let sw  = new Bounds(minX, midY, w, h);
+    let nw  = new Bounds(minX, minY, w, h);
+
+    return [ne,se,sw,nw];
+  }
 
 }
