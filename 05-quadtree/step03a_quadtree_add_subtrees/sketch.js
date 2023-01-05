@@ -28,7 +28,7 @@ function setup() {
 
   console.log("5");
 
-  subdivideTest(qTree);
+
 
 }
 
@@ -45,7 +45,7 @@ function draw() {
     stroke(153);
 
 
-    qtDisplay.drawBounds();
+    //qtDisplay.drawBounds();
 
 
 
@@ -53,7 +53,8 @@ function draw() {
     movers.forEach(mover => {
       if (box.contains(mover.position.x, mover.position.y)) {
         mover.color_tmp = color(204, 102, 102);
-        qTree.addPoint(mover.position.x, mover.position.y);
+        let y = qTree.addPoint(mover.position.x, mover.position.y);
+        console.log("sketch addpoint", y);
       }
       else {
         mover.color_tmp = mover.color_start;
@@ -78,8 +79,8 @@ function draw() {
 
 
     //drawSubTrees(qTree);
-    qtDisplay.drawPoints();
-
+    //qtDisplay.drawPoints();
+    subdivideTest(qTree);
     noLoop();
 
   }

@@ -28,7 +28,7 @@ function setup() {
 
   console.log("5");
 
-  subdivideTest(qTree);
+  //subdivideTest(qTree);
 
 }
 
@@ -78,8 +78,8 @@ function draw() {
 
 
     //drawSubTrees(qTree);
-    qtDisplay.drawPoints();
-
+    //qtDisplay.drawPoints();
+    subdivideTest(qTree);
     noLoop();
 
   }

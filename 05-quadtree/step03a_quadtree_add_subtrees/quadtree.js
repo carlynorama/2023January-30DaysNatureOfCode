@@ -30,13 +30,16 @@ class QuadTree {
     let minX = this.bounds.origin.x;
     let minY = this.bounds.origin.y;
     //these are also our widths and heights
-    let midX = this.bounds.size.width/2;
-    let midY = this.bounds.size.height/2;
+    let width = this.bounds.size.width/2;
+    let height = this.bounds.size.height/2;
 
-    let ne  = new QuadTree(midX, minY, midX, midY, this.limit);
-    let se  = new QuadTree(midX, midY, midX, midY, this.limit);
-    let sw  = new QuadTree(minX, midY, midX, midY, this.limit);
-    let nw  = new QuadTree(minX, minY, midX, midY, this.limit);
+    let midX = width + minX;
+    let midY = height + minY;
+
+    let ne  = new QuadTree(midX, minY, width, height, this.limit);
+    let se  = new QuadTree(midX, midY, width, height, this.limit);
+    let sw  = new QuadTree(minX, midY, width, height, this.limit);
+    let nw  = new QuadTree(minX, minY, width, height, this.limit);
 
     this.subTrees = [ne,se,sw,nw];
   }

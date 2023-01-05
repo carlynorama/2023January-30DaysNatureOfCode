@@ -21,8 +21,11 @@ function subdivideTest(tree) {
     let minX = tree.bounds.origin.x;
     let minY = tree.bounds.origin.y;
     //these are also our widths and heights
-    let midX = tree.bounds.size.width/2;
-    let midY = tree.bounds.size.height/2;
+    let width = tree.bounds.size.width/2;
+    let height = tree.bounds.size.height/2;
+
+    let midX = width + minX;
+    let midY = height + minY;
 
     let ne  = new Bounds(midX, minY, midX, midY);
     let se  = new Bounds(midX, midY, midX, midY);
@@ -31,11 +34,14 @@ function subdivideTest(tree) {
 
     rectMode(CORNER);
     noFill();
-    stroke(0, 255, 0);
-    //rect(ne.origin.x, ne.origin.y, ne.size.width, ne.size.height);
-    //rect(nw.origin.x, nw.origin.y, nw.size.width, nw.size.height);
-    //rect(se.origin.x, se.origin.y, se.size.width, se.size.height);
-    rect(sw.origin.x, sw.origin.y, sw.size.width, sw.size.height);
+    stroke(204, 0, 0);
+    rect(ne.origin.x, ne.origin.y, ne.size.width, ne.size.height);
+    stroke(0, 204, 0);
+    rect(nw.origin.x, nw.origin.y, nw.size.width, nw.size.height);
+    stroke(0, 0, 204);
+    rect(se.origin.x, se.origin.y, se.size.width, se.size.height);
+    // stroke(153, 204, 0);
+    // rect(sw.origin.x, sw.origin.y, sw.size.width, sw.size.height);
 
 }
 

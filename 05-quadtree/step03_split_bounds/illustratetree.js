@@ -18,25 +18,32 @@ function drawBounds(tree) {
 }
 
 function subdivideTest(tree) {
+  let colors = [
+    color(204, 204, 0),
+    color(0, 204, 204),
+    color(204, 0, 204),
+    color(0, 51, 204),
+    color(204, 51, 0),
+  ]
     let minX = tree.bounds.origin.x;
     let minY = tree.bounds.origin.y;
-    //these are also our widths and heights
-    let midX = tree.bounds.size.width/2;
-    let midY = tree.bounds.size.height/2;
 
-    let ne  = new Bounds(midX, minY, midX, midY);
-    let se  = new Bounds(midX, midY, midX, midY);
-    let sw  = new Bounds(minX, midY, midX, midY);
-    let nw  = new Bounds(minX, minY, midX, midY);
+    let w = tree.bounds.size.width/2;
+    let h = tree.bounds.size.height/2;
+
+    let midX = width + minX;
+    let midY = height + minY;
 
     rectMode(CORNER);
     noFill();
-    stroke(0, 255, 0);
-    //rect(ne.origin.x, ne.origin.y, ne.size.width, ne.size.height);
-    //rect(nw.origin.x, nw.origin.y, nw.size.width, nw.size.height);
-    //rect(se.origin.x, se.origin.y, se.size.width, se.size.height);
-    rect(sw.origin.x, sw.origin.y, sw.size.width, sw.size.height);
-
+    stroke(colors[0]);
+    rect(midX, minY, w, h);
+    stroke(colors[1]);
+    rect(midX, midY, w, h);
+    stroke(colors[2]);
+    rect(minX, midY, w, h);
+    stroke(colors[3]);
+    rect(minX, minY, w, h);
 }
 
 
