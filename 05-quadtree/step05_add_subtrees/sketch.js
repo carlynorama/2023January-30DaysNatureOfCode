@@ -35,9 +35,6 @@ function setup() {
 
 
 function draw() {
-  frameRate(5);
-  if (runFlag) {
-    //background(51);
     qTree.points = [];
     qTree.subtrees = [];
 
@@ -77,8 +74,6 @@ function draw() {
     // qTree.walk(0);
     console.log("static walk");
     QuadTree.walkTree(qTree, 0);
-
-  }
 }
 
 function displayAdded(row_limit) {
