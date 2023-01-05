@@ -67,8 +67,6 @@ class Bounds {
     }
     this.origin = new Point(x,y);
     this.size = new Size(w,h);
-
-    console.log(this.pretty());
   }
 
   get minX() {
@@ -95,10 +93,10 @@ class Bounds {
     return this.size.height/2 + this.minY();
   }
 
-  get x() { this.origin.x }
-  get y() { this.origin.x }
-  get width() { this.size.width }
-  get height() { this.size.width }
+  get x() { return this.origin.x }
+  get y() { return this.origin.x }
+  get width() { return this.size.width }
+  get height() { return this.size.width }
 
   contains(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
@@ -144,6 +142,10 @@ class Bounds {
   }
 
   pretty() {
+    return `Bounds(x:${this.origin.x}, y:${this.origin.y},w:${this.size.width}, h:${this.size.height})`
+  }
+
+  minmaxstring() {
     return `Bounds(minX:${this.minX}, maxX:${this.maxX},minY:${this.minY}, maxY:${this.maxY})`
   }
 

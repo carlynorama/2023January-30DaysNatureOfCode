@@ -50,8 +50,10 @@ class QuadTree {
 
   subdivide() {
     if (this.subTrees.length === 0) {
-      for (let bounds of this.bounds.quads()) {
-        console.log(bounds.pretty());
+      let subBounds = this.bounds.quads();
+      console.log(subBounds.length)
+      for (let bounds of subBounds) {
+        console.log(bounds.pretty(), bounds.x, bounds.y, bounds.width, bounds.height);
         //let newTree = new QuadTree(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height)
         //this.subTrees.push(newTree);
       }
