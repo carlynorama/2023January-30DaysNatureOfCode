@@ -1,7 +1,4 @@
 let movers = [];
-
-let box;
-
 let qTree;
 
 function setup() {
@@ -18,7 +15,7 @@ function setup() {
   background(51);
 
   //vide suggestion for random
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 10; i++) {
     let x = random(width);
     let y = random(height);
     let v = p5.Vector.random2D();
@@ -26,7 +23,7 @@ function setup() {
     movers[i] = new Mover(x, y, v.x, v.y, m, color(204, 50));
   }
   qTree = new QuadTree(100,100,200,200, 50);
-  console.log(qTree.bounds.origin.x);
+  //console.log(qTree.bounds.origin.x);
 
   console.log("different");
 
@@ -37,17 +34,20 @@ function draw() {
   frameRate(12);
   if (runFlag) {
     background(51);
+    qTree.points = [];
 
     fill(102);
     stroke(153);
+
     let box = qTree.bounds;
-    console.log(box.origin.x);
+    rectMode(CORNER);
     rect(box.origin.x, box.origin.y, box.size.width, box.size.height);
 
 
     movers.forEach(mover => {
       if (box.contains(mover.position.x, mover.position.y)) {
         mover.color_tmp = color(204, 102, 102);
+        qTree.addPoint(mover.position.x, mover.position.y);
       }
       else {
         mover.color_tmp = mover.color_start;
@@ -67,5 +67,12 @@ function draw() {
     movers.forEach(mover => {
       mover.update();
     });
+
+    rectMode(CENTER);
+    fill(102);
+    qTree.points.forEach(point => {
+      rect(point.x, point.y, 10, 10);
+    });
+
   }
 }

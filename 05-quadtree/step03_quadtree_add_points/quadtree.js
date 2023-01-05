@@ -9,20 +9,20 @@ class QuadTree {
     this.bounds = new Bounds(x, y, w, h);
     this.count = count;
     this.points = [];
+    this.subTrees = [];
   }
 
-  // addPoint(x,y) {
-  //   let point = new Point(x,y);
-  //   return addPoint(point);
-  // }
-  //
-  // addPoint(point) {
-  //   if (!this.bounds.contains(point)) {
-  //     return false;
-  //   } else {
-  //     this.points.push(point);
-  //     return true;
-  //   }
-  // }
+  addPoint(x, y) {
+    //console.log("hello point");
+    if (!this.bounds.contains(x,y)) {
+      return false;
+    } else {
+      let point = new Point(x,y);
+      this.points.push(point);
+      return true;
+    }
+  }
+
+
 
 }
