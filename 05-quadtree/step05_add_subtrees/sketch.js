@@ -21,8 +21,20 @@ function setup() {
   //generateMoverSet(100);
   movers = loadMoverSet();
 
+  console.log("make first qtree");
   qTree = new QuadTree(100,100,200,200, 5);
   qtDisplay = new QuadTreeDrawer(qTree);
+
+  let test = qTree.bounds.quads();
+  console.log(test);
+  for (let bounds of test) {
+    console.log(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
+  }
+
+  for (var i=0; i<4; i++) {
+    console.log(test[i].origin.x, test[i].origin.y, test[i].size.width, test[i].size.height);
+  }
+
 
   console.log("5");
   noLoop();
@@ -75,9 +87,9 @@ function draw() {
     });
 
     console.log(qTree.points.length);
-    console.log(qTree.subTrees)
+    //console.log(qTree.subTrees)
     stroke(255,0,0);
-    drawSubTrees(qTree);
+    // drawSubTrees(qTree);
     //qtDisplay.drawPoints();
 
   }
