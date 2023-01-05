@@ -94,26 +94,26 @@ class Bounds {
   }
 
   get x() { return this.origin.x }
-  get y() { return this.origin.x }
+  get y() { return this.origin.y }
   get width() { return this.size.width }
-  get height() { return this.size.width }
+  get height() { return this.size.height }
 
   contains(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n(Bounds.contains: values are not numeric.)');
     }
-    //console.log("contains:", x, y)
+    console.log("contains:", x, y)
     //console.log("MINX", this.minX())
     //console.log("direct", this.origin.x)
-    let xRange = new Range(this.minX, this.maxY);
+    let xRange = new Range(this.minX, this.maxX);
 
     let xCheck = xRange.upperInclusiveContains(x);
     //console.log("x", xRange.pretty(), x, xCheck);
 
     let yRange = new Range(this.minY, this.maxY);
     let yCheck = yRange.upperInclusiveContains(y);
-    //console.log("y", this.minY(), this.maxY(), y, yCheck);
+    //console.log("y", this.minY, this.maxY, y, yCheck);
     return (xCheck && yCheck);
 
     //return true;
@@ -127,11 +127,15 @@ class Bounds {
     let minX = this.origin.x;
     let minY = this.origin.y;
 
-    let w = this.size.width/2;
-    let h = this.size.height/2;
+    let w = (this.size.width)/2;
+    let h = (this.size.height)/2;
 
     let midX = w + minX;
     let midY = h + minY;
+
+    if (midX === minY || midX === minY ) {
+      throw new Error('Bounds.quads: is a dimension 0?');
+    }
 
     let ne  = new Bounds(midX, minY, w, h);
     let se  = new Bounds(midX, midY, w, h);

@@ -25,18 +25,31 @@ function setup() {
   qTree = new QuadTree(100,100,200,200, 5);
   qtDisplay = new QuadTreeDrawer(qTree);
 
+  // let throwingX = 277.6318366730977;
+  // let throwingY = 186.80057493258775;
+  let throwingX = 120.04105975672697;
+  let throwingY = 285.2761365342877;
 
-  console.log("5");
+  let result = testSubTreeBounds(qTree, throwingX, throwingY);
+   if (!result) {
+     throw new Error("Should of passed.");
+   } else {
+     console.log("working check.")
+   }
+
+  console.log("--------- End of Setup ---------");
   noLoop();
 
 }
+
+
 
 function draw() {
 
 
   frameRate(5);
   if (runFlag) {
-    background(51);
+    //background(51);
     qTree.points = [];
     qTree.subtrees = [];
 
@@ -107,4 +120,36 @@ function displayFound(row_limit) {
   stroke(102, 102, 102);
   fill(51);
   rect(x, y, 10, 10);
+}
+
+function testSubTreeBounds(tree, throwingX, throwingY) {
+  //let throwingX = 277.6318366730977;
+  //let throwingY = 186.80057493258775;
+
+  testTreeBounds(tree.bounds, throwingX, throwingY);
+
+  let subBounds = tree.bounds.quads()
+  console.log(subBounds);
+  for (let wtf of subBounds) {
+    console.log(wtf.pretty());
+    if (testTreeBounds(wtf, throwingX, throwingY)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function testTreeBounds(bounds, testX, testY) {
+  if (bounds.contains(testX, testY)) {
+    fill(0,255,0, 15)
+    circle(testX, testY, 10);
+    console.log(testX, testY,"point in bounds");
+    return true
+  } else {
+    fill(255,0,0, 15)
+    circle(testX, testY, 10);
+    console.log(testX, testY,"point not in bounds");
+    return false
+  }
 }
