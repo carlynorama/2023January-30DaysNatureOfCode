@@ -40,7 +40,7 @@ function setup() {
 
 
 function draw() {
-    frameRate(5);
+    frameRate(1);
     background(51);
     // qTree.clear();
     // qTree.subtrees = [];
@@ -79,13 +79,6 @@ function draw() {
 
     });
 
-    movers.forEach(mover => {
-      mover.update();
-      mover.render();
-    });
-
-
-
     stroke(204, 102, 102);
     QuadTreeDrawer.drawSubTrees(qTree, 0);
 
@@ -98,7 +91,7 @@ function draw() {
     // console.log("instance walk");
     // qTree.walk();
     //console.log("static walk");
-    //QuadTree.walkTree(qTree, 0);
+    QuadTree.walkTree(qTree, 0);
 }
 
 function displayAdded(point) {
