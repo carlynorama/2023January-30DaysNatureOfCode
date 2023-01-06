@@ -1,5 +1,6 @@
 
 let staticBounds;
+let dynamicBounds;
 
 function setup() {
 
@@ -13,22 +14,32 @@ function setup() {
 
   createControlledCanvas(400, 400);
   background(51);
-  staticBounds = new Bounds(150, 150, 100, 100);
+  staticBounds = Bounds.createBounds(150, 150, 100, 100);
+  dynamicBounds = Bounds.createBounds(150, 150, 100, 100);
 
   console.log("--------- End of Setup ---------");
   //noLoop();
 
 }
 
-function drawBounds(bounds, mode = 'CORNER') {
-  rectMode(mode);
+function drawBounds(bounds) {
   rect(bounds.x, bounds.y, bounds.width, bounds.height);
 }
 
 function draw() {
-  if runFlag {
+  if (runFlag) {
+    background(51);
+    stroke(153);
+    dynamicBounds.updateCenter(mouseX, mouseY);
+    if (dynamicBounds.intersects(staticBounds)) { fill(204, 102, 102); }
+    else { fill(102, 102, 102) } ;
+
+    //dynamicBounds.updateOrigin(mouseX, mouseY);
+
+    drawBounds(dynamicBounds);
+
 
     drawBounds(staticBounds);
-    
+
   }
 }

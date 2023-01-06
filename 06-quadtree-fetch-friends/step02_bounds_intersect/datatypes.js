@@ -52,6 +52,10 @@ class Range {
     return ((x <= this.upper) && (x > this.lower))
   }
 
+  overlaps(other) {
+    return(this.inclusiveContains(other.lower) ||  this.inclusiveContains(other.upper))
+  }
+
   pretty() {
     return `Range(lower:${this.lower}, upper:${this.upper})`
   }
@@ -94,11 +98,11 @@ class Bounds {
   }
 
   get midX() {
-    return this.size.width/2 + this.minX();
+    return this.size.width/2 + this.minX;
   }
 
   get midY() {
-    return this.size.height/2 + this.minY();
+    return this.size.height/2 + this.minY;
   }
 
   get x() { return this.origin.x }
@@ -106,10 +110,28 @@ class Bounds {
   get width() { return this.size.width }
   get height() { return this.size.height }
 
+  updateOrigin(x, y) {
+    if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
+      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
+      throw new Error('Bounds.updateOrigin: one or both of the values are not numeric.');
+    }
+    this.origin.x = x;
+    this.origin.y = y;
+  }
+
+  updateCenter(x, y) {
+    if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
+      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
+      throw new Error('Bounds.updateCenter: one or both of the values are not numeric.');
+    }
+    this.origin.x = x - this.width/2;
+    this.origin.y = y - this.height/2;
+  }
+
   contains(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
-      throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n(Bounds.contains: values are not numeric.)');
+      throw new Error('Bounds.contains: one or both of the values are not numeric.');
     }
     //console.log("contains:", x, y)
     //console.log("MINX", this.minX())
@@ -125,6 +147,20 @@ class Bounds {
     return (xCheck && yCheck);
 
     //return true;
+  }
+
+  static intersects(lhs, rhs) {
+    let lhs_xRange = new Range(lhs.minX, lhs.maxX);
+    let lhs_yRange = new Range(lhs.minY, lhs.maxY);
+    let rhs_xRange = new Range(rhs.minX, rhs.maxX);
+    let rhs_yRange = new Range(rhs.minY, rhs.maxY);
+
+    return (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange));
+
+  }
+
+  intersects(other) {
+    return Bounds.intersects(this, other);
   }
 
   quads() {
