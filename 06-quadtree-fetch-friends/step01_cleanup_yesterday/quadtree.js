@@ -61,7 +61,7 @@ class QuadTree {
       else if ((this.points.length < this.limit) && (this.subTrees.length === 0)) {
         let point = new Point(x,y);
         this.points.push(point);
-        pointSuccess(this.limit);
+        pointSuccess(point);
         return true;
       }
       else {
@@ -83,7 +83,7 @@ class QuadTree {
     if (this.subTrees.length === 0) {
       let subBounds = this.bounds.quads();
       for (let bounds of subBounds) {
-        console.log(bounds.pretty(), bounds.x, bounds.y, bounds.width, bounds.height, this.limit);
+        //console.log(bounds.pretty(), bounds.x, bounds.y, bounds.width, bounds.height, this.limit);
         let newTree = new QuadTree(bounds, this.limit);
         this.subTrees.push(newTree);
       }
@@ -111,7 +111,7 @@ class QuadTree {
       if (this.subTrees[i].contains(x,y)) {
         //console.log("I think you're in here!");
         let result = this.subTrees[i].addPoint(x,y,pointSuccess);
-        console.log(result);
+        //console.log(result);
         return result;
       }
     }

@@ -27,14 +27,14 @@ class QuadTreeDrawer {
     });
   }
 
+//====================================================================== STATIC
   static drawSubTrees(parent, level) {
-    console.log("Bounds drawer level:", level);
+    //console.log("Bounds drawer level:", level);
     parent.subTrees.forEach(tree => {
       if (tree.subTrees.length != 0) {
-
-        drawSubTrees(tree, level + 1);
+        QuadTreeDrawer.drawSubTrees(tree, level + 1);
       } else {
-        drawBounds(tree);
+        QuadTreeDrawer.drawBounds(tree);
       }
     });
   }
@@ -49,16 +49,16 @@ class QuadTreeDrawer {
   }
 
   static drawSubPoints(parent, level, c) {
-    console.log("Points drawer level:", level);
+    //console.log("Points drawer level:", level);
 
     let newColor = c;
     //newColor.setAlpha(255 - (level * 30));
     //console.log(255 - (level * 10), newColor);
     parent.subTrees.forEach(tree => {
       if (tree.subTrees.length != 0) {
-        drawSubPoints(tree, level+1, newColor);
+        QuadTreeDrawer.drawSubPoints(tree, level+1, newColor);
       } else {
-        drawPoints(tree, newColor);
+        QuadTreeDrawer.drawPoints(tree, newColor);
       }
     });
   }
@@ -68,7 +68,7 @@ class QuadTreeDrawer {
       rectMode(CENTER);
       noFill();
       tree.points.forEach(point => {
-        drawPoint(point, c);
+        QuadTreeDrawer.drawPoint(point, c);
       });
   }
 

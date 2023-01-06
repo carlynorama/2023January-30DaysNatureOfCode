@@ -60,7 +60,7 @@ class Range {
 class Bounds {
   constructor(point, size) {
     if (!(typeof(point.x) === 'number' && typeof(point.y) === 'number' && typeof(size.width) === 'number' && typeof(size.height) === 'number')) {
-      console.log(point.pretty(), size.pretty())
+      //console.log(point.pretty(), size.pretty())
         throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
     }
     this.origin = point;
@@ -111,7 +111,7 @@ class Bounds {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n(Bounds.contains: values are not numeric.)');
     }
-    console.log("contains:", x, y)
+    //console.log("contains:", x, y)
     //console.log("MINX", this.minX())
     //console.log("direct", this.origin.x)
     let xRange = new Range(this.minX, this.maxX);

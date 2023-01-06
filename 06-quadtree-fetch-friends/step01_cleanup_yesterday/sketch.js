@@ -1,6 +1,7 @@
 let movers = [];
 let qTree;
 let qtDisplay;
+let element_limit = 5;
 
 let numberOfPointsInBounds = 0;
 let numberOfPointsInTree = 0;
@@ -26,11 +27,9 @@ function setup() {
   // Constructor Tests.
   // let bounds = new Bounds(100,100,200,200);
   // qTree = new QuadTree(bounds, 5);
-  qTree = QuadTree.createQuadTree(100,100,200,200,5);
-
+  qTree = QuadTree.createQuadTree(100,100,200,200,element_limit);
 
   qtDisplay = new QuadTreeDrawer(qTree);
-
 
 
   console.log("--------- End of Setup ---------");
@@ -41,8 +40,12 @@ function setup() {
 
 
 function draw() {
+    frameRate(5);
+    background(51);
     qTree.points = [];
     qTree.subtrees = [];
+    numberOfPointsInBounds = 0;
+    numberOfPointsInTree = 0;
 
     fill(75);
     stroke(102);
@@ -58,33 +61,43 @@ function draw() {
         let y = qTree.addPoint(mover.position.x, mover.position.y, displayAdded);
       }
       else {  mover.color_tmp = mover.color_start; }
-      mover.render();
+
+
+      movers.forEach(other => {
+        if (mover !== other) {
+          //stroke(204);
+          mover.attract(other);
+          //line(mover.position.x, mover.position.y, other.position.x, other.position.y);
+        }
+      });
+
     });
 
     movers.forEach(mover => {
       mover.update();
+      mover.render();
     });
 
 
 
     stroke(204, 102, 102);
-    drawSubTrees(qTree, 0);
+    QuadTreeDrawer.drawSubTrees(qTree, 0);
 
     let test = color(204);
     //console.log(test);
-    drawSubPoints(qTree, 0,test);
+    QuadTreeDrawer.drawSubPoints(qTree, 0,test);
     //qtDisplay.drawPoints();
 
     //YES! Everyone is in there!
     // console.log("instance walk");
     // qTree.walk();
-    console.log("static walk");
-    QuadTree.walkTree(qTree, 0);
+    //console.log("static walk");
+    //QuadTree.walkTree(qTree, 0);
 }
 
-function displayAdded(row_limit) {
+function displayAdded(point) {
   //numberOfPointsInTree +=1;
-  let limit = constrain(row_limit, 1, 25);
+  let limit = constrain(element_limit, 1, 25);
   let y = (floor(numberOfPointsInTree/limit) * 15) + 5;
   let x = (numberOfPointsInTree % limit * 15) + 5;
   numberOfPointsInTree +=1;
@@ -104,44 +117,4 @@ function displayFound(row_limit) {
   stroke(102, 102, 102);
   fill(51);
   rect(x, y, 10, 10);
-}
-
-
-  // USAGE:
-  // let result = testSubTreeBounds(qTree, throwingX, throwingY);
-  //  if (!result) {
-  //    throw new Error("Should of passed.");
-  //  } else {
-  //    console.log("working check.")
-  //  }
-function testSubTreeBounds(tree, throwingX, throwingY) {
-  //let throwingX = 277.6318366730977;
-  //let throwingY = 186.80057493258775;
-
-  testTreeBounds(tree.bounds, throwingX, throwingY);
-
-  let subBounds = tree.bounds.quads()
-  console.log(subBounds);
-  for (let wtf of subBounds) {
-    console.log(wtf.pretty());
-    if (testTreeBounds(wtf, throwingX, throwingY)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function testTreeBounds(bounds, testX, testY) {
-  if (bounds.contains(testX, testY)) {
-    fill(0,255,0, 15)
-    circle(testX, testY, 10);
-    console.log(testX, testY,"point in bounds");
-    return true
-  } else {
-    fill(255,0,0, 15)
-    circle(testX, testY, 10);
-    console.log(testX, testY,"point not in bounds");
-    return false
-  }
 }
