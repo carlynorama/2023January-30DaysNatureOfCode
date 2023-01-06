@@ -74,7 +74,8 @@ class QuadTreeDrawer {
 
   static drawPoint(point, c) {
     stroke(c);
-    rect(point.x, point.y, 10, 10);
+    ellipseMode(CENTER);
+    ellipse(point.x, point.y, 8, 8);
   }
 
 }
