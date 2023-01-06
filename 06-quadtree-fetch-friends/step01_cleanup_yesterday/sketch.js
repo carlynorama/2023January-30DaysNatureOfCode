@@ -22,7 +22,13 @@ function setup() {
   movers = loadMoverSet();
 
   console.log("make first qtree");
-  qTree = new QuadTree(100,100,200,200, 5);
+
+  // Constructor Tests.
+  // let bounds = new Bounds(100,100,200,200);
+  // qTree = new QuadTree(bounds, 5);
+  qTree = QuadTree.createQuadTree(100,100,200,200,5);
+
+
   qtDisplay = new QuadTreeDrawer(qTree);
 
 
@@ -71,7 +77,7 @@ function draw() {
 
     //YES! Everyone is in there!
     // console.log("instance walk");
-    // qTree.walk(0);
+    // qTree.walk();
     console.log("static walk");
     QuadTree.walkTree(qTree, 0);
 }
