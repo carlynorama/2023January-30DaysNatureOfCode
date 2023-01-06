@@ -128,8 +128,8 @@ class Bounds {
   }
 
   quads() {
-    if (this.width < 8 || this.height < 8) {
-      throw new Error('Bounds.quads: this is going to be a really small sub tree.');
+    if (this.width < 4 || this.height < 4) {
+      console.log('Bounds.quads: this is going to be a really small sub tree.');
     }
     let minX = this.origin.x;
     let minY = this.origin.y;

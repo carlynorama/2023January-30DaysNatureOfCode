@@ -38,6 +38,21 @@ class QuadTree {
     }
   }
 
+  static clearTree(parent, level) {
+    let thisLevel = level;
+    console.log(thisLevel, parent.bounds.pretty());
+    let nextLevel = level + 1;
+    if (parent.subTrees.length > 0) {
+      console.log("I am a NOT a leaf!", parent.points.length); //<- points length should be 0.
+      for (let subtree of parent.subTrees) {
+        QuadTree.clearTree(subtree, nextLevel);
+      }
+    } else {
+      console.log("I am a leaf!", parent.points.length);
+      this.points = [];
+    }
+  }
+
 
 
 
@@ -128,6 +143,10 @@ class QuadTree {
 
   walk() {
     QuadTree.walkTree(this, 0);
+  }
+
+  clear() {
+    QuadTree.clearTree(this, 0);
   }
 }
 
