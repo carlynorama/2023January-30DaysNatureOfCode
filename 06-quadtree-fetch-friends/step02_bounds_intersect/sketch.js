@@ -2,6 +2,7 @@
 let staticBounds;
 let dynamicBounds;
 let trapped = false;
+let gameOver = false;
 
 function setup() {
 
@@ -49,7 +50,7 @@ function setup() {
 
   console.log("--------- End of Setup ---------");
   //noLoop();
-
+  colorMode(HSB);
 }
 
 function drawBounds(bounds) {
@@ -60,58 +61,62 @@ function drawBounds(bounds) {
 
 function draw() {
   if (runFlag) {
-    console.log(trapped);
-    let bgColor = 51;
-    let fColor = 204;
+    if (gameOver) {
+      background(0);
+    }
+    else {
+      console.log(trapped);
+      let bgColor = color(0, 0, 20);
+      let fColor = color(0, 0, 80);
 
-    if (trapped) {
-      bgColor = 0;
-      fColor = (204, 102, 102);
-      dynamicBounds.insetBy(0.01);
-      staticBounds.insetBy(0.1);
-      if (dynamicBounds.size.area <= 4 ||
+      if (staticBounds.intersects(dynamicBounds)) { fill(0, 0, 60); }
+      else { fill(0, 0, 40) };
+
+      if (trapped) {
+        bgColor = 0;
+        fColor = color(0, 50, 80);
+        dynamicBounds.insetOnCenterBy(0.05);
+        staticBounds.insetOnCenterBy(0.1);
+        if (dynamicBounds.size.area <= 4 ||
           staticBounds.size.area <= 4  ||
           staticBounds.matches(dynamicBounds) ||
           dynamicBounds.holds(staticBounds)
         ) {
-        noLoop();
+          gameOver = true;
+        }
       }
-    }
 
-    background(bgColor);
-    stroke(153);
-    fill(fColor);
+      background(bgColor);
+      stroke(0, 0, 60);
+      fill(fColor);
 
-    if (trapped) {
-      dynamicBounds.moveWithinCentered(mouseX, mouseY, staticBounds);
-      //dynamicBounds.moveWithin(mouseX, mouseY, staticBounds);
-    } else {
-      dynamicBounds.updateCenter(mouseX, mouseY);
-    }
-
-    if (staticBounds.intersects(dynamicBounds)) { fill(204, 204, 204); }
-    else { fill(102, 102, 102) } ;
-
-
-    drawBounds(staticBounds);
-    drawBounds(dynamicBounds);
-
-    let intersection = staticBounds.intersection(dynamicBounds);
-
-    if (intersection !== null) {
-      if (intersection.matches(dynamicBounds) || intersection.holds(dynamicBounds)) {
-        //Careful this might be by reference?
-        fill(102, 102, 204)
-        trapped = true;
+      if (trapped) {
+        dynamicBounds.moveWithinCentered(mouseX, mouseY, staticBounds);
+        //dynamicBounds.moveWithin(mouseX, mouseY, staticBounds);
       } else {
-        let percent = intersection.size.area/dynamicBounds.size.area
-        colorMode(HSB);
-        let h = Range.project(percent, 0, 1, 120, 240);
-        fill(h, 50, 80); //=> target 120
-        colorMode(RGB);
+        dynamicBounds.updateCenter(mouseX, mouseY);
       }
-      drawBounds(intersection);
-    } else { trapped = false; }
 
+      drawBounds(staticBounds);
+      drawBounds(dynamicBounds);
+
+      let intersection = staticBounds.intersection(dynamicBounds);
+
+      if (intersection !== null) {
+        if (intersection.matches(dynamicBounds) || intersection.holds(dynamicBounds)) {
+          //Careful this might be by reference?
+          let b = brightness
+          fill(240, 50, 80);
+          trapped = true;
+        } else {
+          let percent = intersection.size.area/dynamicBounds.size.area
+          let h = Range.project(percent, 0, 1, 120, 240);
+          fill(h, 50, 80);
+
+        }
+        drawBounds(intersection);
+      } else { trapped = false; }
+
+    }
   }
 }

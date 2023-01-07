@@ -170,6 +170,11 @@ class Bounds {
   get width() { return this.size.width }
   get height() { return this.size.height }
 
+  offSetBy(x, y) {
+    this.origin.x += x;
+    this.origin.y += y;
+  }
+
   updateOrigin(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
@@ -178,7 +183,7 @@ class Bounds {
     this.origin.x = x;
     this.origin.y = y;
   }
-
+  
   updateCenter(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
@@ -218,12 +223,6 @@ class Bounds {
     this.size.width -= margin;
     this.size.height -= margin;
   }
-
-  offSetBy(x, y) {
-    this.origin.x += x;
-    this.origin.y += y;
-  }
-
 
   insetOnCenterBy(margin) {
     this.size.width -= margin;

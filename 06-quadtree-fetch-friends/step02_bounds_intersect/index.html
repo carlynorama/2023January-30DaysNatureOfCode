@@ -14,16 +14,17 @@
 
 <body>
   <main>
-    <p>QuadTree has points and can show it via a special class</p>
+    <p>Particpant can move smaller box around. Once smaller bounds is fully inside of larger bounds, lock down mode is enabled and the smaller box remains stuck as they both shrink away.</p>
+    <p>Need to be able to do some bounds work in order to do hit detection for example. Implemented some CGRect syle functions and some misc helper functions.</p>
     <ol>
       <li>function that draws a bounds with a mode</li>
       <li>be able to drag around a bounds</li>
       <li>instersets</li>
-      <li>intersection //return the parts that do intersect</li>
-      <li>TODO: contains</li>
-      <li>TODO: offSetBy</li>
-      <li>TODO: insetBy</li>
-      <li>TODO: divided(atDistance:)</li>
+      <li>intersection (return the parts that do intersect)</li>
+      <li>contains //contains is ambiguous with point check. Called it holds for now. Also made contained by.  </li>
+      <li>offSetBy</li>
+      <li>insetBy</li>
+      <li>TODO?: divided(atDistance:)</li>
     </ol>
   </main>
 </body>
