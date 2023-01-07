@@ -64,6 +64,9 @@ function draw() {
   if (runFlag) {
     if (gameOver) {
       background(0);
+      fill(0,0,5);
+      stroke(0, 0, 30);
+      drawBounds(dynamicBounds)
     }
     else {
       //console.log(trapped);
@@ -78,7 +81,7 @@ function draw() {
         fColor = color(0, 50, 80);
         if (saturation > 0) { saturation -= 0.08; }
         dynamicBounds.insetOnCenterBy(0.01);
-        staticBounds.insetOnCenterBy(0.1);
+        staticBounds.insetOnCenterBy(0.2);
         if (dynamicBounds.size.area <= 4 ||
           staticBounds.size.area <= 4  ||
           staticBounds.matches(dynamicBounds) ||
