@@ -1,3 +1,7 @@
+
+
+
+
 class Point {
   constructor(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
@@ -7,6 +11,15 @@ class Point {
     this.x = x;
     this.y = y;
   }
+
+  static matches(lhs, rhs) {
+    return (lhs.x === rhs.x && lhs.y === rhs.y)
+  }
+
+  matches(other) {
+    return Point.matches(this, other);
+  }
+
   pretty() {
     return `Point(${this.x}, ${this.y})`
   }
@@ -21,8 +34,27 @@ class Size {
     this.width = w;
     this.height = h;
   }
+
+  static matches(lhs, rhs) {
+    return (lhs.width === rhs.width && lhs.height === rhs.height)
+  }
+
+  static sidesGreaterThan(lhs, rhs) {
+    return (lhs.width >= rhs.width && lhs.height >= rhs.height)
+  }
+
+  static areaGreaterThan(lhs, rhs) {
+    return (lhs.area >= rhs.area)
+  }
+
+  matches(other) {
+    return Size.matches(this, other);
+  }
+
+  get area() { return this.width * this.height }
+
   pretty() {
-    return `Point(${this.width}, ${this.height})`
+    return `Size(${this.width}, ${this.height})`
   }
 }
 
@@ -30,10 +62,21 @@ class Range {
   constructor(l, u) {
     if (!(typeof(l) === 'number' && typeof(u) === 'number')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
-      throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n("Range():values are not numeric")');
+      throw new Error('\r\n\r\nRange():values are not numeric")');
     }
     this.lower = l;
     this.upper = u;
+  }
+
+  static project(val, l1, u1, l2, u2) {
+    //check against range.locationInRange();
+    let percent = Math.abs(val - l1)/Math.abs(u1-l1);
+    let displacement = (u2-l2) * percent;
+    return l2 + displacement;
+  }
+
+  locationInRange(val) {
+      return Math.abs(val - this.lower)/Math.abs(this.upper-this.lower);
   }
 
   inclusiveContains(x) {
@@ -53,7 +96,19 @@ class Range {
   }
 
   overlaps(other) {
-    return(this.inclusiveContains(other.lower) ||  this.inclusiveContains(other.upper))
+    //have to have both incase one holds the other and the smaller is the caller.
+    let sideOne = (this.inclusiveContains(other.lower) ||  this.inclusiveContains(other.upper))
+    let sideTwo = (other.inclusiveContains(this.lower) ||  other.inclusiveContains(this.upper))
+    return sideOne || sideTwo;
+  }
+
+  //contains would be better, how to overload without types?
+  fullyHolds(other) {
+    return (this.lower < other.lower && this.upper > other.upper)
+  }
+
+  holds(other) {
+    return (this.lower <= other.lower && this.upper >= other.upper)
   }
 
   pretty() {
@@ -145,9 +200,9 @@ class Bounds {
     let yCheck = yRange.upperInclusiveContains(y);
     //console.log("y", this.minY, this.maxY, y, yCheck);
     return (xCheck && yCheck);
-
     //return true;
   }
+
 
   static intersects(lhs, rhs) {
     let lhs_xRange = new Range(lhs.minX, lhs.maxX);
@@ -169,14 +224,20 @@ class Bounds {
     let rhs_yRange = new Range(rhs.minY, rhs.maxY);
 
     if (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange)) {
-      if (lhs_xRange.inclusiveContains(rhs.minX)) { originX = rhs.minX; w = lhs.maxX-rhs.minX }
-      else { originX = lhs.minX; w = rhs.maxX-lhs.minX }
-      if (lhs_yRange.inclusiveContains(rhs.minY)) { originY = rhs.minY; h = lhs.maxY-rhs.minY }
-      else { originY = lhs.minY; h = rhs.maxY-lhs.minY }
+
+      if (lhs_xRange.inclusiveContains(rhs.minX)) { originX = rhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-rhs.minX }
+      else { originX = lhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-lhs.minX }
+      if (lhs_yRange.inclusiveContains(rhs.minY)) { originY = rhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-rhs.minY }
+      else { originY = lhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-lhs.minY }
     }
+
     else { return null }
     //console.log(originX, originY, w, h);
     return Bounds.createBounds(originX, originY, w, h);
+  }
+
+  static matches(lhs, rhs) {
+    return (lhs.origin.matches(rhs.origin) && lhs.size.matches(rhs.size));
   }
 
   intersects(other) {
@@ -185,6 +246,29 @@ class Bounds {
 
   intersection(other) {
     return Bounds.intersection(this, other);
+  }
+
+  matches(other) {
+    return Bounds.matches(this, other);
+  }
+
+  holds(other) {
+    //x y values can be equal
+    let lhs_xRange = new Range(this.minX, this.maxX);
+    let lhs_yRange = new Range(this.minY, this.maxY);
+    let rhs_xRange = new Range(other.minX, other.maxX);
+    let rhs_yRange = new Range(other.minY, other.maxY);
+
+    return (lhs_xRange.holds(rhs_xRange) && lhs_yRange.holds(rhs_yRange))
+  }
+
+  containedBy(other) {
+    let lhs_xRange = new Range(this.minX, this.maxX);
+    let lhs_yRange = new Range(this.minY, this.maxY);
+    let rhs_xRange = new Range(other.minX, other.maxX);
+    let rhs_yRange = new Range(other.minY, other.maxY);
+
+    return (rhs_xRange.holds(lhs_xRange) && rhs_yRange.holds(lhs_yRange))
   }
 
   quads() {
