@@ -75,6 +75,11 @@ class Range {
     return l2 + displacement;
   }
 
+  static constrain(val, l, u) {
+    return Math.min(Math.max(val, l), u);
+    //Math.clamp(val, l, u) is apparently slow?;
+  }
+
   locationInRange(val) {
       return Math.abs(val - this.lower)/Math.abs(this.upper-this.lower);
   }
@@ -182,6 +187,57 @@ class Bounds {
     this.origin.x = x - this.width/2;
     this.origin.y = y - this.height/2;
   }
+
+  updateWithin(x, y, bounds) {
+    if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
+      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
+      throw new Error('Bounds.updateOrigin: one or both of the values are not numeric.');
+    }
+    this.origin.x = Range.constrain(x, bounds.minX, bounds.maxX);
+    this.origin.y = Range.constrain(y, bounds.minY, bounds.maxY);
+  }
+  moveWithin(x, y, bounds) {
+    if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
+      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
+      throw new Error('Bounds.updateOrigin: one or both of the values are not numeric.');
+    }
+    this.origin.x = Range.constrain(x, bounds.minX, bounds.maxX - this.width);
+    this.origin.y = Range.constrain(y, bounds.minY, bounds.maxY - this.height);
+  }
+
+  moveWithinCentered(x, y, bounds) {
+    this.moveWithin(x - this.width/2, y - this.height/2, bounds)
+  }
+
+  insetBy(margin) {
+    this.size.width -= margin;
+    this.size.height -= margin;
+  }
+
+  insetBy(margin) {
+    this.size.width -= margin;
+    this.size.height -= margin;
+  }
+
+  offSetBy(x, y) {
+    this.origin.x += x;
+    this.origin.y += y;
+  }
+
+
+  insetOnCenterBy(margin) {
+    this.size.width -= margin;
+    this.size.height -= margin;
+    let offset = margin/2;
+    this.offSetBy(offset, offset);
+  }
+
+  scale(factor) {
+    this.size.width * scale;
+    this.size.height * scale;
+  }
+
+
 
   contains(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {

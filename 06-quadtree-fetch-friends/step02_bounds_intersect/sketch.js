@@ -67,9 +67,13 @@ function draw() {
     if (trapped) {
       bgColor = 0;
       fColor = (204, 102, 102);
-      dynamicBounds.size.width -= 0.1;
-      dynamicBounds.size.height -= 0.1;
-      if (dynamicBounds.size.width < 0 || dynamicBounds.size.height < 0) {
+      dynamicBounds.insetBy(0.01);
+      staticBounds.insetBy(0.1);
+      if (dynamicBounds.size.area <= 4 ||
+          staticBounds.size.area <= 4  ||
+          staticBounds.matches(dynamicBounds) ||
+          dynamicBounds.holds(staticBounds)
+        ) {
         noLoop();
       }
     }
@@ -78,8 +82,12 @@ function draw() {
     stroke(153);
     fill(fColor);
 
-    dynamicBounds.updateCenter(mouseX, mouseY);
-    //dynamicBounds.updateOrigin(mouseX, mouseY);
+    if (trapped) {
+      dynamicBounds.moveWithinCentered(mouseX, mouseY, staticBounds);
+      //dynamicBounds.moveWithin(mouseX, mouseY, staticBounds);
+    } else {
+      dynamicBounds.updateCenter(mouseX, mouseY);
+    }
 
     if (staticBounds.intersects(dynamicBounds)) { fill(204, 204, 204); }
     else { fill(102, 102, 102) } ;
