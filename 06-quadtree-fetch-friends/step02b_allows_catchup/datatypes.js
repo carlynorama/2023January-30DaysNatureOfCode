@@ -183,7 +183,7 @@ class Bounds {
     this.origin.x = x;
     this.origin.y = y;
   }
-
+  
   updateCenter(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
@@ -235,6 +235,8 @@ class Bounds {
     this.size.width * scale;
     this.size.height * scale;
   }
+
+
 
   contains(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
