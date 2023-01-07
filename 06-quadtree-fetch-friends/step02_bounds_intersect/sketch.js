@@ -3,6 +3,7 @@ let staticBounds;
 let dynamicBounds;
 let trapped = false;
 let gameOver = false;
+let saturation = 50;
 
 function setup() {
 
@@ -16,8 +17,8 @@ function setup() {
 
   createControlledCanvas(400, 400);
   background(51);
-  staticBounds = Bounds.createBounds(150, 150, 100, 100);
-  dynamicBounds = Bounds.createBounds(0, 0, 50, 50);
+  staticBounds = Bounds.createBounds(125, 125, 150, 150);
+  dynamicBounds = Bounds.createBounds(0, 0, 60, 60);
 
   let baseRange = new Range(150, 250);
   let subset = new Range(175,200);
@@ -65,7 +66,7 @@ function draw() {
       background(0);
     }
     else {
-      console.log(trapped);
+      //console.log(trapped);
       let bgColor = color(0, 0, 20);
       let fColor = color(0, 0, 80);
 
@@ -75,7 +76,8 @@ function draw() {
       if (trapped) {
         bgColor = 0;
         fColor = color(0, 50, 80);
-        dynamicBounds.insetOnCenterBy(0.05);
+        if (saturation > 0) { saturation -= 0.08; }
+        dynamicBounds.insetOnCenterBy(0.04);
         staticBounds.insetOnCenterBy(0.1);
         if (dynamicBounds.size.area <= 4 ||
           staticBounds.size.area <= 4  ||
@@ -103,10 +105,8 @@ function draw() {
       let intersection = staticBounds.intersection(dynamicBounds);
 
       if (intersection !== null) {
-        if (intersection.matches(dynamicBounds) || intersection.holds(dynamicBounds)) {
-          //Careful this might be by reference?
-          let b = brightness
-          fill(240, 50, 80);
+        if (intersection.matches(dynamicBounds) || intersection.holds(dynamicBounds) || trapped) {
+          fill(240, saturation, 80);
           trapped = true;
         } else {
           let percent = intersection.size.area/dynamicBounds.size.area
