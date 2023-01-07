@@ -58,15 +58,23 @@ class Range {
 }
 
 class Bounds {
-  constructor(x, y, w, h) {
-    //console.log("MAKING BOUNDS:")
-    //console.log(x, y, w, h);
-    if (!(typeof(x) === 'number' && typeof(y) === 'number' && typeof(w) === 'number' && typeof(h) === 'number')) {
-      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
-      throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n("Bounds():values are not numeric")');
+  constructor(point, size) {
+    if (!(typeof(point.x) === 'number' && typeof(point.y) === 'number' && typeof(size.width) === 'number' && typeof(size.height) === 'number')) {
+      //console.log(point.pretty(), size.pretty())
+        throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
     }
-    this.origin = new Point(x,y);
-    this.size = new Size(w,h);
+    this.origin = point;
+    this.size = size;
+  }
+
+  static createBounds(x, y, w, h) {
+    if (!(typeof(x) === 'number' && typeof(y) === 'number' && typeof(w) === 'number' && typeof(h) === 'number')) {
+      throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
+    }
+    let p = new Point(x,y);
+    let s = new Size(w,h);
+    let b = new Bounds(p,s);
+    return b;
   }
 
   get minX() {
@@ -103,7 +111,7 @@ class Bounds {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n(Bounds.contains: values are not numeric.)');
     }
-    console.log("contains:", x, y)
+    //console.log("contains:", x, y)
     //console.log("MINX", this.minX())
     //console.log("direct", this.origin.x)
     let xRange = new Range(this.minX, this.maxX);
@@ -120,9 +128,8 @@ class Bounds {
   }
 
   quads() {
-    if (this.width < 8 || this.height < 8) {
-      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
-      throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n(bounds.conatins values are not numeric.)');
+    if (this.width < 4 || this.height < 4) {
+      console.log('Bounds.quads: this is going to be a really small sub tree.');
     }
     let minX = this.origin.x;
     let minY = this.origin.y;
@@ -137,10 +144,10 @@ class Bounds {
       throw new Error('Bounds.quads: is a dimension 0?');
     }
 
-    let ne  = new Bounds(midX, minY, w, h);
-    let se  = new Bounds(midX, midY, w, h);
-    let sw  = new Bounds(minX, midY, w, h);
-    let nw  = new Bounds(minX, minY, w, h);
+    let ne  = Bounds.createBounds(midX, minY, w, h);
+    let se  = Bounds.createBounds(midX, midY, w, h);
+    let sw  = Bounds.createBounds(minX, midY, w, h);
+    let nw  = Bounds.createBounds(minX, minY, w, h);
 
     return [ne,se,sw,nw];
   }

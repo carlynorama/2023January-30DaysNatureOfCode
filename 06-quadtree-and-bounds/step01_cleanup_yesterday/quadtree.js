@@ -1,21 +1,35 @@
 class QuadTree {
-  constructor(x, y, w, h, count) {
-    if (!(typeof(x) === 'number' && typeof(y) === 'number' && typeof(w) === 'number' && typeof(h) === 'number' && typeof(count) === 'number')) {
-      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
-      throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n("QuadTree():values are not numeric")');
+  constructor(bounds, element_limit) {
+    if (!(typeof(element_limit) === 'number')) {
+      throw new Error('\r\n\r\nQuadTree():value for element_limit is not numeric');
     }
-    this.bounds = new Bounds(x, y, w, h);
-    this.limit = count;
+
+    if (!(typeof(bounds.x) === 'number')) {
+      throw new Error('\r\n\r\nQuadTree():are you sure you included a bounds?');
+    }
+
+    this.bounds = bounds;
+    this.limit = element_limit;
     this.points = [];
     this.subTrees = []; //[ne,se,sw,nw];
   }
+
+
+  static createQuadTree(x, y, w, h, element_limit) {
+      if (!(typeof(x) === 'number' && typeof(y) === 'number' && typeof(w) === 'number' && typeof(h) === 'number' && typeof(element_limit) === 'number')) {
+        throw new Error('\r\n\r\nQuadTree():values are not numeric');
+      }
+      let b = Bounds.createBounds(x, y, w, h);
+      let qt = new QuadTree(b, element_limit);
+      return qt;
+    }
 
   static walkTree(parent, level) {
     let thisLevel = level;
     console.log(thisLevel, parent.bounds.pretty());
     let nextLevel = level + 1;
     if (parent.subTrees.length > 0) {
-      console.log("I am a NOT a leaf!", parent.points.length);
+      console.log("I am a NOT a leaf!", parent.points.length); //<- points length should be 0.
       for (let subtree of parent.subTrees) {
         QuadTree.walkTree(subtree, nextLevel);
       }
@@ -24,29 +38,36 @@ class QuadTree {
     }
   }
 
-  // static createEmptyTree(bounds, count) {
-  //   if (!(typeof(bounds) === 'Bounds' && typeof(c) === 'number')) {
-  //     //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
-  //     throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n("QuadTree.createEmptyTree: values are not numeric")');
-  //   }
-  //   this.bounds = bounds;
-  //   this.limit = count;
-  //   this.points = [];
-  //   this.subTrees = []; //[ne,se,sw,nw];
-  // }
+  static clearTree(parent, level) {
+    let thisLevel = level;
+    console.log(thisLevel, parent.bounds.pretty());
+    let nextLevel = level + 1;
+    if (parent.subTrees.length > 0) {
+      console.log("I am a NOT a leaf!", parent.points.length); //<- points length should be 0.
+      for (let subtree of parent.subTrees) {
+        QuadTree.clearTree(subtree, nextLevel);
+      }
+    } else {
+      console.log("I am a leaf!", parent.points.length);
+      this.points = [];
+    }
+  }
+
+
+
 
   addPoint(x, y, pointSuccess) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
-      throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n\n(QuadTree.addPoint values are not numeric.)');
+      throw new Error('QuadTree.addPoint values are not numeric.');
     }
     if (!(typeof(pointSuccess) === 'function')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
-      throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n\n(QuadTree.addPoint: did not recieve successFunction)');
+      throw new Error('QuadTree.addPoint: did not recieve successFunction');
     }
 
     if (!this.contains(x,y)) {
-      console.log(x,y,"not in here", this.bounds.pretty())
+      //console.log(x,y,"not in here", this.bounds.pretty())
       return false;
     } else {
       if (this.subTrees.length != 0) {
@@ -55,13 +76,16 @@ class QuadTree {
       else if ((this.points.length < this.limit) && (this.subTrees.length === 0)) {
         let point = new Point(x,y);
         this.points.push(point);
-        pointSuccess(this.limit);
+        pointSuccess(point);
         return true;
       }
       else {
-        console.log("SUBDIVIDING!");
+        //console.log("SUBDIVIDING!");
         this.subdivide();
-        //distributePoints(); ??
+        for (let point of this.points) {
+          this.addPointToSubTree(point.x,point.y,pointSuccess);
+        }
+        this.points = [];
         return this.addPointToSubTree(x,y,pointSuccess);
       }
       throw new Error('QuadTree.addPoint: case not handled.');
@@ -70,41 +94,39 @@ class QuadTree {
   }
 
   subdivide() {
-    console.log("SUBDIVIDED CALLED ON TREE:" + this.bounds.pretty());
+    //console.log("SUBDIVIDED CALLED ON TREE:" + this.bounds.pretty());
     if (this.subTrees.length === 0) {
       let subBounds = this.bounds.quads();
       for (let bounds of subBounds) {
-        console.log(bounds.pretty(), bounds.x, bounds.y, bounds.width, bounds.height, this.limit);
-        let newTree = new QuadTree(bounds.x, bounds.y, bounds.width, bounds.height, this.limit);
+        //console.log(bounds.pretty(), bounds.x, bounds.y, bounds.width, bounds.height, this.limit);
+        let newTree = new QuadTree(bounds, this.limit);
         this.subTrees.push(newTree);
       }
-      console.log("RESULTING TREES:" + this.bounds.pretty());
+      //console.log("RESULTING TREES:" + this.bounds.pretty());
       // for (let tree in this.subTrees) {
       //   console.log()
       // }
-      for (let i = 0; i < 4; i++) {
-        console.log("bounds", i, subBounds[i].pretty());
-        console.log("tree", i, this.subTrees[i].bounds.pretty());
-      }
+      // for (let i = 0; i < 4; i++) {
+      //   console.log("bounds", i, subBounds[i].pretty());
+      //   console.log("tree", i, this.subTrees[i].bounds.pretty());
+      // }
 
     } else {
-      //console.log("ERROR: subdivide() should never be called if subtrees exists.");
       throw new Error('ERROR: subdivide() should never be called if subtrees exists.');
     }
   }
 
   addPointToSubTree(x,y,pointSuccess) {
     if (this.subTrees.length == 0) {
-      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
-      throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n(QuadTree.addPointToSubTree: subtrees array is empty.)');
+      throw new Error('QuadTree.addPointToSubTree: subtrees array is empty.');
     }
-    console.log("addPointToSubTree, should be 4: ", this.subTrees.length);
+    //console.log("addPointToSubTree, should be 4: ", this.subTrees.length);
     for (let i = 0; i < 4; i++) {
-      console.log(i, this.subTrees[i].bounds.pretty(), x, y);
+      //console.log(i, this.subTrees[i].bounds.pretty(), x, y);
       if (this.subTrees[i].contains(x,y)) {
-        console.log("I think you're in here!");
+        //console.log("I think you're in here!");
         let result = this.subTrees[i].addPoint(x,y,pointSuccess);
-        console.log(result);
+        //console.log(result);
         return result;
       }
     }
@@ -114,15 +136,17 @@ class QuadTree {
 
   contains(x,y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
-      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
-      throw new Error('\r\n\r\nError Description:\r\nI\'m sorry Dave, I\'m afraid I can\'t do that.\n(QuadTree.conatins values are not numeric.)');
+      throw new Error('QuadTree.conatins values are not numeric.');
     }
     return this.bounds.contains(x,y);
   }
 
+  walk() {
+    QuadTree.walkTree(this, 0);
+  }
 
-  walk(level) {
-    QuadTree.walkTree(this, level);
+  clear() {
+    QuadTree.clearTree(this, 0);
   }
 }
 

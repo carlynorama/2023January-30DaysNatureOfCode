@@ -1,7 +1,7 @@
 function generateMoverSet(qty) {
   //vide suggestion for random
   let movers = [];
-  let moverStrings = ["<pre>let movers = [\n\t"];
+  let moverStrings = ["<pre>let particles = [\n\t"];
   for (let i = 0; i < qty; i++) {
     let x = random(width);
     let y = random(height);
