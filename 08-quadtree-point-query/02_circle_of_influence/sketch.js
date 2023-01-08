@@ -8,7 +8,7 @@ let pointIndex = 0;
 let thisQueryPoint;
 let thisQueryBounds;
 let diameter = 50;
-let myFriends = [];
+//let myFriends = [];
 let myNeighborhood;
 
 // ------------------------------------------------------------------------ setup()
@@ -41,14 +41,14 @@ function setup() {
    myNeighborhood = thisQueryBounds;
    console.log("thisQueryBounds", thisQueryBounds.x, thisQueryBounds.y);
 
-   myNeighborhood = thisQueryBounds;
-   myFriends = [];
-   qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
+  //  myNeighborhood = thisQueryBounds;
+  //  myFriends = [];
+  //  qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
 
    
     
   console.log("--------- End of Setup ---------");
-  noLoop();
+  //noLoop();
   
 }
 
@@ -58,8 +58,8 @@ function update() {
   thisQueryPoint = fetchPoint();// makePoint(); //
   thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
   myNeighborhood = thisQueryBounds;
-  myFriends = [];
-  qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
+  // myFriends = [];
+  // qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
 }
 
 function fetchPoint() {
@@ -83,8 +83,8 @@ function draw() {
 
   frameRate(1);
   
-  //  background(51);
-  //  update();
+   background(51);
+   update();
 
    noFill();
    stroke(102, 102, 102);
@@ -93,7 +93,7 @@ function draw() {
  
 
   drawNeighborhood(myNeighborhood);
-  drawFriends(myFriends);
+  //drawFriends(myFriends);
 
   qTree.doWithPointsInRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2, drawFound);
 
@@ -114,21 +114,21 @@ function drawBounds(bounds) {
 //Only runs once during set up. Could use it to create a set, etc. 
 function successPoint(point) { }
 
-function drawFriends(points) {
-  for (point of points) {
-    noFill();
-    stroke(51, 204, 102);
-    ellipseMode(CENTER);
-    ellipse(point.x, point.y, 3);
-  }
-}
+// function drawFriends(points) {
+//   for (point of points) {
+//     noFill();
+//     stroke(51, 204, 102);
+//     ellipseMode(CENTER);
+//     ellipse(point.x, point.y, 3);
+//   }
+// }
 
 function drawFound(point) {
     noFill();
     //console.log(point.x, point.y)
-    stroke(204, 51, 102);
-    rectMode(CENTER);
-    rect(point.x, point.y, 5);
+    stroke(51, 204, 102);
+    ellipseMode(CENTER);
+    ellipse(point.x, point.y, 3);
 }
 
 function drawMe(point) {

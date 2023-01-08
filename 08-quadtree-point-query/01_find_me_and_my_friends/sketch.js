@@ -49,7 +49,7 @@ function update() {
   thisQueryPoint = fetchPoint();// makePoint(); //
   let result = qTree.findPointValue(thisQueryPoint.x, thisQueryPoint.y);
   if (result != null) {
-    console.log("foundOne");
+    //console.log("foundOne");
     myFriends = result.companions;
     myNeighborhood = result.bounds;
   }

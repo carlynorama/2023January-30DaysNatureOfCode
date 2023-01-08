@@ -123,7 +123,7 @@ class QuadTree {
 
     doWithPointsInRadius(x, y, r, myAction) {
       let rqueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, r*2, r*2);
-      console.log("startQuery", rqueryBounds.x, rqueryBounds.y)
+      //console.log("startQuery", rqueryBounds.x, rqueryBounds.y)
       QuadTree.pointAccessWithinRadius(rqueryBounds, this, myAction);
     }
 
@@ -134,7 +134,6 @@ class QuadTree {
         if (parent.subTrees.length > 0) {
           for (let subtree of parent.subTrees) {
             if (queryBounds.intersects(subtree.bounds)) {
-              //let subBounds = queryBounds.intersection(subtree.bounds);
               QuadTree.pointAccessWithinRadius(queryBounds, subtree, myAction);
             }
           }
