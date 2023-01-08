@@ -54,7 +54,7 @@ class QuadTree {
         QuadTree.subTreeAccess(parent.subTrees[i], nextLevel, myPath, myAction);
       }
     } else {
-        myAction(parent.points, parent.bounds, level, Array.from(quadrantPath));
+        myAction(parent.points, parent.bounds, level, Array.from(quadrantPath).reverse());
     }
   }
 
@@ -136,10 +136,23 @@ class QuadTree {
           }
         }
       } else {
-          myAction(parent.points, parent.bounds, level, Array.from(quadrantPath));
+          myAction(parent.points, parent.bounds, level, Array.from(quadrantPath).reverse());
       }
     }
   
+    static getSubTreeFrom(parent, level, quadrantPath) {
+            console.log(parent.bounds.pretty(), level, quadrantPath);
+            if (level === 0) { return parent }
+            let nextLevel = level - 1;
+            if (parent.subTrees.length > 0) {
+              let treeLoc = quadrantPath.pop();
+              return QuadTree.getSubTreeFrom(parent.subTrees[treeLoc], nextLevel, quadrantPath);
+            } else {
+                console.log("Is this really the place?", level, quadrantPath);
+                return parent
+            }
+          }
+    
 
 
 

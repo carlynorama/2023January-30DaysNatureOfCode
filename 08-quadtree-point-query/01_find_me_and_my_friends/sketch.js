@@ -7,6 +7,7 @@ let thisQueryPoint;
 let thisQueryBounds;
 let diameter = 10;
 let myFriends = [];
+let myNeighborhood;
 
 // ------------------------------------------------------------------------ setup()
 function setup() {
@@ -84,9 +85,19 @@ function drawBounds(bounds) {
   rect(bounds.x, bounds.y, bounds.width, bounds.height);
 }
 
+function drawNeighborhood(bounds) {
+  rectMode(CORNER);
+  stroke(204, 51, 204);
+  noFill();
+  rect(bounds.x, bounds.y, bounds.width, bounds.height);
+}
+
 function handleTreeInfo(points, bounds, level, quadrantPath) {
   console.log(level, quadrantPath, points[0], points[1], points[2], points[3], points[4], points[5], bounds.pretty());
   myFriends = points;
+  let test = QuadTree.getSubTreeFrom(qTree, level, quadrantPath);
+  //console.log(test.bounds.pretty());
+  myNeighborhood = test.bounds;
 }
 
 
@@ -99,14 +110,10 @@ function draw() {
    noFill();
    stroke(102, 102, 102);
    qTree.doWithLeafBounds(drawBounds);
-   //QuadTreeDrawer.drawSubTrees(qTree, 0);
+   qTree.doWithPoints(drawFieldPoint);
+ 
 
-  // noFill();
-  // stroke(51, 204, 102);
-  // queryBounds.updateCenter(mouseX, mouseY);
-  // drawBounds(queryBounds);
-
-  qTree.doWithPoints(drawFieldPoint);
+  drawNeighborhood(myNeighborhood);
   drawFriends(myFriends);
   drawMe(thisQueryPoint);
 
