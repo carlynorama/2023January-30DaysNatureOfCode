@@ -38,6 +38,27 @@ class QuadTree {
     }
   }
 
+
+
+  doWithSubTreeInfo(myAction) {
+    QuadTree.subTreeAccess(this, 0, [], myAction);
+  }
+
+  static subTreeAccess(parent, level, quadrantPath, myAction) {
+    //console.log(thisLevel, parent.bounds.pretty());
+    let nextLevel = level + 1;
+    if (parent.subTrees.length > 0) {
+      for (let i = 0; i < parent.subTrees.length; i++) {
+        quadrantPath.push(i);
+        QuadTree.subTreeAccess(parent.subTrees[i], nextLevel, quadrantPath, myAction);
+      }
+    } else {
+        myAction(parent.points, parent.bounds, level, quadrantPath);
+    }
+  }
+
+ 
+
   doWithPoints(myAction) {
     QuadTree.pointAccess(this, 0, myAction);
   }
@@ -53,6 +74,20 @@ class QuadTree {
       for (let point of parent.points) {
         myAction(point);
       };
+    }
+  }
+
+  doWithLeafBounds(myAction) {
+    QuadTree.boundsAccess(this, myAction);
+  }
+
+  static boundsAccess(parent, myAction) {
+    if (parent.subTrees.length > 0) {
+      for (let subtree of parent.subTrees) {
+        QuadTree.boundsAccess(subtree, myAction);
+      }
+    } else {
+        myAction(parent.bounds);
     }
   }
 

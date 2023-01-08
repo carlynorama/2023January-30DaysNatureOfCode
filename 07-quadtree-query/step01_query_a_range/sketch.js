@@ -30,10 +30,7 @@ function setup() {
   //console.log(queryBounds.pretty());
 
 
-  
-  // qTree.doWithPointsIn(bounds, somePointsFunction);
-  // qTree.transformPoint(transformation);
-  // qTree.returnPoints(bounds);
+  qTree.doWithSubTreeInfo(fullTreeResults);
 
   console.log("--------- End of Setup ---------");
   //noLoop();
@@ -75,6 +72,15 @@ function allPointsFunction(point) {
   ellipse(point.x, point.y, 2);
 }
 
+function drawBounds(bounds) {
+  rectMode(CORNER);
+  rect(bounds.x, bounds.y, bounds.width, bounds.height);
+}
+
+function fullTreeResults(points, bounds, level, quadrantPath) {
+  console.log(level, quadrantPath, points[0], points[1], points[2], points[3], bounds.pretty());
+}
+
 
 // ------------------------------------------------------------------------ draw()
 function draw() {
@@ -83,7 +89,8 @@ function draw() {
 
    noFill();
    stroke(102, 102, 102);
-   QuadTreeDrawer.drawSubTrees(qTree, 0);
+   qTree.doWithLeafBounds(drawBounds);
+   //QuadTreeDrawer.drawSubTrees(qTree, 0);
 
   noFill();
   stroke(51, 204, 102);

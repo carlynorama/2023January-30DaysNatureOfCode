@@ -8,21 +8,18 @@
   <script src="../../p5.min.js"></script>
   <script src="sketch.js"></script>
   <script src="controller.js"></script>
-  <script src="particle.js"></script>
   <script src="datatypes.js"></script>
   <script src="quadtree.js"></script>
-  <script src="qtreedrawer.js"></script>
 </head>
 
 <body>
   <main>
     <p>So... FINALLY have something that looks like the sketch at the end of [Coding Challenge 98.2](https://www.youtube.com/watch?v=QQx_NmCIuCY), [see shiffmans code](https://editor.p5js.org/codingtrain/sketches/g7LnWQ42x)</p>
-    <p>I took a slightly different approach. I didn't hand the points out of the quadtree, I passed a function in. </p>
+    <p>I took a slightly different approach, passing a function in rather than points out directly. p5js functions are being handed in to do the drawing this way. It could use some refactoring, but I'm walking away before I break it!</p>
     <ol>
       <li>draw static points</li>
       <li>qTree.doWithPoints(everyPointFunction);</li>
       <li>qTree.doWithPointsWithin(bounds, somePointsFunction);</li>
-      <li></li>
     </ol>
   </main>
 </body>
