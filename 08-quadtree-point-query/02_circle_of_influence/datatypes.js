@@ -23,7 +23,7 @@ class Point {
     let left = ((lhs.x - rhs.x) * (lhs.x - rhs.x)) + ((lhs.y - rhs.y)*(lhs.y - rhs.y))
     let right = distance * distance
     let result = left <= right;
-    console.log(result, left, right);
+    //console.log(result, left, right);
     return  result ;
   }
 

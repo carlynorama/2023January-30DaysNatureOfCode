@@ -29,13 +29,26 @@ function setup() {
     pointSet.push(thisQueryPoint);
   }
 
-   console.log(thisQueryPoint.pretty());
+   //console.log(thisQueryPoint.pretty());
+   //thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
+   //console.log(thisQueryBounds.pretty());
+   //myNeighborhood = thisQueryBounds;
+   //qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
+
+
+
    thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
-   console.log(thisQueryBounds.pretty());
    myNeighborhood = thisQueryBounds;
+   console.log("thisQueryBounds", thisQueryBounds.x, thisQueryBounds.y);
+
+   myNeighborhood = thisQueryBounds;
+   myFriends = [];
    qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
+
+   
     
   console.log("--------- End of Setup ---------");
+  noLoop();
   
 }
 
@@ -70,8 +83,8 @@ function draw() {
 
   frameRate(1);
   
-   background(51);
-   update();
+  //  background(51);
+  //  update();
 
    noFill();
    stroke(102, 102, 102);
@@ -81,6 +94,9 @@ function draw() {
 
   drawNeighborhood(myNeighborhood);
   drawFriends(myFriends);
+
+  qTree.doWithPointsInRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2, drawFound);
+
   drawMe(thisQueryPoint);
 
 
@@ -105,6 +121,14 @@ function drawFriends(points) {
     ellipseMode(CENTER);
     ellipse(point.x, point.y, 3);
   }
+}
+
+function drawFound(point) {
+    noFill();
+    //console.log(point.x, point.y)
+    stroke(204, 51, 102);
+    rectMode(CENTER);
+    rect(point.x, point.y, 5);
 }
 
 function drawMe(point) {
