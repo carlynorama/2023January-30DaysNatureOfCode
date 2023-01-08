@@ -49,11 +49,12 @@ class QuadTree {
     let nextLevel = level + 1;
     if (parent.subTrees.length > 0) {
       for (let i = 0; i < parent.subTrees.length; i++) {
-        quadrantPath.push(i);
-        QuadTree.subTreeAccess(parent.subTrees[i], nextLevel, quadrantPath, myAction);
+        let myPath = Array.from(quadrantPath);
+        myPath.push(i);
+        QuadTree.subTreeAccess(parent.subTrees[i], nextLevel, myPath, myAction);
       }
     } else {
-        myAction(parent.points, parent.bounds, level, quadrantPath);
+        myAction(parent.points, parent.bounds, level, Array.from(quadrantPath));
     }
   }
 
