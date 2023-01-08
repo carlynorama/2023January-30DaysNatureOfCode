@@ -19,6 +19,17 @@ class Point {
     return (this.x === x && this.y === y);
   }
 
+  static closeEnough(lhs, rhs, distance) {
+    let left = ((lhs.x - rhs.x) * (lhs.x - rhs.x)) + ((lhs.y - rhs.y)*(lhs.y - rhs.y))
+    let right = distance * distance
+    let result = left <= right;
+    //console.log(result, left, right);
+    return  result ;
+  }
+
+  closeEnoughTo(other, distance) {
+    return Point.closeEnough(this, other, distance);
+  }
 
   pretty() {
     return `Point(${this.x}, ${this.y})`
@@ -139,6 +150,16 @@ class Bounds {
     return b;
   }
 
+  static createBoundsFromCenter(centerX, centerY, w, h) {
+    if (!(typeof(centerX) === 'number' && typeof(centerY) === 'number' && typeof(w) === 'number' && typeof(h) === 'number')) {
+      throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
+    }
+    let p = new Point(centerX - w/2,centerY - h/2);
+    let s = new Size(w,h);
+    let b = new Bounds(p,s);
+    return b;
+  }
+
   static createBoundsFromPoints(startPoint, endPoint) {
     let w = endPoint.x - startPoint.x;
     let h = endPoint.y - startPoint.y;
@@ -160,35 +181,19 @@ class Bounds {
     }
   }
 
-  get minX() {
-    return this.origin.x;
-  }
-
-  get minY() {
-    return this.origin.y;
-  }
-
-  get maxX() {
-    return this.origin.x + this.size.width;
-  }
-
-  get maxY() {
-    return this.origin.y + this.size.height;
-  }
-
-  get midX() {
-    return this.size.width/2 + this.minX;
-  }
-
-  get midY() {
-    return this.size.height/2 + this.minY;
-  }
-
   get x() { return this.origin.x }
   get y() { return this.origin.y }
   get width() { return this.size.width }
   get height() { return this.size.height }
 
+  get minX() { return this.origin.x; };
+  get minY() { return this.origin.y; };
+  get maxX() { return this.origin.x + this.size.width; };
+  get maxY() { return this.origin.y + this.size.height; };
+  get midX() { return this.size.width/2 + this.minX;};
+  get midY() { return this.size.height/2 + this.minY;}
+  get center() { return new Point(this.midX, this.midY) }
+  
   offSetBy(x, y) {
     this.origin.x += x;
     this.origin.y += y;
@@ -368,6 +373,25 @@ class Bounds {
     let nw  = Bounds.createBounds(minX, minY, w, h);
 
     return [ne,se,sw,nw];
+
+  }
+
+  //really should only be valid if bounds is a square. 
+  inscribedCircleContains(x,y) {
+    
+    if (!this.contains(x,y)) { return false; }
+
+    //Not sure that creating a whole new object saves in this case since I'm not taking the square roots. Worth a performance test.
+    // let side = this.width/2 * Math.SQRT2;
+    // let offset = side/2;
+    // let innerBounds = new Bounds(x-offset, y-offset,side,side); 
+    // if (innerBounds.contains(x,y)) { return true; }
+
+     let rhs = new Point(x,y);
+     let distance  = this.width/2;
+     let result = this.center.closeEnoughTo(rhs, distance);
+     //console.log(this.center.x, this.center.y, distance, rhs.x, rhs.y, result);
+     return result;
   }
 
   pretty() {
@@ -379,3 +403,30 @@ class Bounds {
   }
 
 }
+
+// class Round {
+//   constructor(point, radius) {
+//     if (!(typeof(point.x) === 'number' && typeof(point.y) === 'number' && typeof(radius) === 'number')) {
+//       //console.log(point.pretty(), size.pretty())
+//         throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
+//     }
+//     this.center = point;
+//     this.radius = size;
+//     let diameter = 2*radius;
+//     this.outerBounds = new Bounds(point.x-radius, point.y-radius, diameter, diameter); 
+//     let side = r * Math.SQRT2;
+//     let offset = side/2;
+//     this.innerBounds = new Bounds(x-offset, y-offset,side,side); 
+//   }
+
+//   contains(x,y) {
+//     //Are these checks worth it to avoid the exponent math in Javascript? 
+//     //they create a lot of sub-objects as written. 
+//     if (!this.outerBounds.contains(x,y)) { return false; }
+//     if (this.innerBounds.contains(x,y)) { return true; }
+  
+//     let rhs = new Point(x,y);
+//     return this.center.closeEnoughTo(rhs, this.radius);
+    
+//   }
+// }

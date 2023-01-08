@@ -79,6 +79,8 @@ class QuadTree {
     }
   }
 
+
+
   doWithLeafBounds(myAction) {
     QuadTree.boundsAccess(this, myAction);
   }
@@ -105,6 +107,7 @@ class QuadTree {
       if (parent.subTrees.length > 0) {
         for (let subtree of parent.subTrees) {
           if (queryBounds.intersects(subtree.bounds)) {
+            //At some point double check this is working correctly
             let subBounds = queryBounds.intersection(subtree.bounds);
             QuadTree.pointAccessWithin(subBounds, subtree, nextLevel, myAction);
           }
@@ -117,6 +120,33 @@ class QuadTree {
         };
       }
     }
+
+    doWithPointsInRadius(x, y, r, myAction) {
+      let rqueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, r*2, r*2);
+      //console.log("startQuery", rqueryBounds.x, rqueryBounds.y)
+      QuadTree.pointAccessWithinRadius(rqueryBounds, this, myAction);
+    }
+
+    static pointAccessWithinRadius(queryBounds, parent, myAction) {
+      if (!(typeof(queryBounds.origin.x) === 'number' && typeof(queryBounds.origin.x) === 'number')) {
+        throw new Error('QuadTree.pointAccessWithin: are you sure you got a bounds?');
+      }
+        if (parent.subTrees.length > 0) {
+          for (let subtree of parent.subTrees) {
+            if (queryBounds.intersects(subtree.bounds)) {
+              QuadTree.pointAccessWithinRadius(queryBounds, subtree, myAction);
+            }
+          }
+        } else {
+          for (let point of parent.points) {
+            if (queryBounds.inscribedCircleContains(point.x, point.y)) {
+              myAction(point);
+            }
+          };
+        }
+      }
+  
+
 
     infoFromSubtreesTouching(queryBounds, myAction) {
       QuadTree.subTreeAccessTouching(queryBounds, this, 0, [], myAction)
@@ -131,6 +161,7 @@ class QuadTree {
           if (queryBounds.intersects(subtree.bounds)) {
             let myPath = Array.from(quadrantPath);
             myPath.push(i);
+            //At some point double check this is working correctly
             let subBounds = queryBounds.intersection(subtree.bounds);
             QuadTree.subTreeAccessTouching(subBounds, subtree, nextLevel, myPath, myAction);
           }

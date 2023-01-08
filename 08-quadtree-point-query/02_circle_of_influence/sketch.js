@@ -7,8 +7,8 @@ let pointSet = [];
 let pointIndex = 0;
 let thisQueryPoint;
 let thisQueryBounds;
-let diameter = 10;
-let myFriends = [];
+let diameter = 50;
+//let myFriends = [];
 let myNeighborhood;
 
 // ------------------------------------------------------------------------ setup()
@@ -29,31 +29,37 @@ function setup() {
     pointSet.push(thisQueryPoint);
   }
 
-  //thisQueryPoint = makePoint();
-   console.log(thisQueryPoint.pretty());
-   thisQueryBounds = new Bounds(thisQueryPoint, new Size(1,1));
+   //console.log(thisQueryPoint.pretty());
+   //thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
+   //console.log(thisQueryBounds.pretty());
+   //myNeighborhood = thisQueryBounds;
+   //qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
 
-  //qTree.doWithSubTreeInfo(fullTreeResults);
-  qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
 
-  //let result = qTree.findPointValue(thisQueryPoint.x, thisQueryPoint.y);
-  //console.log(result); 
 
+   thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
+   myNeighborhood = thisQueryBounds;
+   console.log("thisQueryBounds", thisQueryBounds.x, thisQueryBounds.y);
+
+  //  myNeighborhood = thisQueryBounds;
+  //  myFriends = [];
+  //  qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
+
+   
+    
   console.log("--------- End of Setup ---------");
-
+  //noLoop();
+  
 }
 
 // -------------------------------------------------------------- update ()
 
 function update() {
   thisQueryPoint = fetchPoint();// makePoint(); //
-  let result = qTree.findPointValue(thisQueryPoint.x, thisQueryPoint.y);
-  if (result != null) {
-    //console.log("foundOne");
-    myFriends = result.companions;
-    myNeighborhood = result.bounds;
-  }
-
+  thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
+  myNeighborhood = thisQueryBounds;
+  // myFriends = [];
+  // qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
 }
 
 function fetchPoint() {
@@ -87,8 +93,13 @@ function draw() {
  
 
   drawNeighborhood(myNeighborhood);
-  drawFriends(myFriends);
+  //drawFriends(myFriends);
+
+  qTree.doWithPointsInRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2, drawFound);
+
   drawMe(thisQueryPoint);
+
+
 
 }
 
@@ -103,17 +114,25 @@ function drawBounds(bounds) {
 //Only runs once during set up. Could use it to create a set, etc. 
 function successPoint(point) { }
 
-function drawFriends(points) {
-  for (point of points) {
+// function drawFriends(points) {
+//   for (point of points) {
+//     noFill();
+//     stroke(51, 204, 102);
+//     ellipseMode(CENTER);
+//     ellipse(point.x, point.y, 3);
+//   }
+// }
+
+function drawFound(point) {
     noFill();
+    //console.log(point.x, point.y)
     stroke(51, 204, 102);
     ellipseMode(CENTER);
     ellipse(point.x, point.y, 3);
-  }
 }
 
 function drawMe(point) {
-  fill(152, 51, 204);
+  fill(255, 0, 0);
   noStroke();
   ellipseMode(CENTER);
   ellipse(point.x, point.y, 5);
@@ -135,17 +154,27 @@ function drawBounds(bounds) {
 }
 
 function drawNeighborhood(bounds) {
+  ellipseMode(CORNER);
   rectMode(CORNER);
   stroke(204, 51, 204);
   noFill();
-  rect(bounds.x, bounds.y, bounds.width, bounds.height);
+  //rect(bounds.x, bounds.y, bounds.width, bounds.height);
+  ellipse(bounds.x, bounds.y, bounds.width, bounds.height);
+
+  ellipseMode(CENTER);
+  ellipse(bounds.center.x, bounds.center.y, 8);
 }
 
 function handleTreeInfo(points, bounds, level, quadrantPath) {
-  console.log(level, quadrantPath, points[0], points[1], points[2], points[3], points[4], points[5], bounds.pretty());
-  myFriends = points;
-  let test = QuadTree.getSubTreeFrom(qTree, level, quadrantPath);
-  //console.log(test.bounds.pretty());
-  myNeighborhood = test.bounds;
+  //console.log("start", myFriends);
+  //console.log(level, quadrantPath, points[0], points[1], points[2], points[3], points[4], points[5], bounds.pretty());
+  for (let point of points) {
+    //console.log("outside", point.x, point.y);
+    if (thisQueryBounds.inscribedCircleContains(point.x,point.y)) {
+      //console.log("inside", point.x, point.y);
+      myFriends.push(point);
+    }
+  }
+  //console.log("end",myFriends);
 }
 

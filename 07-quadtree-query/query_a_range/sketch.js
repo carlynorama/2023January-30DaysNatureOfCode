@@ -6,7 +6,6 @@ let element_limit = 6;
 let queryBounds;
 let startPoint; 
 let endPoint; 
-let queryPoints = [];
 
 // ------------------------------------------------------------------------ setup()
 function setup() {
