@@ -40,7 +40,7 @@ function setup() {
   //console.log(result); 
 
   console.log("--------- End of Setup ---------");
-
+  
 }
 
 // -------------------------------------------------------------- update ()
@@ -89,6 +89,8 @@ function draw() {
   drawNeighborhood(myNeighborhood);
   drawFriends(myFriends);
   drawMe(thisQueryPoint);
+
+  noLoop();
 
 }
 
