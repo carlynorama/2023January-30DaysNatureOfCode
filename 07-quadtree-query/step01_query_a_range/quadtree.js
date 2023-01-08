@@ -63,7 +63,7 @@ class QuadTree {
     if (!(typeof(queryBounds.origin.x) === 'number' && typeof(queryBounds.origin.x) === 'number')) {
       throw new Error('QuadTree.pointAccessWithin: are you sure you got a bounds?');
     }
-      console.log(queryBounds.pretty());
+      //console.log(queryBounds.pretty());
       let nextLevel = level + 1;
       if (parent.subTrees.length > 0) {
         for (let subtree of parent.subTrees) {

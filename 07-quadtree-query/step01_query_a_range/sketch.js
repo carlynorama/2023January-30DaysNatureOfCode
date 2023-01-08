@@ -8,6 +8,7 @@ let startPoint;
 let endPoint; 
 let queryPoints = [];
 
+// ------------------------------------------------------------------------ setup()
 function setup() {
 
   createControlledCanvas(400, 400);
@@ -39,6 +40,7 @@ function setup() {
 
 }
 
+// ------------------------------------------------------------ functions passed to QuadTree()
 function drawBounds(bounds) {
   rect(bounds.x, bounds.y, bounds.width, bounds.height);
   ellipseMode(CENTER);
@@ -74,37 +76,23 @@ function allPointsFunction(point) {
 }
 
 
-
+// ------------------------------------------------------------------------ draw()
 function draw() {
-    frameRate(5);
-    //background(51);
-
-    fill(75);
-    stroke(102);
-
-    //could rewrite .drawSubPoints to take a drawing function. 
-    //let test = color(204, 50);
-   // stroke(51, 204, 102);
+  
+    background(51);
 
    noFill();
    stroke(102, 102, 102);
    QuadTreeDrawer.drawSubTrees(qTree, 0);
 
-    let testPoint = new Point(20,20);
-    allPointsFunction(testPoint);
-    qTree.doWithPoints(allPointsFunction);
+  noFill();
+  stroke(51, 204, 102);
+  queryBounds.updateCenter(mouseX, mouseY);
+  drawBounds(queryBounds);
 
-    noFill();
-    stroke(51, 204, 102);
-    console.log(queryBounds.pretty());
-    drawBounds(queryBounds);
-
-    somePointsFunction(new Point(20,20));
-    qTree.doWithPointsIn(queryBounds, somePointsFunction);
-
-  
+  qTree.doWithPoints(allPointsFunction);
+  qTree.doWithPointsIn(queryBounds, somePointsFunction);
 
 
-
-  noLoop();
+  //noLoop();
 }
