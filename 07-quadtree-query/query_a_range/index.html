@@ -14,12 +14,15 @@
 
 <body>
   <main>
-    <p>So... FINALLY have something that looks like the sketch at the end of [Coding Challenge 98.2](https://www.youtube.com/watch?v=QQx_NmCIuCY), [see shiffmans code](https://editor.p5js.org/codingtrain/sketches/g7LnWQ42x)</p>
-    <p>I took a slightly different approach, passing a function in rather than points out directly. p5js functions are being handed in to do the drawing this way. It could use some refactoring, but I'm walking away before I break it!</p>
+    <p>So... FINALLY have something that looks like the sketch at the end of <a href="https://www.youtube.com/watch?v=QQx_NmCIuCY">Coding Challenge 98.2</a>), <a href="https://editor.p5js.org/codingtrain/sketches/g7LnWQ42x">see video code</a></p>
+    <p>I took a slightly different approach, passing a function in rather than points out. p5js functions are being handed in to do the drawing this way. It could use some refactoring, but I'm walking away before I break it!</p>
     <ol>
-      <li>draw static points</li>
-      <li>qTree.doWithPoints(everyPointFunction);</li>
-      <li>qTree.doWithPointsWithin(bounds, somePointsFunction);</li>
+      <li>Get Every</li>
+      <ul><li>qTree.doWithPoints(everyPointFunction): where everyPointFunction is a function that takes a point</li>
+      <li>qTree.doWithSubTreeInfo(treeInfoHandler): where treeInfoHandler takes in a points array (from just a leaf),  the leaf's bounds, the leaf's level, quadrantPath to the leaf</li>
+      <li>qTree.doWithLeafBounds(boundsHandler): where boundsHandler takes in a leaf's bounds. </li></ul>
+      <li>Response to Bounds Query</li>
+      <ul><li>qTree.doWithPointsWithin(bounds, somePointsFunction): where bounds is the query range and somePointsFunction is a function that takes a point</li></ul>
     </ol>
   </main>
 </body>
