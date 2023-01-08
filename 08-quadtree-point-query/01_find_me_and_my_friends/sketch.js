@@ -3,6 +3,8 @@ let thisHeight = 400;
 let qTree;
 let element_limit = 6;
 
+let pointSet = [];
+let pointIndex = 0;
 let thisQueryPoint;
 let thisQueryBounds;
 let diameter = 10;
@@ -24,6 +26,7 @@ function setup() {
 		let y = randomGaussian(thisHeight / 2, thisHeight / 8);
     qTree.addPoint(x,y, successPoint);
     thisQueryPoint = new Point(x,y);
+    pointSet.push(thisQueryPoint);
   }
 
   //thisQueryPoint = makePoint();
@@ -33,15 +36,39 @@ function setup() {
   //qTree.doWithSubTreeInfo(fullTreeResults);
   qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
 
+  //let result = qTree.findPointValue(thisQueryPoint.x, thisQueryPoint.y);
+  //console.log(result); 
+
   console.log("--------- End of Setup ---------");
-  noLoop();
 
 }
 
+// -------------------------------------------------------------- update ()
+
+function update() {
+  thisQueryPoint = fetchPoint();// makePoint(); //
+  let result = qTree.findPointValue(thisQueryPoint.x, thisQueryPoint.y);
+  if (result != null) {
+    console.log("foundOne");
+    myFriends = result.companions;
+    myNeighborhood = result.bounds;
+  }
+
+}
+
+
+function fetchPoint() {
+  pointIndex += 1;
+  return pointSet[pointIndex]
+  //return(pointSet[Math.floor(Math.random()*pointSet.length)]);
+}
+
+//Takes too long to find a new point if ever!
 function makePoint() {
   queryPointX = randomGaussian(thisWidth / 2, thisWidth / 8);
   queryPointY = randomGaussian(thisHeight / 2, thisHeight / 8);
   return new Point(queryPointX, queryPointY);
+  //return(pointSet[Math.floor(Math.random()*pointSet.length)]);
 }
 
 // ------------------------------------------------------------ functions passed to QuadTree()
@@ -64,7 +91,7 @@ function drawFriends(points) {
 }
 
 function drawMe(point) {
-  fill(204, 51, 204);
+  fill(152, 51, 204);
   noStroke();
   ellipseMode(CENTER);
   ellipse(point.x, point.y, 5);
@@ -104,8 +131,11 @@ function handleTreeInfo(points, bounds, level, quadrantPath) {
 
 // ------------------------------------------------------------------------ draw()
 function draw() {
+
+  frameRate(5);
   
    background(51);
+   update();
 
    noFill();
    stroke(102, 102, 102);
@@ -117,6 +147,4 @@ function draw() {
   drawFriends(myFriends);
   drawMe(thisQueryPoint);
 
-
-  //noLoop();
 }

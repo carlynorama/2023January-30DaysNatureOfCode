@@ -15,6 +15,11 @@ class Point {
     return Point.matches(this, other);
   }
 
+  hasValues(x, y) {
+    return (this.x === x && this.y === y);
+  }
+
+
   pretty() {
     return `Point(${this.x}, ${this.y})`
   }

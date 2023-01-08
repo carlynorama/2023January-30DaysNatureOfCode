@@ -139,19 +139,60 @@ class QuadTree {
           myAction(parent.points, parent.bounds, level, Array.from(quadrantPath).reverse());
       }
     }
+
+    getSubTree(level, quadrantPath) {
+      return QuadTree.getSubTreeFrom(this, level, quadrantPath);
+    }
   
     static getSubTreeFrom(parent, level, quadrantPath) {
-            console.log(parent.bounds.pretty(), level, quadrantPath);
-            if (level === 0) { return parent }
-            let nextLevel = level - 1;
-            if (parent.subTrees.length > 0) {
-              let treeLoc = quadrantPath.pop();
-              return QuadTree.getSubTreeFrom(parent.subTrees[treeLoc], nextLevel, quadrantPath);
-            } else {
-                console.log("Is this really the place?", level, quadrantPath);
-                return parent
+      console.log(parent.bounds.pretty(), level, quadrantPath);
+      if (level === 0) { return parent }
+      let nextLevel = level - 1;
+      if (parent.subTrees.length > 0) {
+        let treeLoc = quadrantPath.pop();
+        return QuadTree.getSubTreeFrom(parent.subTrees[treeLoc], nextLevel, quadrantPath);
+      } else {
+          //only gets here if there has been a wrong path.
+          console.log("Is this really the place?", level, quadrantPath);
+          return parent
+      }
+    }
+
+    findPointValue(x, y) {
+      if (!this.bounds.contains(x,y)) { return null }
+      return QuadTree.returnPointInfo(x, y, this, 0, []);
+    }
+
+
+    static returnPointInfo(x, y, parent, level, quadrantPath) {
+      //console.log(level, parent.bounds.pretty());
+      let nextLevel = level + 1;
+      if (parent.subTrees.length > 0) {
+        for (let i = 0; i < parent.subTrees.length; i++) {
+          const subtree = parent.subTrees[i];
+          if (subtree.bounds.contains(x,y)) {
+            let myPath = Array.from(quadrantPath);
+            myPath.push(i);
+            return QuadTree.returnPointInfo(x, y, subtree, nextLevel, myPath);
+          }
+        }
+        return null; //really shouldn't ever get here. 
+      } else {
+        for (let point of parent.points) {
+          let result = point.hasValues(x,y);
+          //console.log('check', x, y, point.x, point.y, result);
+          if (result) {
+            return {
+              bounds: parent.bounds,
+              companions: parent.points.filter(val=> val !== point),
+              level: level,
+              path:quadrantPath.reverse()
             }
           }
+        }
+        return null;
+      }
+    }
     
 
 
