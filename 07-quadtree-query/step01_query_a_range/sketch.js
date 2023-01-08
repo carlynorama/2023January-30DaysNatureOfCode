@@ -1,14 +1,19 @@
-let particles = [];
 let thisWidth = 400;
 let thisHeight = 400;
 let qTree;
-let qtDisplay;
 let element_limit = 6;
+
+let queryBounds;
+let startPoint; 
+let endPoint; 
+let queryPoints = [];
 
 function setup() {
 
   createControlledCanvas(400, 400);
   background(51);
+
+
 
   qTree = QuadTree.createQuadTree(0,0,thisWidth,thisHeight,element_limit);
 
@@ -18,15 +23,50 @@ function setup() {
     qTree.addPoint(x,y, successPoint);
   }
 
-  qtDisplay = new QuadTreeDrawer(qTree);
+  startPoint =  new Point(63,78+50);
+  endPoint = new Point(220,156+50);
+  queryBounds = Bounds.createBoundsFromPoints(startPoint, endPoint);
+  //console.log(queryBounds.pretty());
 
+
+  
+  // qTree.doWithPointsIn(bounds, somePointsFunction);
+  // qTree.transformPoint(transformation);
+  // qTree.returnPoints(bounds);
 
   console.log("--------- End of Setup ---------");
   //noLoop();
 
 }
 
+function drawBounds(bounds) {
+  rect(bounds.x, bounds.y, bounds.width, bounds.height);
+  ellipseMode(CENTER);
+  ellipse(bounds.x, bounds.y, 5);
+}
+
+//Only runs once during set up. Could use it to create a set, etc. 
 function successPoint(point) {
+  fill(205);
+  noStroke();
+  ellipseMode(CENTER);
+  ellipse(point.x, point.y, 2);
+}
+
+function somePointsFunction(point) {
+  if (!(typeof(point.x) === 'number' && typeof(point.y) === 'number')) {
+    throw new Error('sketch.allPoints: are you sure you got a point?');
+  }
+  noFill();
+  stroke(51, 204, 102);
+  ellipseMode(CENTER);
+  ellipse(point.x, point.y, 3);
+}
+
+function allPointsFunction(point) {
+  if (!(typeof(point.x) === 'number' && typeof(point.y) === 'number')) {
+    throw new Error('sketch.allPoints: are you sure you got a point?');
+  }
   fill(205);
   noStroke();
   ellipseMode(CENTER);
@@ -42,14 +82,29 @@ function draw() {
     fill(75);
     stroke(102);
 
-    let test = color(204, 50);
-    QuadTreeDrawer.drawSubPoints(qTree, 0, test);
+    //could rewrite .drawSubPoints to take a drawing function. 
+    //let test = color(204, 50);
+   // stroke(51, 204, 102);
 
-    stroke(204, 102, 102);
-    QuadTreeDrawer.drawSubTrees(qTree, 0);
+   noFill();
+   stroke(102, 102, 102);
+   QuadTreeDrawer.drawSubTrees(qTree, 0);
 
-    // console.log("instance walk");
-    // qTree.walk();
-    //console.log("static walk");
-    //QuadTree.walkTree(qTree, 0);
+    let testPoint = new Point(20,20);
+    allPointsFunction(testPoint);
+    qTree.doWithPoints(allPointsFunction);
+
+    noFill();
+    stroke(51, 204, 102);
+    console.log(queryBounds.pretty());
+    drawBounds(queryBounds);
+
+    somePointsFunction(new Point(20,20));
+    qTree.doWithPointsIn(queryBounds, somePointsFunction);
+
+  
+
+
+
+  noLoop();
 }

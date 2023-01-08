@@ -38,20 +38,67 @@ class QuadTree {
     }
   }
 
-  static clearTree(parent, level) {
-    let thisLevel = level;
-    console.log(thisLevel, parent.bounds.pretty());
+  doWithPoints(myAction) {
+    QuadTree.pointAccess(this, 0, myAction);
+  }
+
+  static pointAccess(parent, level, myAction) {
+    //console.log(thisLevel, parent.bounds.pretty());
     let nextLevel = level + 1;
     if (parent.subTrees.length > 0) {
-      console.log("I am a NOT a leaf!", parent.points.length); //<- points length should be 0.
       for (let subtree of parent.subTrees) {
-        QuadTree.clearTree(subtree, nextLevel);
+        QuadTree.pointAccess(subtree, nextLevel, myAction);
       }
     } else {
-      console.log("I am a leaf!", parent.points.length);
-      this.points = [];
+      for (let point of parent.points) {
+        myAction(point);
+      };
     }
   }
+
+  doWithPointsIn(queryBounds, myAction) {
+    QuadTree.pointAccessWithin(queryBounds, this, 0, myAction);
+  }
+  static pointAccessWithin(queryBounds, parent, level, myAction) {
+    if (!(typeof(queryBounds.origin.x) === 'number' && typeof(queryBounds.origin.x) === 'number')) {
+      throw new Error('QuadTree.pointAccessWithin: are you sure you got a bounds?');
+    }
+      console.log(queryBounds.pretty());
+      let nextLevel = level + 1;
+      if (parent.subTrees.length > 0) {
+        for (let subtree of parent.subTrees) {
+          if (queryBounds.intersects(subtree.bounds)) {
+            let subBounds = queryBounds.intersection(subtree.bounds);
+            QuadTree.pointAccessWithin(subBounds, subtree, nextLevel, myAction);
+          }
+        }
+      } else {
+        for (let point of parent.points) {
+          if (queryBounds.containsPoint(point)) {
+            myAction(point);
+          }
+        };
+      }
+    }
+  
+
+
+
+  // Not sure this really works as desired. 
+  // static clearTree(parent, level) {
+  //   let thisLevel = level;
+  //   console.log(thisLevel, parent.bounds.pretty());
+  //   let nextLevel = level + 1;
+  //   if (parent.subTrees.length > 0) {
+  //     console.log("I am a NOT a leaf!", parent.points.length); //<- points length should be 0.
+  //     for (let subtree of parent.subTrees) {
+  //       QuadTree.clearTree(subtree, nextLevel);
+  //     }
+  //   } else {
+  //     console.log("I am a leaf!", parent.points.length);
+  //     this.points = [];
+  //   }
+  // }
 
 
 

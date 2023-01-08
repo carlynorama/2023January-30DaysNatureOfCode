@@ -1,11 +1,6 @@
-
-
-
-
 class Point {
   constructor(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
-      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('\r\n\r\nPoint():values are not numeric');
     }
     this.x = x;
@@ -28,7 +23,6 @@ class Point {
 class Size {
   constructor(w, h) {
     if (!(typeof(w) === 'number' && typeof(h) === 'number')) {
-      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('\r\n\r\nSize():values are not numeric');
     }
     this.width = w;
@@ -61,7 +55,6 @@ class Size {
 class Range {
   constructor(l, u) {
     if (!(typeof(l) === 'number' && typeof(u) === 'number')) {
-      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('\r\n\r\nRange():values are not numeric")');
     }
     this.lower = l;
@@ -141,6 +134,27 @@ class Bounds {
     return b;
   }
 
+  static createBoundsFromPoints(startPoint, endPoint) {
+    let w = endPoint.x - startPoint.x;
+    let h = endPoint.y - startPoint.y;
+    if (w >= 0 && h >= 0) {
+      let s = new Size(w, h);
+      let b = new Bounds(startPoint, s);
+      return b;
+    } 
+    else if (w < 0 && h < 0) {
+      let s = new Size(Math.abs(w), Math.abs(h));
+      let b = new Bounds(endPoint, s);
+      return b;
+    }
+    else {
+      let s = new Size(Math.abs(w), Math.abs(h));
+      let p = new Point(Math.min(endPoint.x,startPoint.x), Math.min(endPoint.y,startPoint.y));
+      let b = new Bounds(p, s);
+      return b;
+    }
+  }
+
   get minX() {
     return this.origin.x;
   }
@@ -177,7 +191,6 @@ class Bounds {
 
   updateOrigin(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
-      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('Bounds.updateOrigin: one or both of the values are not numeric.');
     }
     this.origin.x = x;
@@ -238,7 +251,6 @@ class Bounds {
 
   contains(x, y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
-      //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('Bounds.contains: one or both of the values are not numeric.');
     }
     //console.log("contains:", x, y)
@@ -254,6 +266,10 @@ class Bounds {
     //console.log("y", this.minY, this.maxY, y, yCheck);
     return (xCheck && yCheck);
     //return true;
+  }
+
+  containsPoint(point) {
+    return this.contains(point.x, point.y);
   }
 
 

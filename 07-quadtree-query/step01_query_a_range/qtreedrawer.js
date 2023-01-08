@@ -7,7 +7,6 @@ class QuadTreeDrawer {
   }
 
   drawBounds() {
-    noFill();
     let box = this.tree.bounds;
     rectMode(CORNER);
     rect(box.origin.x, box.origin.y, box.size.width, box.size.height);
@@ -76,7 +75,7 @@ class QuadTreeDrawer {
   static drawPoint(point, c) {
     stroke(c);
     ellipseMode(CENTER);
-    ellipse(point.x, point.y, 8, 8);
+    ellipse(point.x, point.y, 3, 3);
   }
 
 }
