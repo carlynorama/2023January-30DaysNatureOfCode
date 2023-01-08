@@ -20,11 +20,15 @@ class Point {
   }
 
   static closeEnough(lhs, rhs, distance) {
-    return Math.abs(lhs.x - rhs.x)^2 + Math.abs(lhs.y - rhs.y)^2 <= distance^2;
+    let left = ((lhs.x - rhs.x) * (lhs.x - rhs.x)) + ((lhs.y - rhs.y)*(lhs.y - rhs.y))
+    let right = distance * distance
+    let result = left <= right;
+    console.log(result, left, right);
+    return  result ;
   }
 
   closeEnoughTo(other, distance) {
-    Point.closeEnough(this, other, distance);
+    return Point.closeEnough(this, other, distance);
   }
 
   pretty() {
@@ -146,6 +150,16 @@ class Bounds {
     return b;
   }
 
+  static createBoundsFromCenter(centerX, centerY, w, h) {
+    if (!(typeof(centerX) === 'number' && typeof(centerY) === 'number' && typeof(w) === 'number' && typeof(h) === 'number')) {
+      throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
+    }
+    let p = new Point(centerX - w/2,centerY - h/2);
+    let s = new Size(w,h);
+    let b = new Bounds(p,s);
+    return b;
+  }
+
   static createBoundsFromPoints(startPoint, endPoint) {
     let w = endPoint.x - startPoint.x;
     let h = endPoint.y - startPoint.y;
@@ -178,7 +192,7 @@ class Bounds {
   get maxY() { return this.origin.y + this.size.height; };
   get midX() { return this.size.width/2 + this.minX;};
   get midY() { return this.size.height/2 + this.minY;}
-  get center() { new Point(this.midX, this.midY) }
+  get center() { return new Point(this.midX, this.midY) }
   
   offSetBy(x, y) {
     this.origin.x += x;
@@ -362,8 +376,9 @@ class Bounds {
 
   }
 
-
+  //really should only be valid if bounds is a square. 
   inscribedCircleContains(x,y) {
+    
     if (!this.contains(x,y)) { return false; }
 
     //Not sure that creating a whole new object saves in this case since I'm not taking the square roots. Worth a performance test.
@@ -372,8 +387,11 @@ class Bounds {
     // let innerBounds = new Bounds(x-offset, y-offset,side,side); 
     // if (innerBounds.contains(x,y)) { return true; }
 
-    let rhs = new Point(x,y);
-    return this.center.closeEnoughTo(rhs, this.radius);
+     let rhs = new Point(x,y);
+     let distance  = this.width/2;
+     let result = this.center.closeEnoughTo(rhs, distance);
+     //console.log(this.center.x, this.center.y, distance, rhs.x, rhs.y, result);
+     return result;
   }
 
   pretty() {
