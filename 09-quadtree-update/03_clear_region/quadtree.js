@@ -536,28 +536,30 @@ reAddPointToSubTree(point) {
       throw new Error('QuadTree.pointAccessWithin: are you sure you got a bounds?');
     }
     
-    console.log("startPop Region");
+    //console.log("startPop Region");
     if (!parent.bounds.intersects(queryBounds)) {
-      // ----------------------- START p5js code to troubleshoot
+      // ==================================================================================================
+      // ------------------------------------------------------------------ START p5js code to troubleshoot
       rectMode(CORNER);
       rect(parent.bounds.x, parent.bounds.y, parent.bounds.width, parent.bounds.height);
-      // ----------------------- END p5js code to troubleshoot
-      console.log("popRegion, no intersection.", queryBounds.pretty(), parent.bounds.pretty());
+      // -------------------------------------------------------------------- END p5js code to troubleshoot
+      // ==================================================================================================
+      //console.log("popRegion, no intersection.", queryBounds.pretty(), parent.bounds.pretty());
       return [];
     }
     
     let newPointCollector = [];
     //console.log(level, parent.bounds.pretty(), );
     if (parent.subTrees.length > 0) {
-      console.log("going deeper");
+      //console.log("going deeper");
       for (let subtree of parent.subTrees) {
           let newPoints = QuadTree.popRegion(queryBounds, subtree);
           newPointCollector.push(...newPoints);
         }
     } else {
       let thesePoints = parent.points.filter(val=> queryBounds.containsPoint(val));
-
-      // ----------------------- START p5js code to troubleshoot
+      // ==================================================================================================
+      // ------------------------------------------------------------------ START p5js code to troubleshoot
       
       for (let pointToCheck of thesePoints) {  
         stroke(0, 255, 255);
@@ -570,7 +572,8 @@ reAddPointToSubTree(point) {
         ellipseMode(CENTER);
         ellipse(pointToCheck.x, pointToCheck.y, 5);
       }
-      // ----------------------- END p5js code to troubleshoot
+      // -------------------------------------------------------------------- END p5js code to troubleshoot
+      // ==================================================================================================
 
       for (let point of thesePoints) { parent.clearPointValue(point.x, point.y) }
       return thesePoints;
