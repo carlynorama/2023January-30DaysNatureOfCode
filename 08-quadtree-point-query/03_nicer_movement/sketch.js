@@ -3,12 +3,18 @@ let thisHeight = 400;
 let qTree;
 let element_limit = 6;
 
+const xoff = 0;
+const yoff = 10000;
+const inc = 0.01;
+
+
 let pointSet = [];
 let pointIndex = 0;
+const pointQty = 300;
+
 let thisQueryPoint;
 let thisQueryBounds;
 let diameter = 50;
-//let myFriends = [];
 let myNeighborhood;
 
 // ------------------------------------------------------------------------ setup()
@@ -21,32 +27,19 @@ function setup() {
 
   qTree = QuadTree.createQuadTree(0,0,thisWidth,thisHeight,element_limit);
 
-	for (let i = 0; i < 300; i++) {
-		let x = randomGaussian(thisWidth / 2, thisWidth / 8);
-		let y = randomGaussian(thisHeight / 2, thisHeight / 8);
+	for (let i = 0; i < 5000; i++) {
+    let x = map(noise(xoff+ i*inc), 0, 1, 0, width);
+    let y = map(noise(yoff + i*inc), 0, 1, 0, height);
     qTree.addPoint(x,y, successPoint);
     thisQueryPoint = new Point(x,y);
     pointSet.push(thisQueryPoint);
   }
 
-   //console.log(thisQueryPoint.pretty());
-   //thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
-   //console.log(thisQueryBounds.pretty());
-   //myNeighborhood = thisQueryBounds;
-   //qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
-
-
-
    thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
    myNeighborhood = thisQueryBounds;
    console.log("thisQueryBounds", thisQueryBounds.x, thisQueryBounds.y);
 
-  //  myNeighborhood = thisQueryBounds;
-  //  myFriends = [];
-  //  qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
 
-   
-    
   console.log("--------- End of Setup ---------");
   //noLoop();
   
@@ -58,22 +51,18 @@ function update() {
   thisQueryPoint = fetchPoint();// makePoint(); //
   thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
   myNeighborhood = thisQueryBounds;
-  // myFriends = [];
-  // qTree.infoFromSubtreesTouching(thisQueryBounds, handleTreeInfo);
 }
 
+let reverseFlag = false;
 function fetchPoint() {
-  pointIndex += 1;
-  return pointSet[pointIndex]
-  //return(pointSet[Math.floor(Math.random()*pointSet.length)]);
-}
+  
+  if  (pointIndex >= pointQty) { reverseFlag = true } 
+  else if  (pointIndex < 0) { reverseFlag = false } 
 
-//Takes too long to find a new point if ever!
-function makePoint() {
-  queryPointX = randomGaussian(thisWidth / 2, thisWidth / 8);
-  queryPointY = randomGaussian(thisHeight / 2, thisHeight / 8);
-  return new Point(queryPointX, queryPointY);
-  //return(pointSet[Math.floor(Math.random()*pointSet.length)]);
+  if (reverseFlag) { pointIndex -= 1; }
+  else { pointIndex += 1; } 
+
+  return pointSet[pointIndex]
 }
 
 
@@ -81,7 +70,7 @@ function makePoint() {
 // ------------------------------------------------------------------------ draw()
 function draw() {
 
-  frameRate(1);
+  frameRate(24);
   
    background(51);
    update();
@@ -113,15 +102,6 @@ function drawBounds(bounds) {
 
 //Only runs once during set up. Could use it to create a set, etc. 
 function successPoint(point) { }
-
-// function drawFriends(points) {
-//   for (point of points) {
-//     noFill();
-//     stroke(51, 204, 102);
-//     ellipseMode(CENTER);
-//     ellipse(point.x, point.y, 3);
-//   }
-// }
 
 function drawFound(point) {
     noFill();
