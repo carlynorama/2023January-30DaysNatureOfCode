@@ -7,7 +7,7 @@ const xoff = 0;
 const yoff = 10000;
 const inc = 0.01;
 
-fieldPointsQty = 200;
+fieldPointsQty = 2000;
 fieldPointsToClear = [];
 let clearFlag = true;
 
@@ -16,7 +16,6 @@ let pointIndex = 0;
 const pointQty = 5000;
 
 let thisQueryPoint;
-let thisQueryBounds;
 let diameter = 50;
 let myNeighborhood;
 
@@ -53,9 +52,8 @@ function setup() {
     pointSet.push(thisQueryPoint);
   }
 
-   thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
-   myNeighborhood = thisQueryBounds;
-   console.log("thisQueryBounds", thisQueryBounds.x, thisQueryBounds.y);
+   myNeighborhood = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
+   console.log("myNeighborhood", myNeighborhood.x, myNeighborhood.y);
 
    //this is a very dangerous function because it returns all the points as reference objects? 
    let fullset = qTree.returnAllPoints();
@@ -71,17 +69,13 @@ function setup() {
 // -------------------------------------------------------------- update ()
 
 function update() {
-  thisQueryPoint = fetchPoint();// makePoint(); //
-  thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
-  myNeighborhood = thisQueryBounds;
+  thisQueryPoint = fetchPoint();
+  myNeighborhood = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
 
   fill(204, 50);
-  rectMode(CORNER);
-  rect(myNeighborhood.x, myNeighborhood.y, myNeighborhood.width, myNeighborhood.height);
-
-  //let returnedPoints = QuadTree.popRegion(Bounds.createBounds(200, 200, 30, 30), qTree);
-  let returnedPoints = qTree.popRegion(thisQueryBounds);
-  //console.log(returnedPoints);
+  ellipseMode(CENTER);
+  ellipse(thisQueryPoint.x, thisQueryPoint.y, diameter/2);
+  let returnedPoints = qTree.popRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2);
 }
 
 let reverseFlag = false;
@@ -126,15 +120,9 @@ if (runFlag) {
 
 
 // ------------------------------------------------------------ functions passed to QuadTree()
-function drawBounds(bounds) {
-  rect(bounds.x, bounds.y, bounds.width, bounds.height);
-  ellipseMode(CENTER);
-  ellipse(bounds.x, bounds.y, 5);
-}
 
-//Only runs once during set up. Could use it to create a set, etc. 
+//Only runs once during qTree setup. 
 function successPoint(point) { 
-  //see note in setup
   fieldPointsToClear.push(point);
 }
 
@@ -181,8 +169,6 @@ function drawNeighborhood(bounds) {
 
   ellipseMode(CENTER);
   ellipse(bounds.center.x, bounds.center.y, 8);
-
-
 
 }
 
