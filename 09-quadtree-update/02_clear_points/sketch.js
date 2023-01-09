@@ -7,7 +7,7 @@ const xoff = 0;
 const yoff = 10000;
 const inc = 0.01;
 
-fieldPointsQty = 30;
+fieldPointsQty = 50;
 fieldPointsToClear = [];
 let clearFlag = true;
 
@@ -33,7 +33,13 @@ function setup() {
   for (let i = 0; i < fieldPointsQty; i++) {
 		let x = randomGaussian(thisWidth / 2, thisWidth / 8);
 		let y = randomGaussian(thisHeight / 2, thisHeight / 8);
-    qTree.addPoint(x,y, successPoint);
+    qTree.addPoint(x,y, successPoint); //TODO: success point RERUNS on this point if quad tree is rebalanced. Cant use function to append to array until I fix that.
+    fieldPointsToClear.push(new Point(x,y));
+  }
+
+  if (fieldPointsToClear.length != fieldPointsQty) {
+    console.log(fieldPointsToClear.length)
+    throw new Error("wrong number of field points.");
   }
 
 	for (let i = 0; i < pointQty; i++) {
@@ -50,8 +56,8 @@ function setup() {
    //this is a very dangerous function because it returns all the points as reference objects? 
    let fullset = qTree.returnAllPoints();
    console.log(fullset);
-   let removedSet = qTree.popAllPoints();
-   console.log(removedSet);
+  //  let removedSet = qTree.popAllPoints();
+  //  console.log(removedSet);
 
   console.log("--------- End of Setup ---------");
   //noLoop();
@@ -67,8 +73,10 @@ function setup() {
 // }
 
 function clearPoint() {
-  
+  //let lengthTestA = fieldPointsToClear.length;
   let pointToClear = fieldPointsToClear.pop();
+  //let lengthTestB = fieldPointsToClear.length;
+  //console.log("clearPoint did it pop?", lengthTestA-lengthTestB);
   if (fieldPointsToClear.length <= 0 ) {  clearFlag = false;  }
   let result = qTree.clearPointValue(pointToClear.x, pointToClear.y);
   console.log(pointToClear.x, pointToClear.y, result);
@@ -128,7 +136,8 @@ function drawBounds(bounds) {
 
 //Only runs once during set up. Could use it to create a set, etc. 
 function successPoint(point) { 
-  fieldPointsToClear.push(point);
+  //see note in setup
+  //fieldPointsToClear.push(point);
 }
 
 function drawFound(point) {

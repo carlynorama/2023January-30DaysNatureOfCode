@@ -162,6 +162,7 @@ class QuadTree {
           let newPoints = QuadTree.popAllPoints(subtree);
           newPointCollector.push(...newPoints);
       }
+      parent.subTrees = [];
     } else {
       let thesePoints = [];
       let num = parent.points.length; 
@@ -305,19 +306,26 @@ class QuadTree {
     }
 
     getSubTree(level, quadrantPath) {
+
+      //if actually MEANT to call on self and self has no subtree this should cover it. 
+      if (level == 0) { return this }
+
       return QuadTree.getSubTreeFrom(this, level, quadrantPath);
+
     }
   
     static getSubTreeFrom(parent, level, quadrantPath) {
       //console.log(parent.bounds.pretty(), level, quadrantPath);
       if (level === 0) { return parent }
+      if (level < 0) { throw new Error("get subTree was called on value above root") } 
       let nextLevel = level - 1;
       if (parent.subTrees.length > 0) {
         let treeLoc = quadrantPath.pop();
         return QuadTree.getSubTreeFrom(parent.subTrees[treeLoc], nextLevel, quadrantPath);
       } else {
           //only gets here if there has been a wrong path.
-          console.log("Is this really the place?", level, quadrantPath);
+          console.log("getSubTreeFrom: called on something without subtrees", level, quadrantPath);
+          //throw new Error("get subTree was called on something without subtrees")
           return parent
       }
     }
@@ -347,6 +355,7 @@ class QuadTree {
           //console.log('check', x, y, point.x, point.y, result);
           if (result) {
             return {
+              found: true,
               bounds: parent.bounds,
               companions: parent.points.filter(val=> val !== point),
               level: level,
@@ -354,7 +363,13 @@ class QuadTree {
             }
           }
         }
-        return null;
+        return {
+          found: false,
+          bounds: parent.bounds,
+          companions: parent.points,
+          level: level,
+          path:quadrantPath.reverse()
+        }
       }
     }
     
@@ -362,39 +377,55 @@ class QuadTree {
   clearPointValue(x, y) {
     let info = QuadTree.returnPointInfo(x, y, this, 0, []);
     if (info == null) { 
-      //console.log("point does not exist");
-      throw new Error('Point does not exist and I am only using this on points that exit.');
+      console.log("cPV how?");
+      
       return null
+    } else if (info.found == false) {
+      console.log("cPV found is false", x, y, info.bounds.pretty(), info.companions);
+      throw new Error('Point does not exist and I am only using this on points that exist.');
+      return { removed:false, refresh:false }
     }
-    console.log("clearPoint start", info.bounds.pretty(), info.companions.length, info.level, info.path);
+    console.log("cPV found is true", x, y, info.bounds.pretty(), info.companions.length, info.level, info.path);
 
     if (info.companions.length > (this.limit/4)) {
       let result = this.getSubTree(info.level, info.path);
-      //console.log("subtrees?",result.subTrees, result.limit);
       if (result.points.length > 0) { result.points = info.companions } 
-      else { console.log("something went wrong.") }
+      else { console.log("cPV something went wrong.") }
       return { removed:true, refresh:false }
     } 
     else {
-      let pointParentLevel = info.level - 1;
-      let pathToParent = Array.from(info.path);
-      let lastStep = pathToParent.pop();
-      let result = this.getSubTree(pointParentLevel, pathToParent);
-      console.log("parent", pointParentLevel, pathToParent, lastStep, result.subTrees.length);
-      let allPoints = result.returnAllPoints();
-      console.log("allPoints", allPoints);
-      result.subTrees = [];
-      //The re-adding is not happening. 
-      if (typeof(allPoints) !== 'undefined' && allPoints.length > 0) {
-        for (point of allPoints) {
-          this.reAddPoint(point);
-        }
+      let result;
+      if (info.level <= 0) {
+        result = this;
+      } else {
+        let pointParentLevel = info.level - 1;
+        let pathToParent = Array.from(info.path);
+        let lastStep = pathToParent.shift();  // <----  ROOT is at the end POP will remove root, not leaf.
+        result = this.getSubTree(pointParentLevel, pathToParent);
       }
+
+      //if (result == null) { result = this; }
+      //console.log("cPV parent",result.subTrees.length, lastStep, result.bounds.pretty(), pointParentLevel, pathToParent);
+      
+      let allPoints = result.popAllPoints();
+
+      //console.log("cPV allPoints", allPoints);
+      //if (typeof(allPoints) === 'undefined') { throw new Error("allPoints undefined")}
+
+      let validPoints = allPoints.filter(val=> (val.x != x && val.y != y));
+      //console.log("cPV validPoints", "diff", allPoints.length - validPoints.length, validPoints);
+      //if (allPoints.length - validPoints.length != 1) { throw new Error("cPV where is the point?"); }
+      
+      for (point of validPoints) {
+        this.reAddPoint(point);
+      }
+     
+      return { removed:true, refresh:true }
     }
 
   }
 
-  //These should only be used by this object on itself. 
+  //These should only be used by this object on itself. Is there "private" for javascript? I think not?
   reAddPoint(point) {
       if (this.subTrees.length != 0) {
         return this.reAddPointToSubTree(point);
