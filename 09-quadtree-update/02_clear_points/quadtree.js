@@ -227,25 +227,37 @@ class QuadTree {
     
    /// ------------------------------------------------------------------------------ clearPointValue() 
   clearPointValue(x, y) {
-    let info = returnPointInfo(x, y, this, 0, []);
+    let info = QuadTree.returnPointInfo(x, y, this, 0, []);
     if (info == null) { 
       console.log("point does not exist");
       return null
     }
-    
-    let pointParentLevel = info.level - 1;
-    let pathToParent = Array.from(info.path);
-    let lastStep = pathToParent.pop();
-    let result = this.getSubTree(pointParentLevel, pathToParent);
+    console.log(info.bounds.pretty(), info.companions.length, info.level, info.path);
 
-    //this is an efficiency thing. Don't super need to rebalance if there are still plenty of points. 
-    if (info.companions.length > (this.limit/4) ) {
-      result.subTrees[lastStep].points = info.companions
+    // let pointParentLevel = info.level - 1;
+    // let pathToParent = Array.from(info.path);
+    // let lastStep = pathToParent.pop();
+    //console.log(pointParentLevel, pathToParent, lastStep, result.subTrees.length);
+
+    if (info.companions.length > (this.limit/4)) {
+      let result = this.getSubTree(info.level, info.path);
+      //console.log("subtrees?",result.subTrees, result.limit);
+      if (result.points.length > 0) { result.points = info.companions } 
+      else { console.log("something when wrong.") }
       return { removed:true, refresh:false }
     } else {
-      let allPoints = result.subTrees.flat();
-      console.log(allPoints);
+      // let allPoints = result.subTrees.flat();
+      // console.log(allPoints);
     }
+
+    // //this is an efficiency thing. Don't super need to rebalance if there are still plenty of points. 
+    // if (info.companions.length > (this.limit/4) ) {
+    //   result.subTrees[lastStep].points = info.companions
+    //   return { removed:true, refresh:false }
+    // } else {
+    //   let allPoints = result.subTrees.flat();
+    //   console.log(allPoints);
+    // }
 
 
   }
