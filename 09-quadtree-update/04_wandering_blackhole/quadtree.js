@@ -541,6 +541,36 @@ reAddPointToSubTree(point) {
     }
     
     //console.log("startPop Region");
+    if (!parent.bounds.intersects(queryBounds)) { return []; }
+    
+    let newPointCollector = [];
+    //console.log(level, parent.bounds.pretty(), );
+    if (parent.subTrees.length > 0) {
+      //console.log("going deeper");
+      for (let subtree of parent.subTrees) {
+          let newPoints = QuadTree.popRegion(queryBounds, subtree);
+          newPointCollector.push(...newPoints);
+        }
+    } else {
+      let thesePoints = parent.points.filter(val=> queryBounds.containsPoint(val));
+
+      for (let point of thesePoints) { parent.clearPointValue(point.x, point.y) }
+      return thesePoints;
+    }
+    return newPointCollector;
+  }
+
+  popRadius(x, y, r) {
+    let rqueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, r*2, r*2);
+    return QuadTree.popCircularRegion(rqueryBounds, this)
+  }
+
+  static popCircularRegion(queryBounds, parent) {
+    if (!(typeof(queryBounds.origin.x) === 'number' && typeof(queryBounds.origin.x) === 'number')) {
+      throw new Error('QuadTree.pointAccessWithin: are you sure you got a bounds?');
+    }
+    
+    //console.log("startPop Region");
     if (!parent.bounds.intersects(queryBounds)) {
       // ==================================================================================================
       // ------------------------------------------------------------------ START p5js code to troubleshoot
@@ -561,7 +591,7 @@ reAddPointToSubTree(point) {
           newPointCollector.push(...newPoints);
         }
     } else {
-      let thesePoints = parent.points.filter(val=> queryBounds.containsPoint(val));
+      let thesePoints = parent.points.filter(val=> queryBounds.inscribedCircleContains(val));
       // ==================================================================================================
       // ------------------------------------------------------------------ START p5js code to troubleshoot
       
@@ -570,7 +600,7 @@ reAddPointToSubTree(point) {
         ellipseMode(CENTER);
         ellipse(pointToCheck.x, pointToCheck.y, 5);
       }
-      let theLeftBehind = parent.points.filter(val=> !queryBounds.containsPoint(val));
+      let theLeftBehind = parent.points.filter(val=> !queryBounds.inscribedCircleContains(val));
       for (let pointToCheck of theLeftBehind) {  
         stroke(0, 255, 255);
         ellipseMode(CENTER);
@@ -584,7 +614,6 @@ reAddPointToSubTree(point) {
     }
     return newPointCollector;
   }
-
 
 
 
