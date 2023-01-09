@@ -80,27 +80,25 @@ function makePoint() {
 
 // ------------------------------------------------------------------------ draw()
 function draw() {
+  if (runFlag) {  
+    frameRate(1);
+    
+    background(51);
+    update();
 
-  frameRate(1);
+    noFill();
+    stroke(102, 102, 102);
+    qTree.doWithLeafBounds(drawBounds);
+    qTree.doWithPoints(drawFieldPoint);
   
-   background(51);
-   update();
 
-   noFill();
-   stroke(102, 102, 102);
-   qTree.doWithLeafBounds(drawBounds);
-   qTree.doWithPoints(drawFieldPoint);
- 
+    drawNeighborhood(myNeighborhood);
+    //drawFriends(myFriends);
 
-  drawNeighborhood(myNeighborhood);
-  //drawFriends(myFriends);
+    qTree.doWithPointsInRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2, drawFound);
 
-  qTree.doWithPointsInRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2, drawFound);
-
-  drawMe(thisQueryPoint);
-
-
-
+    drawMe(thisQueryPoint);
+  }
 }
 
 
@@ -113,15 +111,6 @@ function drawBounds(bounds) {
 
 //Only runs once during set up. Could use it to create a set, etc. 
 function successPoint(point) { }
-
-// function drawFriends(points) {
-//   for (point of points) {
-//     noFill();
-//     stroke(51, 204, 102);
-//     ellipseMode(CENTER);
-//     ellipse(point.x, point.y, 3);
-//   }
-// }
 
 function drawFound(point) {
     noFill();

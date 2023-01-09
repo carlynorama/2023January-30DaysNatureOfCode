@@ -10,7 +10,7 @@ const inc = 0.01;
 
 let pointSet = [];
 let pointIndex = 0;
-const pointQty = 300;
+const pointQty = 5000;
 
 let thisQueryPoint;
 let thisQueryBounds;
@@ -27,7 +27,7 @@ function setup() {
 
   qTree = QuadTree.createQuadTree(0,0,thisWidth,thisHeight,element_limit);
 
-	for (let i = 0; i < 5000; i++) {
+	for (let i = 0; i < pointQty; i++) {
     let x = map(noise(xoff+ i*inc), 0, 1, 0, width);
     let y = map(noise(yoff + i*inc), 0, 1, 0, height);
     qTree.addPoint(x,y, successPoint);
@@ -55,12 +55,12 @@ function update() {
 
 let reverseFlag = false;
 function fetchPoint() {
-  
-  if  (pointIndex >= pointQty) { reverseFlag = true } 
-  else if  (pointIndex < 0) { reverseFlag = false } 
 
   if (reverseFlag) { pointIndex -= 1; }
   else { pointIndex += 1; } 
+  
+  if  (pointIndex > pointQty-1) { reverseFlag = true; pointIndex = pointQty-1; } 
+  else if  (pointIndex < 0) { reverseFlag = false; pointIndex = 0; } 
 
   return pointSet[pointIndex]
 }
@@ -69,8 +69,7 @@ function fetchPoint() {
 
 // ------------------------------------------------------------------------ draw()
 function draw() {
-
-  frameRate(24);
+if (runFlag) {  frameRate(24);
   
    background(51);
    update();
@@ -82,13 +81,12 @@ function draw() {
  
 
   drawNeighborhood(myNeighborhood);
-  //drawFriends(myFriends);
 
   qTree.doWithPointsInRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2, drawFound);
 
   drawMe(thisQueryPoint);
 
-
+}
 
 }
 
@@ -143,18 +141,5 @@ function drawNeighborhood(bounds) {
 
   ellipseMode(CENTER);
   ellipse(bounds.center.x, bounds.center.y, 8);
-}
-
-function handleTreeInfo(points, bounds, level, quadrantPath) {
-  //console.log("start", myFriends);
-  //console.log(level, quadrantPath, points[0], points[1], points[2], points[3], points[4], points[5], bounds.pretty());
-  for (let point of points) {
-    //console.log("outside", point.x, point.y);
-    if (thisQueryBounds.inscribedCircleContains(point.x,point.y)) {
-      //console.log("inside", point.x, point.y);
-      myFriends.push(point);
-    }
-  }
-  //console.log("end",myFriends);
 }
 
