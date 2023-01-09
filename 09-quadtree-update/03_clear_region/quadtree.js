@@ -516,8 +516,10 @@ reAddPointToSubTree(point) {
     
     console.log("startPop Region");
     if (!parent.bounds.intersects(queryBounds)) {
+      // ----------------------- START p5js code to troubleshoot
       rectMode(CORNER);
       rect(parent.bounds.x, parent.bounds.y, parent.bounds.width, parent.bounds.height);
+      // ----------------------- END p5js code to troubleshoot
       console.log("popRegion, no intersection.", queryBounds.pretty(), parent.bounds.pretty());
       return [];
     }
@@ -537,6 +539,17 @@ reAddPointToSubTree(point) {
         let pointToCheck = parent.points[parent.points.length-1]
         let check = queryBounds.containsPoint(pointToCheck)
         console.log("pointPopper", pointToCheck.x, pointToCheck.y, check, queryBounds.pretty())
+        // ----------------------- START p5js code to troubleshoot
+        rectMode(CORNER);
+        //strokeWidth(5);
+        let thisColor;
+        if (check) { thisColor = color(0, 255, 255) } else { thisColor = color(255, 0, 0) }
+        stroke(thisColor);
+        ellipseMode(CENTER);
+        ellipse(pointToCheck.x, pointToCheck.y, 5);
+        //point(pointToCheck.x, pointToCheck.y);
+        //strokeWidth(1);
+        // ----------------------- END p5js code to troubleshoot
         if (check) {
           let samePointCheck = parent.points.pop();
           console.log("same point?", samePointCheck.x, samePointCheck.y, pointToCheck.x, pointToCheck.y);

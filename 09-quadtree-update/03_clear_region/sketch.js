@@ -75,6 +75,7 @@ function update() {
   thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
   myNeighborhood = thisQueryBounds;
 
+  fill(204, 50);
   rectMode(CORNER);
   rect(myNeighborhood.x, myNeighborhood.y, myNeighborhood.width, myNeighborhood.height);
 
@@ -150,6 +151,9 @@ function successPoint(point) {
 function drawFound(point) {
     noFill();
     //console.log(point.x, point.y)
+    // stroke(51, 204, 102);
+    // ellipseMode(CENTER);
+    // ellipse(point.x, point.y, 3);
     stroke(51, 204, 102);
     ellipseMode(CENTER);
     ellipse(point.x, point.y, 3);
