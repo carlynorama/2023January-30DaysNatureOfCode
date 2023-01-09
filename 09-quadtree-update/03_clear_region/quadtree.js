@@ -429,6 +429,28 @@ reAddPointToSubTree(point) {
     //   }
     // }
 
+    //  USES INTERSCTION
+//   static pointAccessWithin(queryBounds, parent, level, myAction) {
+
+//       //console.log(queryBounds.pretty());
+//       let nextLevel = level + 1;
+//       if (parent.subTrees.length > 0) {
+//         for (let subtree of parent.subTrees) {
+//           if (queryBounds.intersects(subtree.bounds)) {
+//             //At some point double check this is working correctly
+//             let subBounds = queryBounds.intersection(subtree.bounds);
+//             QuadTree.pointAccessWithin(subBounds, subtree, nextLevel, myAction);
+//           }
+//         }
+//       } else {
+//         for (let point of parent.points) {
+//           if (queryBounds.containsPoint(point)) {
+//             myAction(point);
+//           }
+//         };
+//       }
+//     }
+
 //----------------------------------------------------------------------------------------- EDITING TREE 
   clearPointValue(x, y) {
     let info = QuadTree.returnPointInfo(x, y, this, 0, []);
@@ -533,57 +555,75 @@ reAddPointToSubTree(point) {
           newPointCollector.push(...newPoints);
         }
     } else {
-      let thesePoints = [];
-      let num = parent.points.length; 
-      for (let i = 0; i < num; i++) {
-        let pointToCheck = parent.points[parent.points.length-1]
-        let check = queryBounds.containsPoint(pointToCheck)
-        console.log("pointPopper", pointToCheck.x, pointToCheck.y, check, queryBounds.pretty())
-        // ----------------------- START p5js code to troubleshoot
-        rectMode(CORNER);
-        //strokeWidth(5);
-        let thisColor;
-        if (check) { thisColor = color(0, 255, 255) } else { thisColor = color(255, 0, 0) }
-        stroke(thisColor);
-        ellipseMode(CENTER);
-        ellipse(pointToCheck.x, pointToCheck.y, 5);
-        //point(pointToCheck.x, pointToCheck.y);
-        //strokeWidth(1);
-        // ----------------------- END p5js code to troubleshoot
-        if (check) {
-          let samePointCheck = parent.points.pop();
-          console.log("same point?", samePointCheck.x, samePointCheck.y, pointToCheck.x, pointToCheck.y);
-          thesePoints.push(samePointCheck);
-        } 
-      }
+      let thesePoints = parent.points.filter(val=> queryBounds.containsPoint(val));
+      for (let point of thesePoints) { parent.clearPointValue(point.x, point.y) }
       return thesePoints;
     }
     return newPointCollector;
   }
 
 
-//  USES INTERSCTION
-//   static pointAccessWithin(queryBounds, parent, level, myAction) {
 
-//       //console.log(queryBounds.pretty());
-//       let nextLevel = level + 1;
-//       if (parent.subTrees.length > 0) {
-//         for (let subtree of parent.subTrees) {
-//           if (queryBounds.intersects(subtree.bounds)) {
-//             //At some point double check this is working correctly
-//             let subBounds = queryBounds.intersection(subtree.bounds);
-//             QuadTree.pointAccessWithin(subBounds, subtree, nextLevel, myAction);
-//           }
-//         }
-//       } else {
-//         for (let point of parent.points) {
-//           if (queryBounds.containsPoint(point)) {
-//             myAction(point);
-//           }
-//         };
-//       }
-//     }
 
 
 }
+
+
+
+
+// static popRegion(queryBounds, parent) {
+//   if (!(typeof(queryBounds.origin.x) === 'number' && typeof(queryBounds.origin.x) === 'number')) {
+//     throw new Error('QuadTree.pointAccessWithin: are you sure you got a bounds?');
+//   }
+  
+//   console.log("startPop Region");
+//   if (!parent.bounds.intersects(queryBounds)) {
+//     // ----------------------- START p5js code to troubleshoot
+//     rectMode(CORNER);
+//     rect(parent.bounds.x, parent.bounds.y, parent.bounds.width, parent.bounds.height);
+//     // ----------------------- END p5js code to troubleshoot
+//     console.log("popRegion, no intersection.", queryBounds.pretty(), parent.bounds.pretty());
+//     return [];
+//   }
+  
+//   let newPointCollector = [];
+//   //console.log(level, parent.bounds.pretty(), );
+//   if (parent.subTrees.length > 0) {
+//     console.log("going deeper");
+//     for (let subtree of parent.subTrees) {
+//         let newPoints = QuadTree.popRegion(queryBounds, subtree);
+//         newPointCollector.push(...newPoints);
+//       }
+//   } else {
+//     let thesePoints = [];
+//     let num = parent.points.length; 
+//     for (let i = 0; i < num; i++) {
+//       let pointToCheck = parent.points.pop();
+//       // let pointToCheck = parent.points[parent.points.length-1];
+//       // let pointToCheck = parent.points[parent.points.length-1];
+//       let check = queryBounds.containsPoint(pointToCheck)
+//       console.log("pointPopper", pointToCheck.x, pointToCheck.y, check, queryBounds.pretty())
+//       // ----------------------- START p5js code to troubleshoot
+//       rectMode(CORNER);
+//       //strokeWidth(5);
+//       let thisColor;
+//       if (check) { thisColor = color(0, 255, 255) } else { thisColor = color(255, 0, 0) }
+//       stroke(thisColor);
+//       ellipseMode(CENTER);
+//       ellipse(pointToCheck.x, pointToCheck.y, 5);
+//       //point(pointToCheck.x, pointToCheck.y);
+//       //strokeWidth(1);
+//       // ----------------------- END p5js code to troubleshoot
+//       if (check) {
+//         // let samePointCheck = parent.points.pop();
+//         // console.log("same point?", samePointCheck.x, samePointCheck.y, pointToCheck.x, pointToCheck.y);
+//         thesePoints.push(pointToCheck);
+//       } else {
+//         //parent.points.push(pointToCheck);
+//       }
+//     }
+//     return thesePoints;
+//   }
+//   return newPointCollector;
+// }
 
