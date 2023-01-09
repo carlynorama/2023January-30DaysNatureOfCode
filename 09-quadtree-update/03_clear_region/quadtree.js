@@ -556,6 +556,22 @@ reAddPointToSubTree(point) {
         }
     } else {
       let thesePoints = parent.points.filter(val=> queryBounds.containsPoint(val));
+
+      // ----------------------- START p5js code to troubleshoot
+      
+      for (let pointToCheck of thesePoints) {  
+        stroke(0, 255, 255);
+        ellipseMode(CENTER);
+        ellipse(pointToCheck.x, pointToCheck.y, 5);
+      }
+      let theLeftBehind = parent.points.filter(val=> !queryBounds.containsPoint(val));
+      for (let pointToCheck of theLeftBehind) {  
+        stroke(255, 0, 0);
+        ellipseMode(CENTER);
+        ellipse(pointToCheck.x, pointToCheck.y, 5);
+      }
+      // ----------------------- END p5js code to troubleshoot
+
       for (let point of thesePoints) { parent.clearPointValue(point.x, point.y) }
       return thesePoints;
     }
