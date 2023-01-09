@@ -7,7 +7,7 @@ const xoff = 0;
 const yoff = 10000;
 const inc = 0.01;
 
-fieldPointsQty = 50;
+fieldPointsQty = 200;
 fieldPointsToClear = [];
 let clearFlag = true;
 
@@ -42,16 +42,16 @@ function setup() {
     throw new Error("wrong number of field points.");
   }
 
-	for (let i = 0; i < pointQty; i++) {
-    let x = map(noise(xoff+ i*inc), 0, 1, 0, width);
-    let y = map(noise(yoff + i*inc), 0, 1, 0, height);
-    thisQueryPoint = new Point(x,y);
-    pointSet.push(thisQueryPoint);
-  }
+	// for (let i = 0; i < pointQty; i++) {
+  //   let x = map(noise(xoff+ i*inc), 0, 1, 0, width);
+  //   let y = map(noise(yoff + i*inc), 0, 1, 0, height);
+  //   thisQueryPoint = new Point(x,y);
+  //   pointSet.push(thisQueryPoint);
+  // }
 
-   thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
-   myNeighborhood = thisQueryBounds;
-   console.log("thisQueryBounds", thisQueryBounds.x, thisQueryBounds.y);
+  //  thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
+  //  myNeighborhood = thisQueryBounds;
+  //  console.log("thisQueryBounds", thisQueryBounds.x, thisQueryBounds.y);
 
    //this is a very dangerous function because it returns all the points as reference objects? 
    let fullset = qTree.returnAllPoints();
@@ -82,17 +82,17 @@ function clearPoint() {
   console.log(pointToClear.x, pointToClear.y, result);
 }
 
-let reverseFlag = false;
-function fetchPoint() {
+// let reverseFlag = false;
+// function fetchPoint() {
 
-  if (reverseFlag) { pointIndex -= 1; }
-  else { pointIndex += 1; } 
+//   if (reverseFlag) { pointIndex -= 1; }
+//   else { pointIndex += 1; } 
   
-  if  (pointIndex > pointQty-1) { reverseFlag = true; pointIndex = pointQty-1; } 
-  else if  (pointIndex < 0) { reverseFlag = false; pointIndex = 0; } 
+//   if  (pointIndex > pointQty-1) { reverseFlag = true; pointIndex = pointQty-1; } 
+//   else if  (pointIndex < 0) { reverseFlag = false; pointIndex = 0; } 
 
-  return pointSet[pointIndex]
-}
+//   return pointSet[pointIndex]
+// }
 
 
 
@@ -114,11 +114,9 @@ if (runFlag) {
    qTree.doWithPoints(drawFieldPoint);
  
 
-  drawNeighborhood(myNeighborhood);
-
-  qTree.doWithPointsInRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2, drawFound);
-
-  drawMe(thisQueryPoint);
+  //drawNeighborhood(myNeighborhood);
+  //qTree.doWithPointsInRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2, drawFound);
+  //drawMe(thisQueryPoint);
 
 }
 
