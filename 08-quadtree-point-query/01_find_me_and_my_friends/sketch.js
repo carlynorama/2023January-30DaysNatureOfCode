@@ -74,23 +74,25 @@ function makePoint() {
 
 // ------------------------------------------------------------------------ draw()
 function draw() {
-
-  frameRate(1);
+  if (runFlag) {
+    frameRate(1);
   
-   background(51);
-   update();
-
-   noFill();
-   stroke(102, 102, 102);
-   qTree.doWithLeafBounds(drawBounds);
-   qTree.doWithPoints(drawFieldPoint);
+    background(51);
+    update();
  
-
-  drawNeighborhood(myNeighborhood);
-  drawFriends(myFriends);
-  drawMe(thisQueryPoint);
-
+    noFill();
+    stroke(102, 102, 102);
+    qTree.doWithLeafBounds(drawBounds);
+    qTree.doWithPoints(drawFieldPoint);
+  
+ 
+   drawNeighborhood(myNeighborhood);
+   drawFriends(myFriends);
+   drawMe(thisQueryPoint);
+ }
 }
+
+
 
 
 // ------------------------------------------------------------ functions passed to QuadTree()
