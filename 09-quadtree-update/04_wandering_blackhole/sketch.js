@@ -15,9 +15,14 @@ let pointSet = [];
 let pointIndex = 0;
 const pointQty = 5000;
 
+let memoryLength = 100;
+let timePassed = 0;
+let rememberedDead = [];
+let onTheBlock = [];
+
 let thisQueryPoint;
-let diameter = 50;
-let myNeighborhood;
+let diameter = 20;
+let myMonster;
 
 // function mouseClicked() {
 //   runFlag = false;
@@ -36,8 +41,7 @@ function setup() {
   for (let i = 0; i < fieldPointsQty; i++) {
 		let x = randomGaussian(thisWidth / 2, thisWidth / 8);
 		let y = randomGaussian(thisHeight / 2, thisHeight / 8);
-    qTree.addPoint(x,y, successPoint); //TODO: success point RERUNS on this point if quad tree is rebalanced. Cant use function to append to array until I fix that.
-    //fieldPointsToClear.push(new Point(x,y));
+    qTree.addPoint(x,y, successPoint); 
   }
 
   // if (fieldPointsToClear.length != fieldPointsQty) {
@@ -52,18 +56,7 @@ function setup() {
     pointSet.push(thisQueryPoint);
   }
 
-   myNeighborhood = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
-   console.log("myNeighborhood", myNeighborhood.x, myNeighborhood.y);
-
-   //this is a very dangerous function because it returns all the points as reference objects? 
-   let fullset = qTree.returnAllPoints();
-   console.log(fullset);
-  //  let removedSet = qTree.popAllPoints();
-  //  console.log(removedSet);
-
-  print("hello?");
   console.log("--------- End of Setup ---------");
-  //noLoop();
   
 }
 
@@ -73,10 +66,17 @@ function update() {
   thisQueryPoint = fetchPoint();
   myNeighborhood = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
 
-  fill(204, 50);
-  ellipseMode(CENTER);
-  ellipse(thisQueryPoint.x, thisQueryPoint.y, diameter);
-  let returnedPoints = qTree.popRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2);
+  onTheBlock = qTree.popRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2);
+  rememberedDead.push(...onTheBlock);
+
+  diameter = (rememberedDead.length * inc * 3) + 20;
+
+  if (timePassed % memoryLength == 0) {
+    rememberedDead.shift();
+    //console.log("forgetting");
+  }
+
+  timePassed += 1;
 }
 
 let reverseFlag = false;
@@ -108,14 +108,13 @@ if (runFlag) {
    qTree.doWithLeafBounds(drawBounds);
    qTree.doWithPoints(drawFieldPoint);
  
-
-  drawNeighborhood(myNeighborhood);
-  qTree.doWithPointsInRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2, drawFound);
-  drawMe(thisQueryPoint);
+  rememberedDead.forEach((point) => { drawGone(point) } )
+  onTheBlock.forEach((point) => { drawFound(point) } )
+  drawMonster(myNeighborhood);
+  
+  drawCenter(thisQueryPoint);
 
 }
-
-
 
 }
 
@@ -129,17 +128,20 @@ function successPoint(point) {
 
 function drawFound(point) {
     noFill();
-    //console.log(point.x, point.y)
-    // stroke(51, 204, 102);
-    // ellipseMode(CENTER);
-    // ellipse(point.x, point.y, 3);
-    stroke(51, 204, 102);
+    stroke(255);
     ellipseMode(CENTER);
     ellipse(point.x, point.y, 3);
 }
 
-function drawMe(point) {
-  fill(255, 0, 0);
+function drawGone(point) {
+  noFill();
+  stroke(0, 100);
+  ellipseMode(CENTER);
+  ellipse(point.x, point.y, 3);
+}
+
+function drawCenter(point) {
+  fill(0, 100);
   noStroke();
   ellipseMode(CENTER);
   ellipse(point.x, point.y, 5);
@@ -156,20 +158,16 @@ function drawFieldPoint(point) {
 }
 
 function drawBounds(bounds) {
+  stroke(255,20);
   rectMode(CORNER);
   rect(bounds.x, bounds.y, bounds.width, bounds.height);
 }
 
-function drawNeighborhood(bounds) {
+function drawMonster(bounds) {
   ellipseMode(CORNER);
-  rectMode(CORNER);
-  stroke(204, 51, 204);
-  noFill();
-  //rect(bounds.x, bounds.y, bounds.width, bounds.height);
+  fill(0, 80);
+  noStroke();
   ellipse(bounds.x, bounds.y, bounds.width, bounds.height);
-
-  ellipseMode(CENTER);
-  ellipse(bounds.center.x, bounds.center.y, 8);
 
 }
 

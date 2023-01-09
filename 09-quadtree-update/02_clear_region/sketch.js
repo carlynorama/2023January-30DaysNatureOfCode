@@ -20,9 +20,9 @@ let thisQueryBounds;
 let diameter = 50;
 let myNeighborhood;
 
-// function mouseClicked() {
-//   runFlag = false;
-// }
+function mouseClicked() {
+  runFlag = false;
+}
 
 // ------------------------------------------------------------------------ setup()
 function setup() {

@@ -532,10 +532,10 @@ reAddPointToSubTree(point) {
   }
 
   popRegion(queryBounds) {
-    return QuadTree.popRegion(queryBounds, this)
+    return QuadTree.popRegion(queryBounds, this, this)
   }
 
-  static popRegion(queryBounds, parent) {
+  static popRegion(queryBounds, parent, owner) {
     if (!(typeof(queryBounds.origin.x) === 'number' && typeof(queryBounds.origin.x) === 'number')) {
       throw new Error('QuadTree.pointAccessWithin: are you sure you got a bounds?');
     }
@@ -548,13 +548,13 @@ reAddPointToSubTree(point) {
     if (parent.subTrees.length > 0) {
       //console.log("going deeper");
       for (let subtree of parent.subTrees) {
-          let newPoints = QuadTree.popRegion(queryBounds, subtree);
+          let newPoints = QuadTree.popRegion(queryBounds, subtree, owner);
           newPointCollector.push(...newPoints);
         }
     } else {
       let thesePoints = parent.points.filter(val=> queryBounds.containsPoint(val));
 
-      for (let point of thesePoints) { parent.clearPointValue(point.x, point.y) }
+      for (let point of thesePoints) { owner.clearPointValue(point.x, point.y) }
       return thesePoints;
     }
     return newPointCollector;
@@ -564,10 +564,10 @@ reAddPointToSubTree(point) {
     let d = r*2;
     //console.log("popRadius");
     let rqueryBounds = Bounds.createBoundsFromCenter(x, y, d, d);
-    return QuadTree.popCircularRegion(rqueryBounds, this);
+    return QuadTree.popCircularRegion(rqueryBounds, this, this);
   }
 
-  static popCircularRegion(queryBounds, parent) {
+  static popCircularRegion(queryBounds, parent, owner) {
     //console.log("popCircularRegion");
     if (!(typeof(queryBounds.origin.x) === 'number' && typeof(queryBounds.origin.x) === 'number')) {
       throw new Error('QuadTree.pointAccessWithin: are you sure you got a bounds?');
@@ -584,7 +584,7 @@ reAddPointToSubTree(point) {
     if (parent.subTrees.length > 0) {
       //console.log("going deeper");
       for (let subtree of parent.subTrees) {
-          let newPoints = QuadTree.popCircularRegion(queryBounds, subtree);
+          let newPoints = QuadTree.popCircularRegion(queryBounds, subtree, owner);
           newPointCollector.push(...newPoints);
         }
     } else {
@@ -608,7 +608,7 @@ reAddPointToSubTree(point) {
       // -------------------------------------------------------------------- END p5js code to troubleshoot
       // ==================================================================================================
 
-      for (let point of thesePoints) { parent.clearPointValue(point.x, point.y) }
+      for (let point of thesePoints) { owner.clearPointValue(point.x, point.y) }
       return thesePoints;
     }
     return newPointCollector;

@@ -126,11 +126,6 @@ if (runFlag) {
 
 
 // ------------------------------------------------------------ functions passed to QuadTree()
-function drawBounds(bounds) {
-  rect(bounds.x, bounds.y, bounds.width, bounds.height);
-  ellipseMode(CENTER);
-  ellipse(bounds.x, bounds.y, 5);
-}
 
 //Only runs once during set up. Could use it to create a set, etc. 
 function successPoint(point) { 

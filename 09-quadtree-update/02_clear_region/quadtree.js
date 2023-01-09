@@ -452,56 +452,58 @@ reAddPointToSubTree(point) {
 //     }
 
 //----------------------------------------------------------------------------------------- EDITING TREE 
-  clearPointValue(x, y) {
-    let info = QuadTree.returnPointInfo(x, y, this, 0, []);
-    if (info == null) { 
-      //console.log("cPV how?");
-      
-      return null
-    } else if (info.found == false) {
-      //console.log("cPV found is false", x, y, info.bounds.pretty(), info.companions);
-      throw new Error('Point does not exist and I am only using this on points that exist.');
-      return { removed:false, refresh:false }
-    }
-    //console.log("cPV found is true", x, y, info.bounds.pretty(), info.companions.length, info.level, info.path);
-
-    if (info.companions.length > (this.limit/4)) {
-      let result = this.getSubTree(info.level, info.path);
-      if (result.points.length > 0) { result.points = info.companions } 
-      else { console.log("cPV something went wrong.") }
-      return { removed:true, refresh:false }
-    } 
-    else {
-      let result;
-      if (info.level <= 0) {
-        result = this;
-      } else {
-        let pointParentLevel = info.level - 1;
-        let pathToParent = Array.from(info.path);
-        let lastStep = pathToParent.shift();  // <----  ROOT is at the end POP will remove root, not leaf.
-        result = this.getSubTree(pointParentLevel, pathToParent);
-      }
-
-      //if (result == null) { result = this; }
-      //console.log("cPV parent",result.subTrees.length, lastStep, result.bounds.pretty(), pointParentLevel, pathToParent);
-      
-      let allPoints = result.popAllPoints();
-
-      //console.log("cPV allPoints", allPoints);
-      //if (typeof(allPoints) === 'undefined') { throw new Error("allPoints undefined")}
-
-      let validPoints = allPoints.filter(val=> (val.x != x && val.y != y));
-      //console.log("cPV validPoints", "diff", allPoints.length - validPoints.length, validPoints);
-      //if (allPoints.length - validPoints.length != 1) { throw new Error("cPV where is the point?"); }
-      
-      for (point of validPoints) {
-        this.reAddPoint(point);
-      }
-     
-      return { removed:true, refresh:true }
-    }
-
+clearPointValue(x, y) {
+  let info = QuadTree.returnPointInfo(x, y, this, 0, []);
+  if (info == null) { 
+    //console.log("cPV how?");
+    
+    return null
+  } else if (info.found == false) {
+    //console.log("cPV found is false", x, y, info.bounds.pretty(), info.companions);
+    throw new Error('Point does not exist and I am only using this on points that exist.');
+    return { removed:false, refresh:false }
   }
+  //console.log("cPV found is true", x, y, info.bounds.pretty(), info.companions.length, info.level, info.path);
+
+  if (info.companions.length > (this.limit/4)) {
+    let result = this.getSubTree(info.level, info.path);
+    if (result.points.length > 0) { result.points = info.companions } 
+    else { console.log("cPV something went wrong.") }
+    return { removed:true, refresh:false }
+  } 
+  else {
+    let result;
+    if (info.level <= 0) {
+      result = this;
+      console.log("I am root");
+    } else {
+      let pointParentLevel = info.level - 1;
+      let pathToParent = Array.from(info.path);
+      let lastStep = pathToParent.shift();  // <----  ROOT is at the end POP will remove root, not leaf.
+      result = this.getSubTree(pointParentLevel, pathToParent);
+      console.log("cPV parent",result.subTrees.length, lastStep, result.bounds.pretty(), pointParentLevel, pathToParent);
+    }
+
+    //if (result == null) { result = this; }
+    
+    let allPoints = result.popAllPoints();
+
+    //console.log("cPV allPoints", allPoints);
+    //if (typeof(allPoints) === 'undefined') { throw new Error("allPoints undefined")}
+
+    let validPoints = allPoints.filter(val=> (val.x != x && val.y != y));
+    //console.log("cPV validPoints", "diff", allPoints.length - validPoints.length, validPoints);
+    //if (allPoints.length - validPoints.length != 1) { throw new Error("cPV where is the point?"); }
+    
+    for (point of validPoints) {
+      this.reAddPoint(point);
+    }
+   
+    return { removed:true, refresh:true }
+  }
+
+}
+
 
 
   popAllPoints() {
@@ -532,10 +534,10 @@ reAddPointToSubTree(point) {
   }
 
   popRegion(queryBounds) {
-    return QuadTree.popRegion(queryBounds, this)
+    return QuadTree.popRegion(queryBounds, this, this)
   }
 
-  static popRegion(queryBounds, parent) {
+  static popRegion(queryBounds, parent, owner) {
     if (!(typeof(queryBounds.origin.x) === 'number' && typeof(queryBounds.origin.x) === 'number')) {
       throw new Error('QuadTree.pointAccessWithin: are you sure you got a bounds?');
     }
@@ -557,7 +559,7 @@ reAddPointToSubTree(point) {
     if (parent.subTrees.length > 0) {
       //console.log("going deeper");
       for (let subtree of parent.subTrees) {
-          let newPoints = QuadTree.popRegion(queryBounds, subtree);
+          let newPoints = QuadTree.popRegion(queryBounds, subtree, owner);
           newPointCollector.push(...newPoints);
         }
     } else {
@@ -579,7 +581,7 @@ reAddPointToSubTree(point) {
       // -------------------------------------------------------------------- END p5js code to troubleshoot
       // ==================================================================================================
 
-      for (let point of thesePoints) { parent.clearPointValue(point.x, point.y) }
+      for (let point of thesePoints) { owner.clearPointValue(point.x, point.y) }
       return thesePoints;
     }
     return newPointCollector;

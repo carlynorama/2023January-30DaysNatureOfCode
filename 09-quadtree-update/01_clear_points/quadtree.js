@@ -478,11 +478,14 @@ reAddPointToSubTree(point) {
       let result;
       if (info.level <= 0) {
         result = this;
+        console.log("cPV as Root");
       } else {
         let pointParentLevel = info.level - 1;
         let pathToParent = Array.from(info.path);
         let lastStep = pathToParent.shift();  // <----  ROOT is at the end POP will remove root, not leaf.
         result = this.getSubTree(pointParentLevel, pathToParent);
+        console.log("cPV parent",result.subTrees.length, lastStep, result.bounds.pretty(), pointParentLevel, pathToParent);
+      
       }
 
       //if (result == null) { result = this; }
