@@ -7,8 +7,9 @@ const xoff = 0;
 const yoff = 10000;
 const inc = 0.01;
 
-fieldPointsQty = 300;
+fieldPointsQty = 30;
 fieldPointsToClear = [];
+let clearFlag = true;
 
 let pointSet = [];
 let pointIndex = 0;
@@ -60,8 +61,10 @@ function setup() {
 //   myNeighborhood = thisQueryBounds;
 // }
 
-function update() {
+function clearPoint() {
+  
   let pointToClear = fieldPointsToClear.pop();
+  if (fieldPointsToClear.length <= 0 ) {  clearFlag = false;  }
   let result = qTree.clearPointValue(pointToClear.x, pointToClear.y);
   console.log(pointToClear.x, pointToClear.y, result);
 }
@@ -87,7 +90,10 @@ if (runFlag) {
   frameRate(5);
   
    background(51);
-   update();
+   if (clearFlag) {
+    clearPoint();
+   }
+  
 
    noFill();
    stroke(102, 102, 102);
