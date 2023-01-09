@@ -47,6 +47,11 @@ function setup() {
    myNeighborhood = thisQueryBounds;
    console.log("thisQueryBounds", thisQueryBounds.x, thisQueryBounds.y);
 
+   //this is a very dangerous function because it returns all the points as reference objects? 
+   let fullset = qTree.returnAllPoints();
+   console.log(fullset);
+   let removedSet = qTree.popAllPoints();
+   console.log(removedSet);
 
   console.log("--------- End of Setup ---------");
   //noLoop();

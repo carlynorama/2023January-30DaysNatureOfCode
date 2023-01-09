@@ -40,6 +40,142 @@ class QuadTree {
 
 
 
+  addPoint(x, y, pointSuccess) {
+    if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
+      throw new Error('QuadTree.addPoint values are not numeric.');
+    }
+    if (!(typeof(pointSuccess) === 'function')) {
+      throw new Error('QuadTree.addPoint: did not receive successFunction');
+    }
+
+    if (!this.contains(x,y)) {
+      //console.log(x,y,"not in here", this.bounds.pretty())
+      return false;
+    } else {
+      if (this.subTrees.length != 0) {
+        return this.addPointToSubTree(x,y,pointSuccess);
+      }
+      else if ((this.points.length < this.limit) && (this.subTrees.length === 0)) {
+        let point = new Point(x,y);
+        this.points.push(point);
+        pointSuccess(point);
+        return true;
+      }
+      else {
+        //console.log("SUBDIVIDING!");
+        this.subdivide();
+        for (let point of this.points) {
+          this.addPointToSubTree(point.x,point.y,pointSuccess);
+        }
+        this.points = [];
+        return this.addPointToSubTree(x,y,pointSuccess);
+      }
+      throw new Error('QuadTree.addPoint: case not handled.');
+
+    }
+  }
+
+  subdivide() {
+    //console.log("SUBDIVIDED CALLED ON TREE:" + this.bounds.pretty());
+    if (this.subTrees.length === 0) {
+      let subBounds = this.bounds.quads();
+      for (let bounds of subBounds) {
+        //console.log(bounds.pretty(), bounds.x, bounds.y, bounds.width, bounds.height, this.limit);
+        let newTree = new QuadTree(bounds, this.limit);
+        this.subTrees.push(newTree);
+      }
+      //console.log("RESULTING TREES:" + this.bounds.pretty());
+      // for (let tree in this.subTrees) {
+      //   console.log()
+      // }
+      // for (let i = 0; i < 4; i++) {
+      //   console.log("bounds", i, subBounds[i].pretty());
+      //   console.log("tree", i, this.subTrees[i].bounds.pretty());
+      // }
+
+    } else {
+      throw new Error('ERROR: subdivide() should never be called if subtrees exists.');
+    }
+  }
+
+
+
+  addPointToSubTree(x,y,pointSuccess) {
+    if (this.subTrees.length == 0) {
+      throw new Error('QuadTree.addPointToSubTree: subtrees array is empty.');
+    }
+    //console.log("addPointToSubTree, should be 4: ", this.subTrees.length);
+    for (let i = 0; i < 4; i++) {
+      //console.log(i, this.subTrees[i].bounds.pretty(), x, y);
+      if (this.subTrees[i].contains(x,y)) {
+        //console.log("I think you're in here!");
+        let result = this.subTrees[i].addPoint(x,y,pointSuccess);
+        //console.log(result);
+        return result;
+      }
+    }
+
+    throw new Error('QuadTree.addPointToSubTree: Point within bounds did not find subtree.' + this.bounds.pretty() + " x:" + x + " y:"+ y, { details: "Where does this show up?" });
+  }
+
+  contains(x,y) {
+    if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
+      throw new Error('QuadTree.conatins values are not numeric.');
+    }
+    return this.bounds.contains(x,y);
+  }
+
+  walk() {
+    QuadTree.walkTree(this, 0);
+  }
+
+  returnAllPoints() {
+    let checkPoints = QuadTree.returnAllPoints(this, []);
+    return checkPoints
+    //console.log(checkPoints);
+  }
+
+  static returnAllPoints(parent, pointsArray) {
+    //could use flatMap?
+    //console.log(level, parent.bounds.pretty());
+    if (parent.subTrees.length > 0) {
+      for (let subtree of parent.subTrees) {
+          QuadTree.returnAllPoints(subtree, pointsArray);
+      }
+    } else {
+        pointsArray.push(...parent.points);
+    }
+    return pointsArray;
+  }
+
+  popAllPoints() {
+    let checkPoints = QuadTree.popAllPoints(this);
+    return checkPoints
+    //console.log(checkPoints);
+  }
+
+  static popAllPoints(parent) {
+    let newPointCollector = [];
+    //console.log(level, parent.bounds.pretty());
+    if (parent.subTrees.length > 0) {
+      for (let subtree of parent.subTrees) {
+          let newPoints = QuadTree.popAllPoints(subtree);
+          newPointCollector.push(...newPoints);
+      }
+    } else {
+      let thesePoints = [];
+      let num = parent.points.length; 
+      for (let i = 0; i < num; i++) {
+        thesePoints.push(parent.points.pop())
+      }
+      return thesePoints;
+      //return Array.from(thesePoints);  //am I breaking the link? do I need to?
+    }
+    return newPointCollector;
+  }
+
+
+
   doWithSubTreeInfo(myAction) {
     QuadTree.subTreeAccess(this, 0, [], myAction);
   }
@@ -57,9 +193,6 @@ class QuadTree {
         myAction(parent.points, parent.bounds, level, Array.from(quadrantPath).reverse());
     }
   }
-
-
- 
 
   doWithPoints(myAction) {
     QuadTree.pointAccess(this, 0, myAction);
@@ -176,7 +309,7 @@ class QuadTree {
     }
   
     static getSubTreeFrom(parent, level, quadrantPath) {
-      console.log(parent.bounds.pretty(), level, quadrantPath);
+      //console.log(parent.bounds.pretty(), level, quadrantPath);
       if (level === 0) { return parent }
       let nextLevel = level - 1;
       if (parent.subTrees.length > 0) {
@@ -229,10 +362,11 @@ class QuadTree {
   clearPointValue(x, y) {
     let info = QuadTree.returnPointInfo(x, y, this, 0, []);
     if (info == null) { 
-      console.log("point does not exist");
+      //console.log("point does not exist");
+      throw new Error('Point does not exist and I am only using this on points that exit.');
       return null
     }
-    console.log(info.bounds.pretty(), info.companions.length, info.level, info.path);
+    console.log("clearPoint start", info.bounds.pretty(), info.companions.length, info.level, info.path);
 
     if (info.companions.length > (this.limit/4)) {
       let result = this.getSubTree(info.level, info.path);
@@ -247,30 +381,59 @@ class QuadTree {
       let lastStep = pathToParent.pop();
       let result = this.getSubTree(pointParentLevel, pathToParent);
       console.log("parent", pointParentLevel, pathToParent, lastStep, result.subTrees.length);
-      
-    }
-
-  }
-
-  returnAllPoints() {
-    return QuatTree.returnAllPoints(this, []);
-  }
-
-  //--------------------------------------------------------- flattenpoints? 
-  static allPoints(parent, pointsArray) {
-    //console.log(level, parent.bounds.pretty());
-    if (parent.subTrees.length > 0) {
-      for (let i = 0; i < parent.subTrees.length; i++) {
-        const subtree = parent.subTrees[i];
-        if (subtree.bounds.contains(x,y)) {
-          QuadTree.returnAllPoints(subtree, pointsArray);
+      let allPoints = result.returnAllPoints();
+      console.log("allPoints", allPoints);
+      result.subTrees = [];
+      //The re-adding is not happening. 
+      if (typeof(allPoints) !== 'undefined' && allPoints.length > 0) {
+        for (point of allPoints) {
+          this.reAddPoint(point);
         }
       }
-      return null; //really shouldn't ever get here. 
-    } else {
-        pointsArray = parent.points;
     }
+
   }
+
+  //These should only be used by this object on itself. 
+  reAddPoint(point) {
+      if (this.subTrees.length != 0) {
+        return this.reAddPointToSubTree(point);
+      }
+      else if ((this.points.length < this.limit) && (this.subTrees.length === 0)) {
+        this.points.push(point);
+        return true;
+      }
+      else {
+        //console.log("SUBDIVIDING!");
+        this.subdivide();
+        for (let point of this.points) {
+          this.reAddPointToSubTree(point);
+        }
+        this.points = [];
+        return this.reAddPointToSubTree(point);
+      }
+      throw new Error('QuadTree.reAddPoint: case not handled.');
+
+  }
+
+  reAddPointToSubTree(point) {
+    if (this.subTrees.length == 0) {
+      throw new Error('QuadTree.reAddPointToSubTree: subtrees array is empty.');
+    }
+    //console.log("addPointToSubTree, should be 4: ", this.subTrees.length);
+    for (let i = 0; i < 4; i++) {
+      //console.log(i, this.subTrees[i].bounds.pretty(), x, y);
+      if (this.subTrees[i].contains(point.x,point.y)) {
+        //console.log("I think you're in here!");
+        let result = this.subTrees[i].reAddPoint(point);
+        //console.log(result);
+        return result;
+      }
+    }
+
+    throw new Error('QuadTree.addPointToSubTree: Point within bounds did not find subtree.' + this.bounds.pretty() + " x:" + x + " y:"+ y, { details: "Where does this show up?" });
+  }
+
 
 
   //returns the information related to the leaf touching point x,y
@@ -298,94 +461,9 @@ class QuadTree {
   }
 
 
+ 
 
 
-  addPoint(x, y, pointSuccess) {
-    if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
-      throw new Error('QuadTree.addPoint values are not numeric.');
-    }
-    if (!(typeof(pointSuccess) === 'function')) {
-      throw new Error('QuadTree.addPoint: did not receive successFunction');
-    }
-
-    if (!this.contains(x,y)) {
-      //console.log(x,y,"not in here", this.bounds.pretty())
-      return false;
-    } else {
-      if (this.subTrees.length != 0) {
-        return this.addPointToSubTree(x,y,pointSuccess);
-      }
-      else if ((this.points.length < this.limit) && (this.subTrees.length === 0)) {
-        let point = new Point(x,y);
-        this.points.push(point);
-        pointSuccess(point);
-        return true;
-      }
-      else {
-        //console.log("SUBDIVIDING!");
-        this.subdivide();
-        for (let point of this.points) {
-          this.addPointToSubTree(point.x,point.y,pointSuccess);
-        }
-        this.points = [];
-        return this.addPointToSubTree(x,y,pointSuccess);
-      }
-      throw new Error('QuadTree.addPoint: case not handled.');
-
-    }
-  }
-
-  subdivide() {
-    //console.log("SUBDIVIDED CALLED ON TREE:" + this.bounds.pretty());
-    if (this.subTrees.length === 0) {
-      let subBounds = this.bounds.quads();
-      for (let bounds of subBounds) {
-        //console.log(bounds.pretty(), bounds.x, bounds.y, bounds.width, bounds.height, this.limit);
-        let newTree = new QuadTree(bounds, this.limit);
-        this.subTrees.push(newTree);
-      }
-      //console.log("RESULTING TREES:" + this.bounds.pretty());
-      // for (let tree in this.subTrees) {
-      //   console.log()
-      // }
-      // for (let i = 0; i < 4; i++) {
-      //   console.log("bounds", i, subBounds[i].pretty());
-      //   console.log("tree", i, this.subTrees[i].bounds.pretty());
-      // }
-
-    } else {
-      throw new Error('ERROR: subdivide() should never be called if subtrees exists.');
-    }
-  }
-
-  addPointToSubTree(x,y,pointSuccess) {
-    if (this.subTrees.length == 0) {
-      throw new Error('QuadTree.addPointToSubTree: subtrees array is empty.');
-    }
-    //console.log("addPointToSubTree, should be 4: ", this.subTrees.length);
-    for (let i = 0; i < 4; i++) {
-      //console.log(i, this.subTrees[i].bounds.pretty(), x, y);
-      if (this.subTrees[i].contains(x,y)) {
-        //console.log("I think you're in here!");
-        let result = this.subTrees[i].addPoint(x,y,pointSuccess);
-        //console.log(result);
-        return result;
-      }
-    }
-
-    throw new Error('QuadTree.addPointToSubTree: Point within bounds did not find subtree.' + this.bounds.pretty() + " x:" + x + " y:"+ y, { details: "Where does this show up?" });
-  }
-
-  contains(x,y) {
-    if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
-      throw new Error('QuadTree.conatins values are not numeric.');
-    }
-    return this.bounds.contains(x,y);
-  }
-
-  walk() {
-    QuadTree.walkTree(this, 0);
-  }
 
 }
 
