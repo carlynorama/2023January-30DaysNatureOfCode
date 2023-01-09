@@ -1,4 +1,6 @@
 class QuadTree {
+
+   // --------------------------------------------------------------------------- MAKING
   constructor(bounds, element_limit) {
     if (!(typeof(element_limit) === 'number')) {
       throw new Error('\r\n\r\nQuadTree():value for element_limit is not numeric');
@@ -24,6 +26,7 @@ class QuadTree {
     return qt;
   }
 
+  // --------------------------------------------------------------------------- DEBUG STRUCTURE
   static walkTree(parent, level) {
     let thisLevel = level;
     console.log(thisLevel, parent.bounds.pretty());
@@ -38,7 +41,11 @@ class QuadTree {
     }
   }
 
+  walk() {
+    QuadTree.walkTree(this, 0);
+  }
 
+//------------------------------------------------------------------------------- ADDING
 
   addPoint(x, y, pointSuccess) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
@@ -48,7 +55,7 @@ class QuadTree {
       throw new Error('QuadTree.addPoint: did not receive successFunction');
     }
 
-    if (!this.contains(x,y)) {
+    if (!this.containsLocation(x,y)) {
       //console.log(x,y,"not in here", this.bounds.pretty())
       return false;
     } else {
@@ -64,8 +71,10 @@ class QuadTree {
       else {
         //console.log("SUBDIVIDING!");
         this.subdivide();
+
+        //TODO: this works but readding before removing okay? 
         for (let point of this.points) {
-          this.addPointToSubTree(point.x,point.y,pointSuccess);
+          this.reAddPointToSubTree(point);
         }
         this.points = [];
         return this.addPointToSubTree(x,y,pointSuccess);
@@ -107,7 +116,7 @@ class QuadTree {
     //console.log("addPointToSubTree, should be 4: ", this.subTrees.length);
     for (let i = 0; i < 4; i++) {
       //console.log(i, this.subTrees[i].bounds.pretty(), x, y);
-      if (this.subTrees[i].contains(x,y)) {
+      if (this.subTrees[i].containsLocation(x,y)) {
         //console.log("I think you're in here!");
         let result = this.subTrees[i].addPoint(x,y,pointSuccess);
         //console.log(result);
@@ -115,20 +124,62 @@ class QuadTree {
       }
     }
 
-    throw new Error('QuadTree.addPointToSubTree: Point within bounds did not find subtree.' + this.bounds.pretty() + " x:" + x + " y:"+ y, { details: "Where does this show up?" });
+    throw new Error('Point within bounds did not find subtree.' + this.bounds.pretty() + " x:" + x + " y:"+ y, { details: "Where does this show up?" });
   }
 
-  contains(x,y) {
+
+
+  //These should only be used by this object on itself. Is there "private" for javascript? I think not?
+  reAddPoint(point) {
+    if (this.subTrees.length != 0) {
+      return this.reAddPointToSubTree(point);
+    }
+    else if ((this.points.length < this.limit) && (this.subTrees.length === 0)) {
+      this.points.push(point);
+      return true;
+    }
+    else {
+      //console.log("SUBDIVIDING!");
+      this.subdivide();
+      for (let point of this.points) {
+        this.reAddPointToSubTree(point);
+      }
+      this.points = [];
+      return this.reAddPointToSubTree(point);
+    }
+    throw new Error('QuadTree.reAddPoint: case not handled.');
+
+}
+
+reAddPointToSubTree(point) {
+  if (this.subTrees.length == 0) {
+    throw new Error('QuadTree.reAddPointToSubTree: subtrees array is empty.');
+  }
+  //console.log("addPointToSubTree, should be 4: ", this.subTrees.length);
+  for (let i = 0; i < 4; i++) {
+    //console.log(i, this.subTrees[i].bounds.pretty(), x, y);
+    if (this.subTrees[i].containsLocation(point.x,point.y)) {
+      //console.log("I think you're in here!");
+      let result = this.subTrees[i].reAddPoint(point);
+      //console.log(result);
+      return result;
+    }
+  }
+
+  throw new Error('Point within bounds did not find subtree.' + this.bounds.pretty() + " x:" + x + " y:"+ y, { details: "Where does this show up?" });
+}
+
+//----------------------------------------------------------------------------------------- INFO
+
+  containsLocation(x,y) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       throw new Error('QuadTree.conatins values are not numeric.');
     }
     return this.bounds.contains(x,y);
   }
 
-  walk() {
-    QuadTree.walkTree(this, 0);
-  }
 
+//------------------------------------------------------------------------------------------ RETURNS DATA
   returnAllPoints() {
     let checkPoints = QuadTree.returnAllPoints(this, []);
     return checkPoints
@@ -175,8 +226,106 @@ class QuadTree {
     return newPointCollector;
   }
 
+  getSubTree(level, quadrantPath) {
+
+    //if actually MEANT to call on self and self has no subtree this should cover it. 
+    if (level == 0) { return this }
+
+    return QuadTree.getSubTreeFrom(this, level, quadrantPath);
+
+  }
+
+  static getSubTreeFrom(parent, level, quadrantPath) {
+    //console.log(parent.bounds.pretty(), level, quadrantPath);
+    if (level === 0) { return parent }
+    if (level < 0) { throw new Error("get subTree was called on value above root") } 
+    let nextLevel = level - 1;
+    if (parent.subTrees.length > 0) {
+      let treeLoc = quadrantPath.pop();
+      return QuadTree.getSubTreeFrom(parent.subTrees[treeLoc], nextLevel, quadrantPath);
+    } else {
+        //only gets here if there has been a wrong path.
+        console.log("getSubTreeFrom: called on something without subtrees", level, quadrantPath);
+        //throw new Error("get subTree was called on something without subtrees")
+        return parent
+    }
+  }
 
 
+
+  //returns the information related to the leaf touching point x,y
+  static returnLeafTouching(x, y, parent, level, quadrantPath) {
+    //console.log(level, parent.bounds.pretty());
+    let nextLevel = level + 1;
+    if (parent.subTrees.length > 0) {
+      for (let i = 0; i < parent.subTrees.length; i++) {
+        const subtree = parent.subTrees[i];
+        if (subtree.bounds.contains(x,y)) {
+          let myPath = Array.from(quadrantPath);
+          myPath.push(i);
+          return QuadTree.returnPointInfo(x, y, subtree, nextLevel, myPath);
+        }
+      }
+      return null; //really shouldn't ever get here. 
+    } else {
+      return {
+        bounds: parent.bounds,
+        companions: parent.points,
+        level: level,
+        path:quadrantPath.reverse()
+      }
+    }
+  }
+
+
+ 
+
+  findPointValue(x, y) {
+    if (!this.bounds.contains(x,y)) { return null }
+    return QuadTree.returnPointInfo(x, y, this, 0, []);
+  }
+
+
+  static returnPointInfo(x, y, parent, level, quadrantPath) {
+    //console.log(level, parent.bounds.pretty());
+    let nextLevel = level + 1;
+    if (parent.subTrees.length > 0) {
+      for (let i = 0; i < parent.subTrees.length; i++) {
+        const subtree = parent.subTrees[i];
+        if (subtree.bounds.contains(x,y)) {
+          let myPath = Array.from(quadrantPath);
+          myPath.push(i);
+          return QuadTree.returnPointInfo(x, y, subtree, nextLevel, myPath);
+        }
+      }
+      return null; //really shouldn't ever get here. 
+    } else {
+      for (let point of parent.points) {
+        let result = point.hasValues(x,y);
+        //console.log('check', x, y, point.x, point.y, result);
+        if (result) {
+          return {
+            found: true,
+            bounds: parent.bounds,
+            companions: parent.points.filter(val=> val !== point),
+            level: level,
+            path:quadrantPath.reverse()
+          }
+        }
+      }
+      return {
+        found: false,
+        bounds: parent.bounds,
+        companions: parent.points,
+        level: level,
+        path:quadrantPath.reverse()
+      }
+    }
+  }
+  
+
+
+//-------------------------------------------------------------------------------- ACTS ON DATA
   doWithSubTreeInfo(myAction) {
     QuadTree.subTreeAccess(this, 0, [], myAction);
   }
@@ -305,75 +454,7 @@ class QuadTree {
       }
     }
 
-    getSubTree(level, quadrantPath) {
-
-      //if actually MEANT to call on self and self has no subtree this should cover it. 
-      if (level == 0) { return this }
-
-      return QuadTree.getSubTreeFrom(this, level, quadrantPath);
-
-    }
-  
-    static getSubTreeFrom(parent, level, quadrantPath) {
-      //console.log(parent.bounds.pretty(), level, quadrantPath);
-      if (level === 0) { return parent }
-      if (level < 0) { throw new Error("get subTree was called on value above root") } 
-      let nextLevel = level - 1;
-      if (parent.subTrees.length > 0) {
-        let treeLoc = quadrantPath.pop();
-        return QuadTree.getSubTreeFrom(parent.subTrees[treeLoc], nextLevel, quadrantPath);
-      } else {
-          //only gets here if there has been a wrong path.
-          console.log("getSubTreeFrom: called on something without subtrees", level, quadrantPath);
-          //throw new Error("get subTree was called on something without subtrees")
-          return parent
-      }
-    }
-
-    findPointValue(x, y) {
-      if (!this.bounds.contains(x,y)) { return null }
-      return QuadTree.returnPointInfo(x, y, this, 0, []);
-    }
-
-
-    static returnPointInfo(x, y, parent, level, quadrantPath) {
-      //console.log(level, parent.bounds.pretty());
-      let nextLevel = level + 1;
-      if (parent.subTrees.length > 0) {
-        for (let i = 0; i < parent.subTrees.length; i++) {
-          const subtree = parent.subTrees[i];
-          if (subtree.bounds.contains(x,y)) {
-            let myPath = Array.from(quadrantPath);
-            myPath.push(i);
-            return QuadTree.returnPointInfo(x, y, subtree, nextLevel, myPath);
-          }
-        }
-        return null; //really shouldn't ever get here. 
-      } else {
-        for (let point of parent.points) {
-          let result = point.hasValues(x,y);
-          //console.log('check', x, y, point.x, point.y, result);
-          if (result) {
-            return {
-              found: true,
-              bounds: parent.bounds,
-              companions: parent.points.filter(val=> val !== point),
-              level: level,
-              path:quadrantPath.reverse()
-            }
-          }
-        }
-        return {
-          found: false,
-          bounds: parent.bounds,
-          companions: parent.points,
-          level: level,
-          path:quadrantPath.reverse()
-        }
-      }
-    }
-    
-   /// ------------------------------------------------------------------------------ clearPointValue() 
+//----------------------------------------------------------------------------------------- EDITING TREE 
   clearPointValue(x, y) {
     let info = QuadTree.returnPointInfo(x, y, this, 0, []);
     if (info == null) { 
@@ -425,74 +506,7 @@ class QuadTree {
 
   }
 
-  //These should only be used by this object on itself. Is there "private" for javascript? I think not?
-  reAddPoint(point) {
-      if (this.subTrees.length != 0) {
-        return this.reAddPointToSubTree(point);
-      }
-      else if ((this.points.length < this.limit) && (this.subTrees.length === 0)) {
-        this.points.push(point);
-        return true;
-      }
-      else {
-        //console.log("SUBDIVIDING!");
-        this.subdivide();
-        for (let point of this.points) {
-          this.reAddPointToSubTree(point);
-        }
-        this.points = [];
-        return this.reAddPointToSubTree(point);
-      }
-      throw new Error('QuadTree.reAddPoint: case not handled.');
 
-  }
-
-  reAddPointToSubTree(point) {
-    if (this.subTrees.length == 0) {
-      throw new Error('QuadTree.reAddPointToSubTree: subtrees array is empty.');
-    }
-    //console.log("addPointToSubTree, should be 4: ", this.subTrees.length);
-    for (let i = 0; i < 4; i++) {
-      //console.log(i, this.subTrees[i].bounds.pretty(), x, y);
-      if (this.subTrees[i].contains(point.x,point.y)) {
-        //console.log("I think you're in here!");
-        let result = this.subTrees[i].reAddPoint(point);
-        //console.log(result);
-        return result;
-      }
-    }
-
-    throw new Error('QuadTree.addPointToSubTree: Point within bounds did not find subtree.' + this.bounds.pretty() + " x:" + x + " y:"+ y, { details: "Where does this show up?" });
-  }
-
-
-
-  //returns the information related to the leaf touching point x,y
-  static returnLeafTouching(x, y, parent, level, quadrantPath) {
-    //console.log(level, parent.bounds.pretty());
-    let nextLevel = level + 1;
-    if (parent.subTrees.length > 0) {
-      for (let i = 0; i < parent.subTrees.length; i++) {
-        const subtree = parent.subTrees[i];
-        if (subtree.bounds.contains(x,y)) {
-          let myPath = Array.from(quadrantPath);
-          myPath.push(i);
-          return QuadTree.returnPointInfo(x, y, subtree, nextLevel, myPath);
-        }
-      }
-      return null; //really shouldn't ever get here. 
-    } else {
-      return {
-        bounds: parent.bounds,
-        companions: parent.points,
-        level: level,
-        path:quadrantPath.reverse()
-      }
-    }
-  }
-
-
- 
 
 
 

@@ -34,7 +34,7 @@ function setup() {
 		let x = randomGaussian(thisWidth / 2, thisWidth / 8);
 		let y = randomGaussian(thisHeight / 2, thisHeight / 8);
     qTree.addPoint(x,y, successPoint); //TODO: success point RERUNS on this point if quad tree is rebalanced. Cant use function to append to array until I fix that.
-    fieldPointsToClear.push(new Point(x,y));
+    //fieldPointsToClear.push(new Point(x,y));
   }
 
   if (fieldPointsToClear.length != fieldPointsQty) {
@@ -135,7 +135,7 @@ function drawBounds(bounds) {
 //Only runs once during set up. Could use it to create a set, etc. 
 function successPoint(point) { 
   //see note in setup
-  //fieldPointsToClear.push(point);
+  fieldPointsToClear.push(point);
 }
 
 function drawFound(point) {
