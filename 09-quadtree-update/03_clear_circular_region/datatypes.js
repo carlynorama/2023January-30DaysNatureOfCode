@@ -292,28 +292,29 @@ class Bounds {
     return (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange));
   }
 
-  static intersection(lhs, rhs) {
-    let originX;
-    let originY;
-    let w;
-    let h;
-    let lhs_xRange = new Range(lhs.minX, lhs.maxX);
-    let lhs_yRange = new Range(lhs.minY, lhs.maxY);
-    let rhs_xRange = new Range(rhs.minX, rhs.maxX);
-    let rhs_yRange = new Range(rhs.minY, rhs.maxY);
+  // Check on this
+  // static intersection(lhs, rhs) {
+  //   let originX;
+  //   let originY;
+  //   let w;
+  //   let h;
+  //   let lhs_xRange = new Range(lhs.minX, lhs.maxX);
+  //   let lhs_yRange = new Range(lhs.minY, lhs.maxY);
+  //   let rhs_xRange = new Range(rhs.minX, rhs.maxX);
+  //   let rhs_yRange = new Range(rhs.minY, rhs.maxY);
 
-    if (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange)) {
+  //   if (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange)) {
 
-      if (lhs_xRange.inclusiveContains(rhs.minX)) { originX = rhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-rhs.minX }
-      else { originX = lhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-lhs.minX }
-      if (lhs_yRange.inclusiveContains(rhs.minY)) { originY = rhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-rhs.minY }
-      else { originY = lhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-lhs.minY }
-    }
+  //     if (lhs_xRange.inclusiveContains(rhs.minX)) { originX = rhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-rhs.minX }
+  //     else { originX = lhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-lhs.minX }
+  //     if (lhs_yRange.inclusiveContains(rhs.minY)) { originY = rhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-rhs.minY }
+  //     else { originY = lhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-lhs.minY }
+  //   }
 
-    else { return null }
-    //console.log(originX, originY, w, h);
-    return Bounds.createBounds(originX, originY, w, h);
-  }
+  //   else { return null }
+  //   //console.log(originX, originY, w, h);
+  //   return Bounds.createBounds(originX, originY, w, h);
+  // }
 
   static matches(lhs, rhs) {
     return (lhs.origin.matches(rhs.origin) && lhs.size.matches(rhs.size));

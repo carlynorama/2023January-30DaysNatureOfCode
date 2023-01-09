@@ -40,10 +40,10 @@ function setup() {
     //fieldPointsToClear.push(new Point(x,y));
   }
 
-  if (fieldPointsToClear.length != fieldPointsQty) {
-    console.log(fieldPointsToClear.length)
-    throw new Error("wrong number of field points.");
-  }
+  // if (fieldPointsToClear.length != fieldPointsQty) {
+  //   console.log(fieldPointsToClear.length)
+  //   throw new Error("wrong number of field points.");
+  // }
 
 	for (let i = 0; i < pointQty; i++) {
     let x = map(noise(xoff+ i*inc), 0, 1, 0, width);
@@ -61,6 +61,7 @@ function setup() {
   //  let removedSet = qTree.popAllPoints();
   //  console.log(removedSet);
 
+  print("hello?");
   console.log("--------- End of Setup ---------");
   //noLoop();
   
@@ -74,7 +75,7 @@ function update() {
 
   fill(204, 50);
   ellipseMode(CENTER);
-  ellipse(thisQueryPoint.x, thisQueryPoint.y, diameter/2);
+  ellipse(thisQueryPoint.x, thisQueryPoint.y, diameter);
   let returnedPoints = qTree.popRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2);
 }
 

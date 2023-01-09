@@ -7,16 +7,21 @@ const xoff = 0;
 const yoff = 10000;
 const inc = 0.01;
 
-fieldPointsQty = 300;
+fieldPointsQty = 2000;
+fieldPointsToClear = [];
+let clearFlag = true;
 
 let pointSet = [];
 let pointIndex = 0;
 const pointQty = 5000;
 
 let thisQueryPoint;
-let thisQueryBounds;
 let diameter = 50;
 let myNeighborhood;
+
+// function mouseClicked() {
+//   runFlag = false;
+// }
 
 // ------------------------------------------------------------------------ setup()
 function setup() {
@@ -31,8 +36,14 @@ function setup() {
   for (let i = 0; i < fieldPointsQty; i++) {
 		let x = randomGaussian(thisWidth / 2, thisWidth / 8);
 		let y = randomGaussian(thisHeight / 2, thisHeight / 8);
-    qTree.addPoint(x,y, successPoint);
+    qTree.addPoint(x,y, successPoint); //TODO: success point RERUNS on this point if quad tree is rebalanced. Cant use function to append to array until I fix that.
+    //fieldPointsToClear.push(new Point(x,y));
   }
+
+  // if (fieldPointsToClear.length != fieldPointsQty) {
+  //   console.log(fieldPointsToClear.length)
+  //   throw new Error("wrong number of field points.");
+  // }
 
 	for (let i = 0; i < pointQty; i++) {
     let x = map(noise(xoff+ i*inc), 0, 1, 0, width);
@@ -41,11 +52,16 @@ function setup() {
     pointSet.push(thisQueryPoint);
   }
 
-   thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
-   myNeighborhood = thisQueryBounds;
-   console.log("thisQueryBounds", thisQueryBounds.x, thisQueryBounds.y);
+   myNeighborhood = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
+   console.log("myNeighborhood", myNeighborhood.x, myNeighborhood.y);
 
+   //this is a very dangerous function because it returns all the points as reference objects? 
+   let fullset = qTree.returnAllPoints();
+   console.log(fullset);
+  //  let removedSet = qTree.popAllPoints();
+  //  console.log(removedSet);
 
+  print("hello?");
   console.log("--------- End of Setup ---------");
   //noLoop();
   
@@ -54,9 +70,13 @@ function setup() {
 // -------------------------------------------------------------- update ()
 
 function update() {
-  thisQueryPoint = fetchPoint();// makePoint(); //
-  thisQueryBounds = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
-  myNeighborhood = thisQueryBounds;
+  thisQueryPoint = fetchPoint();
+  myNeighborhood = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
+
+  fill(204, 50);
+  ellipseMode(CENTER);
+  ellipse(thisQueryPoint.x, thisQueryPoint.y, diameter);
+  let returnedPoints = qTree.popRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2);
 }
 
 let reverseFlag = false;
@@ -75,10 +95,13 @@ function fetchPoint() {
 
 // ------------------------------------------------------------------------ draw()
 function draw() {
-if (runFlag) {  frameRate(24);
+if (runFlag) {  
+  
+  frameRate(5);
   
    background(51);
    update();
+  
 
    noFill();
    stroke(102, 102, 102);
@@ -87,29 +110,29 @@ if (runFlag) {  frameRate(24);
  
 
   drawNeighborhood(myNeighborhood);
-
   qTree.doWithPointsInRadius(thisQueryPoint.x, thisQueryPoint.y, diameter/2, drawFound);
-
   drawMe(thisQueryPoint);
 
 }
+
+
 
 }
 
 
 // ------------------------------------------------------------ functions passed to QuadTree()
-function drawBounds(bounds) {
-  rect(bounds.x, bounds.y, bounds.width, bounds.height);
-  ellipseMode(CENTER);
-  ellipse(bounds.x, bounds.y, 5);
-}
 
-//Only runs once during set up. Could use it to create a set, etc. 
-function successPoint(point) { }
+//Only runs once during qTree setup. 
+function successPoint(point) { 
+  fieldPointsToClear.push(point);
+}
 
 function drawFound(point) {
     noFill();
     //console.log(point.x, point.y)
+    // stroke(51, 204, 102);
+    // ellipseMode(CENTER);
+    // ellipse(point.x, point.y, 3);
     stroke(51, 204, 102);
     ellipseMode(CENTER);
     ellipse(point.x, point.y, 3);
@@ -147,5 +170,6 @@ function drawNeighborhood(bounds) {
 
   ellipseMode(CENTER);
   ellipse(bounds.center.x, bounds.center.y, 8);
+
 }
 
