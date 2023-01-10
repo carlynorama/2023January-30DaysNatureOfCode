@@ -132,13 +132,16 @@ class ParticleSet {
 
 
 
-  draw = () => { this.qtree.doWithPoints(this.drawFound); }
+  draw = () => { 
+    //this.qTree.doWithLeafBounds(this.drawBounds);
+    this.qtree.doWithPoints(this.drawFound); 
+  }
+  
   drawFound = (point) => { point.render(); }
 
-  drawCheck(bounds) {
+  drawBounds = (bounds) => {
+    stroke(255,20);
     rectMode(CORNER);
-    stroke(204,51,51, 80);
-    noFill();
     rect(bounds.x, bounds.y, bounds.width, bounds.height);
   }
 

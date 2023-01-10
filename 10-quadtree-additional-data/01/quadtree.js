@@ -336,7 +336,7 @@ reAddPointToSubTree(point) {
 
 
 
- doWithLeafBounds(myAction) {
+ doWithLeafBounds = (myAction) => {
    QuadTree.boundsAccess(this, myAction);
  }
 
