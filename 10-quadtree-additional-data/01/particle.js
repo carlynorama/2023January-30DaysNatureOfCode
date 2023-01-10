@@ -99,39 +99,33 @@ class ParticleSet {
     const boundCheckDistance = this.checkDistance.bind(this);
 
     for (let p of this.particleHandles) {
-      //console.log("check point", p.x, p.y, this.qtree.bounds.pretty());
-      
-      //console.log(p.x, p.y, p.properties.radius);
        let side = (2 * p.properties.radius) + 10;
-      // let checkBounds = Bounds.createBoundsFromCenter(p.x, p.y, side, side);
-      // //console.log(checkBounds.pretty())
-      // this.drawCheck(checkBounds);
       this.qtree.doWithPointsInRadius(p.x, p.y, side+10, boundCheckDistance);
-      //this.qtree.doWithPoints(boundCheckDistance);
     }
 
   }
 
+  //TODO: WAIT....? Why am I calling .doWithPointsInRadius twice?
+
   checkDistance(point) {
+    
     let checkAndSet = (other) => {
-      //point.setTouched(true);
-      //console.log("check other", other.x, other.y);
-      //console.log("check other", other.x, other.y, point.x, point.y);
+      //if the point is already touched, it doesn't matter in this code how many.
+      if (point.properties.touched) { return } 
+ 
       if (point != other) {
         console.log("check other", other.x, other.y, point.x, point.y);
-        //console.log("not the same", point.properties.touched);
-        //if (point.closeEnoughTo(other, (point.properties.radius + other.properties.radius))) {
+        if (point.closeEnoughTo(other, (point.properties.radius + other.properties.radius))) {
            point.setTouched(true);
-        //}
-        //console.log("not the same", point.properties.touched);
+           other.setTouched(true);
+        }
       }
     }
 
-    //console.log("check point", point.x, point.y, this.qtree.bounds.pretty());
-    //point.setTouched(false);
+    point.setTouched(false);
 
-    this.qtree.doWithPointsInRadius(point.x, point.y, 2 * point.properties.radius, checkAndSet);
-
+    //The (2.2 * point.properties.radius) is the stand in for what should be 2x the biggest possible value between the centers of particles.
+    this.qtree.doWithPointsInRadius(point.x, point.y, 2.2 * point.properties.radius, checkAndSet);
   }
 
 
