@@ -15,8 +15,14 @@
 
 <body>
   <main>
-    <p>page loaded.</p>
- </main>
+    <p>Recreates the <a href="https://editor.p5js.org/codingtrain/sketches/CDMjU0GIK">Quadtree Tree part 3 video</a> (<a href="https://editor.p5js.org/codingtrain/sketches/CDMjU0GIK">code</a>)but trying to update and existing quadtree every frame instead of replacing it. Seems to work!</p>
+ 
+    <ol>
+      <li>Rewrite quadtree to take an object instead of values, which I had hoped to avoid.</li>
+      <li>Created a Particle class and a ParticleSet class that required learning about <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">function binding</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function#named_function_expression">named function notation</a> and a note to self to look into <a href=https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">arrow expressions</a></li>
+      <li>This project does not have a Circle class, it adds inscribed circle checking to Bounds and distance comparisons to Particle.</li>
+    </ol>
+  </main>
 </body>
 
 </html>
