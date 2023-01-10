@@ -38,10 +38,15 @@ class Particle {
     this.properties.touched = value;
   }
 
+  setSelected = (value) => {
+    this.properties.selected = value;
+  }
+
   render = () => {
     noFill();
     let c;
-    if (this.properties.touched) { c = color(0, 255, 255, 255) } else { c = color(153, 100) };
+    if (this.properties.selected) { c = color(255) } else { c = color(153, 100) } 
+    if (this.properties.touched) { c = color(0, 255, 255, 255) };
     stroke(c);
     ellipseMode(CENTER);
     ellipse(this.x, this.y, this.properties.radius * 2);
@@ -56,6 +61,7 @@ class ParticleProperties {
     this.radius = 2;
     this.wiggle = 6;
     this.touched = false;
+    this.selected = false;
    }
 }
 
@@ -79,12 +85,12 @@ class ParticleSet {
       this.qtree.addPoint(p, boundSuccess);
     }
   }
-  success(point) {
+  success = (point) => {
     //console.log("success", point.x, point.y, point.properties);
     this.particleHandles.push(point);
   }
 
-  wiggled(point) {
+  wiggled = (point) => {
     //console.log("wiggled", point.x, point.y, point.properties);
   }
 
@@ -107,10 +113,12 @@ class ParticleSet {
 
   }
 
-  update(bounds) {
+  update = (bounds) => {
+    //console.log(bounds.pretty())
     let values = this.qtree.popRegion(bounds);
     let wiggleUpdate = (point) => { 
       point.wiggle(); 
+      point.setSelected(true);
       this.qtree.addPoint(point, this.wiggled);
     } 
     values.forEach(wiggleUpdate)
