@@ -20,12 +20,13 @@ The meat of much of this code already lives there in Coding Train accounts.
 - <https://github.com/nature-of-code> <- includes syllabus for course taught at NYU/ITP
 
 
-## Why all the HTML files?
+## What is going on in this repo? 
 
-p5js is web embeddable focused, so why not build this as a website?
+p5js is web embeddable focused, so why not build this as a website? Originally I served this website from the root of the main branch. I'd `cd` into the the directory that has this repo, type `python3 -m http.server` and browse away. Nice side effect, it was immediate available as a website.
 
-I cd into the the directory that has this repo and do `python3 -m http.server` to navigate through it on my home computer.
+* <https://carlynorama.github.io/2023January-30DaysOfNatureOfCode/>
 
-Nice side effect, it's immediately available as a website.
+Over the past weeks I really really really was missing working in a strongly typed language so I decided to migrate to TypeScript. The bulk of the files now live in the docs folder, with JUST the `.ts` files living in the `src` folder. 
 
-<https://carlynorama.github.io/2023Genuary-NatureOfCode/>
+[Steps I took to convert the repo](moving-to-typescript.md).
+

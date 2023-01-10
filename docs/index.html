@@ -11,7 +11,7 @@
 <body>
   <main>
     <H1>January 2023: Nature of Code Playthrough</H1>
-    <p>Time to shake the rust off. <a href="https://github.com/carlynorama/2023Genuary-NatureOfCode/">See the Repo</a></p>
+    <p>Time to shake the rust off. <a href="https://github.com/carlynorama/2023January-30DaysNatureOfCode/">See the Repo</a></p>
 
     <p>There is an official <a href="https://genuary.art">Genuary</a> process that involves lots of really cool prompts, etc, but I'm too rusty. What better way to get back into the creative coding groove than follow along with Daniel Shiffman's Nature of Code 2 playlist?</p>
 
@@ -52,12 +52,13 @@
     <li><a href="https://shiffman.net/">https://shiffman.net/</a></li>
     <li><a href="https://github.com/nature-of-code">https://github.com/nature-of-code</a> &lt;- includes syllabus for course taught at NYU/ITP</li>
     </ul>
-    <h2>Why all the HTML files?</h2>
-    <p>p5js is web embeddable focused, so why not build this as a website?</p>
-    <p>I cd into the the directory that has this repo and do <code>python3 -m http.server</code> to navigate through it on my home computer.</p>
-    <p>Nice side effect, it's immediately available as a website.</p>
-    <p><a href="https://carlynorama.github.io/2023Genuary-NatureOfCode/">https://carlynorama.github.io/2023Genuary-NatureOfCode/</a></p>
-  </main>
+    <h2>What is going on in this Repo?</h2>
+    <p>p5js is web embeddable focused, so why not build this as a website? Originally I served this website from the root of the main branch. I'd <pre>cd</pre> into the the directory that has this repo, type <pre>python3 -m http.server</pre>> and browse away. Nice side effect, it was immediate available as a website.</p>
+    <p>Over the past weeks I really really really was missing working in a strongly typed language so I decided to migrate to TypeScript. The bulk of the files now live in the docs folder, with JUST the `.ts` files living in the `src` folder. </p>
+    <p>A nice side effect is that I can now use a local node server that constant watches for changed files so I'm not constantly hard refreshing the browser. The steps file, linked below, includes that.</p>>
+    
+    <p><a href="https://github.com/carlynorama/2023January-30DaysNatureOfCode/moving-to-typescript.md">Steps I took to convert the repo.</a></p>
+   </main>
 </body>
 
 </html>
