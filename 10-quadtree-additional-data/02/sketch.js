@@ -14,12 +14,12 @@ const inc = 0.01;
 
 
 let thisQueryPoint;
-let diameter = 20;
+let diameter = 100;
 let myNeighborhood;
 
-function mouseClicked() {
-  runFlag = false;
-}
+// function mouseClicked() {
+//   runFlag = false;
+// }
 
 // ------------------------------------------------------------------------ setup()
 function setup() {
@@ -28,17 +28,17 @@ function setup() {
   background(51);
 
   particleSet = new ParticleSet(thisWidth, thisHeight, element_limit);
-  particleSet.populateSet(1000);
+  particleSet.populateSet(500);
 
-  for (let i = 0; i < pointQty; i++) {
-    let x = map(noise(xoff+ i*inc), 0, 1, 0, width);
-    let y = map(noise(yoff + i*inc), 0, 1, 0, height);
-    thisQueryPoint = new Point(x,y);
-    pointSet.push(thisQueryPoint);
-  }
-
+  // for (let i = 0; i < pointQty; i++) {
+  //   let x = map(noise(xoff+ i*inc), 0, 1, 0, width);
+  //   let y = map(noise(yoff + i*inc), 0, 1, 0, height);
+  //   thisQueryPoint = new Point(x,y);
+  //   pointSet.push(thisQueryPoint);
+  // }
+  thisQueryPoint = new Point(200,200);
   myNeighborhood = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
-
+  console.log(myNeighborhood);
 
 
   console.log("--------- End of Setup ---------");
@@ -47,8 +47,10 @@ function setup() {
 
 // ------------------------------------------------------------------------ update()
 function update() {
-  thisQueryPoint = fetchPoint();
+  thisQueryPoint = new Point(mouseX, mouseY);//fetchPoint();
+  //console.log(thisQueryPoint);
   myNeighborhood = Bounds.createBoundsFromCenter(thisQueryPoint.x, thisQueryPoint.y, diameter, diameter);
+  //console.log(thisQueryPoint, myNeighborhood.pretty());
 }
 
 let reverseFlag = false;
@@ -65,11 +67,14 @@ function fetchPoint() {
 
 
 
+
 // ------------------------------------------------------------------------ draw()
 function draw() {
 if (runFlag) {  
  background(51);
- particleSet.update();
+ update();
+
+ particleSet.update(myNeighborhood);
  QuadTree.boundsAccess(particleSet.qtree, drawBounds);
  particleSet.draw();
 
@@ -98,7 +103,8 @@ function drawCenter(point) {
 
 function drawFinger(bounds) {
   ellipseMode(CORNER);
-  fill(0, 80);
-  noStroke();
+  //fill(0, 80);
+  noFill();
+  stroke(153,30);
   ellipse(bounds.x, bounds.y, bounds.width, bounds.height);
 }
