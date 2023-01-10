@@ -5,9 +5,9 @@ let element_limit = 6;
 let particleSet;
 
 
-// function mouseClicked() {
-//   runFlag = false;
-// }
+function mouseClicked() {
+  runFlag = false;
+}
 
 // ------------------------------------------------------------------------ setup()
 function setup() {
@@ -16,11 +16,11 @@ function setup() {
   background(51);
 
   particleSet = new ParticleSet(thisWidth, thisHeight, element_limit);
-  particleSet.populateSet(20);
+  particleSet.populateSet(500);
 
 
   console.log("--------- End of Setup ---------");
-  noLoop();
+  //noLoop();
 }
 
 
@@ -84,6 +84,5 @@ function drawMonster(bounds) {
   fill(0, 80);
   noStroke();
   ellipse(bounds.x, bounds.y, bounds.width, bounds.height);
-
 }
 
