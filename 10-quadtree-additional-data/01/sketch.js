@@ -29,6 +29,7 @@ function draw() {
 if (runFlag) {  
  background(51);
  particleSet.update();
+ QuadTree.boundsAccess(particleSet.qtree, drawBounds);
  particleSet.draw();
 }
 
@@ -38,3 +39,8 @@ if (runFlag) {
 // ------------------------------------------------------------ functions passed to QuadTree()
 
 
+function drawBounds(bounds) {
+  stroke(255,20);
+  rectMode(CORNER);
+  rect(bounds.x, bounds.y, bounds.width, bounds.height);
+}
