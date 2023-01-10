@@ -404,30 +404,3 @@ class Bounds {
   }
 
 }
-
-// class Round {
-//   constructor(point, radius) {
-//     if (!(typeof(point.x) === 'number' && typeof(point.y) === 'number' && typeof(radius) === 'number')) {
-//       //console.log(point.pretty(), size.pretty())
-//         throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
-//     }
-//     this.center = point;
-//     this.radius = size;
-//     let diameter = 2*radius;
-//     this.outerBounds = new Bounds(point.x-radius, point.y-radius, diameter, diameter); 
-//     let side = r * Math.SQRT2;
-//     let offset = side/2;
-//     this.innerBounds = new Bounds(x-offset, y-offset,side,side); 
-//   }
-
-//   contains(x,y) {
-//     //Are these checks worth it to avoid the exponent math in Javascript? 
-//     //they create a lot of sub-objects as written. 
-//     if (!this.outerBounds.contains(x,y)) { return false; }
-//     if (this.innerBounds.contains(x,y)) { return true; }
-  
-//     let rhs = new Point(x,y);
-//     return this.center.closeEnoughTo(rhs, this.radius);
-    
-//   }
-// }
