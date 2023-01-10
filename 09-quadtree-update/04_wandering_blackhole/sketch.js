@@ -97,7 +97,7 @@ function fetchPoint() {
 function draw() {
 if (runFlag) {  
   
-  frameRate(5);
+  frameRate(8);
   
    background(51);
    update();
@@ -110,8 +110,8 @@ if (runFlag) {
  
   rememberedDead.forEach((point) => { drawGone(point) } )
   onTheBlock.forEach((point) => { drawFound(point) } )
+
   drawMonster(myNeighborhood);
-  
   drawCenter(thisQueryPoint);
 
 }
