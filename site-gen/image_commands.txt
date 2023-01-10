@@ -1,0 +1,7 @@
+//overwrites images
+mogrify -trim /dir/trim_me/*
+
+//move to another folder
+convert -bordercolor white -border 5 input.jpg output.jpg
+convert -border 2x2 old.jpg new.jpg
+
