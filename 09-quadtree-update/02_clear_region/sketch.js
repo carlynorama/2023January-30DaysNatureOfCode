@@ -102,7 +102,8 @@ function fetchPoint() {
 function draw() {
 if (runFlag) {  
   
-  frameRate(5);
+  //it doesn't need to be slow I just like it better.
+  frameRate(12);
   
    background(51);
    update();
