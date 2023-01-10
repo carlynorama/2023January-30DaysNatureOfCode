@@ -35,6 +35,8 @@
     * no, you have to do at least `npm install @types/p5`, but you can leave off installing p5 if you're including it in docs folder by hand. 
 * add `global.d.ts` to the src folder. //Will not be seen in root with the config set the way I have it. 
 * `npm run http-server` to confirm old files are still navigable, the root folder is a directory above docs on the server, which for my purposes, emulating a github pages install, is correct.
+* create a proof of concept sketch.ts (src/11-first-day-of-type-script/01)
+* ran `npm run tsc` to generate a folder at the same location in docs, copied in the needed html files. 
 
 
 ## tsconfig.json
