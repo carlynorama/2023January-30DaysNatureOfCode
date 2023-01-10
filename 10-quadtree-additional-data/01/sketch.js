@@ -5,9 +5,9 @@ let element_limit = 6;
 let particleSet;
 
 
-function mouseClicked() {
-  runFlag = false;
-}
+// function mouseClicked() {
+//   runFlag = false;
+// }
 
 // ------------------------------------------------------------------------ setup()
 function setup() {
