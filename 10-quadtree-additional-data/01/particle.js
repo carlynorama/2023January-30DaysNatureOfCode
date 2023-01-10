@@ -100,12 +100,14 @@ class ParticleSet {
 
     for (let p of this.particleHandles) {
        let side = (2 * p.properties.radius) + 10;
+       //TODO: Why am I calling .doWithPointsInRadius twice? 
+       //Because originally the original point could have moved
       this.qtree.doWithPointsInRadius(p.x, p.y, side+10, boundCheckDistance);
     }
 
   }
 
-  //TODO: WAIT....? Why am I calling .doWithPointsInRadius twice?
+  
 
   checkDistance(point) {
     
