@@ -1,0 +1,6 @@
+1. [step01_make_datatypes](step01_make_datatypes)
+2. [step02_start_quad_tree](step02_start_quad_tree)
+3. [step03_quadtree_add_points](step03_quadtree_add_points)
+4. [step04_split_bounds](step04_split_bounds)
+5. [step05_add_subtrees](step05_add_subtrees)
+6. [step05a_setup_troubleshoothing](step05a_setup_troubleshoothing)

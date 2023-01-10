@@ -1,0 +1,34 @@
+{
+  "name": "2023january-30daysnatureofcode",
+  "version": "1.0.0",
+  "description": "30 days of playing around with p5js and Daniel Shiffman's Nature Of Code to get back in the swing of 2d visual thinking.",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc",
+    "tsc:w": "tsc --watch",
+    "http-server": "npx http-server ./ -o"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlynorama/2023January-30DaysNatureOfCode.git"
+  },
+  "keywords": [
+    "CreativeCoding",
+    "p5js"
+  ],
+  "author": "carlynorama",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/carlynorama/2023January-30DaysNatureOfCode/issues"
+  },
+  "homepage": "https://github.com/carlynorama/2023January-30DaysNatureOfCode#readme",
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@types/p5": "^1.4.3"
+  }
+}

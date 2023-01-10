@@ -1,6 +1,0 @@
-1. [perlin-noise-1d](perlin-noise-1d)
-2. [perlin-noise-2d](perlin-noise-2d)
-3. [perlin-sin-snake](perlin-sin-snake)
-4. [random-walk-01](random-walk-01)
-5. [random-walk-02](random-walk-02)
-6. [random-walk-03](random-walk-03)
