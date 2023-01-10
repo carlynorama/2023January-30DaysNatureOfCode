@@ -18,11 +18,11 @@ class Particle {
   }
 
   static closeEnough(lhs, rhs, distance) {
-    let left = ((lhs.x - rhs.x) * (lhs.x - rhs.x)) + ((lhs.y - rhs.y)*(lhs.y - rhs.y))
+    let left = ((lhs.x - rhs.x) * (lhs.x - rhs.x)) + ((lhs.y - rhs.y) * (lhs.y - rhs.y))
     let right = distance * distance
     let result = left <= right;
     //console.log(result, left, right);
-    return  result ;
+    return result;
   }
 
   closeEnoughTo(other, distance) {
@@ -55,70 +55,90 @@ class ParticleProperties {
     //stroke(153);
     noStroke();
     ellipseMode(CENTER);
-    ellipse(this.position.x, this.position.y, this.diameter/2);
+    ellipse(this.position.x, this.position.y, this.diameter / 2);
   }
 }
 
 
 class ParticleSet {
-	constructor(thisWidth, thisHeight, element_limit) {
-    this.qtree = QuadTree.createQuadTree(0,0,thisWidth,thisHeight,element_limit);
-	}
+  constructor(thisWidth, thisHeight, element_limit) {
+    this.qtree = QuadTree.createQuadTree(0, 0, thisWidth, thisHeight, element_limit);
+    this.particleHandles = [];
+    console.log(this.qtree.bounds.pretty());
+  }
 
-    get width() { return this.qtree.bounds.width }
-    get height() { return this.qtree.bounds.height }
+  get width() { return this.qtree.bounds.width }
+  get height() { return this.qtree.bounds.height }
 
-    populateSet(qty) {
-        for (let i = 0; i < qty; i++) {
-            let x = randomGaussian(this.width / 2, this.width / 8);
-            let y = randomGaussian(this.height / 2, this.height / 8);
-            let p = new Particle(x,y);
-            this.qtree.addPoint(p, this.success);
-        }
+  populateSet(qty) {
+    const boundSuccess = this.success.bind(this);
+    for (let i = 0; i < qty; i++) {
+      let x = randomGaussian(this.width / 2, this.width / 8);
+      let y = randomGaussian(this.height / 2, this.height / 8);
+      let p = new Particle(x, y);
+      this.qtree.addPoint(p, boundSuccess);
     }
-    success(point) {
-        console.log("success", point.x, point.y, point.properties);
+  }
+  success(point) {
+    console.log("success", point.x, point.y, point.properties);
+    this.particleHandles.push(point);
+  }
+
+  wiggled(point) {
+    console.log("wiggled", point.x, point.y, point.properties);
+  }
+
+  update() {
+    // let values = this.qtree.popAllPoints()
+    // values.forEach((point) => { 
+    //   point.wiggle(); 
+    //   this.qtree.addPoint(point, this.wiggled);
+    // } )
+
+    const boundCheckDistance = this.checkDistance.bind(this);
+
+    for (let p of this.particleHandles) {
+      console.log("check point", p.x, p.y, this.qtree.bounds.pretty());
+      p.setTouched(false);
+      this.qtree.doWithPointsInRadius(p.x, p.y, p.properties.radius, boundCheckDistance);
     }
 
-    wiggled(point) {
-      console.log("wiggled", point.x, point.y, point.properties);
-    }
+  }
 
-    update() {
-      let values = this.qtree.popAllPoints()
-      values.forEach((point) => { 
-        point.wiggle 
-        this.qtree.addPoint(point, this.wiggled);
-      } )
-
-      this.qtree.doWithPoints(this.checkDistance);
-    }
-
-    checkDistance(point) {
-      point.setTouched(false);
-      this.qtree.doWithPointsInRadius(point.x, point.y, point.properties.radius, checkAndSet);
-
-      function checkAndSet(other) {
-        if (point != other) {
-          if (point.closeEnough(other, (point.properties.radius + other.properties.radius))) {
-            point.setTouched(true);
-          }
+  checkDistance(point) {
+    let checkAndSet = (other) => {
+      console.log("check other", other.x, other.y);
+      if (point != other) {
+        if (point.closeEnough(other, (point.properties.radius + other.properties.radius))) {
+          point.setTouched(true);
         }
       }
     }
 
-    draw() {
-      this.qtree.doWithPoints(this.drawFound);
-    }
+    console.log("check point", point.x, point.y, this.qtree.bounds.pretty());
+    point.setTouched(false);
+
+    this.qtree.doWithPointsInRadius(point.x, point.y, point.properties.radius, checkAndSet);
+
+    
+
+   
+  }
 
 
-    drawFound(point) {
-      noFill();
-      let c;
-      if (point.properties.isTouched) { c = color(255) } else { c = color(153) };
-      stroke(c);
-      ellipseMode(CENTER);
-      ellipse(point.x, point.y, 3);
+
+  draw() {
+    this.qtree.doWithPoints(this.drawFound);
+  }
+
+
+  drawFound(point) {
+    noFill();
+    let c;
+    if (point.properties.isTouched) { c = color(255) } else { c = color(153) };
+    stroke(c);
+    ellipseMode(CENTER);
+    ellipse(point.x, point.y, 3);
   }
 
 

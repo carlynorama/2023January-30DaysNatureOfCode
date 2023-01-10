@@ -16,11 +16,11 @@ function setup() {
   background(51);
 
   particleSet = new ParticleSet(thisWidth, thisHeight, element_limit);
-  particleSet.populateSet(300);
+  particleSet.populateSet(20);
 
 
   console.log("--------- End of Setup ---------");
-  
+  noLoop();
 }
 
 

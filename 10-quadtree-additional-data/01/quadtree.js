@@ -71,7 +71,7 @@ class QuadTree {
        //console.log("SUBDIVIDING!");
        this.subdivide();
 
-       //TODO: this works but readding before removing okay? 
+       //TODO: this works but reading before removing okay? 
        for (let point of this.points) {
          this.reAddPointToSubTree(point);
        }
@@ -172,7 +172,7 @@ reAddPointToSubTree(point) {
 
  containsLocation(x,y) {
    if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
-     throw new Error('QuadTree.conatins values are not numeric.');
+     throw new Error('QuadTree.contains values are not numeric.');
    }
    return this.bounds.contains(x,y);
  }
@@ -428,7 +428,7 @@ reAddPointToSubTree(point) {
    //   }
    // }
 
-   //  USES INTERSCTION
+   //  USES INTERSECTION
 //   static pointAccessWithin(queryBounds, parent, level, myAction) {
 
 //       //console.log(queryBounds.pretty());
