@@ -29,7 +29,6 @@ function draw() {
 if (runFlag) {  
  background(51);
  particleSet.update();
- 
  particleSet.draw();
 }
 

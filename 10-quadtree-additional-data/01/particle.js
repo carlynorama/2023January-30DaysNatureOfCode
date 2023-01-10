@@ -133,7 +133,7 @@ class ParticleSet {
 
 
   draw = () => { 
-    //this.qTree.doWithLeafBounds(this.drawBounds);
+    //this.qTree.doWithLeafBounds(this.drawBounds); <- why is this one not an object?
     this.qtree.doWithPoints(this.drawFound); 
   }
   
