@@ -1,10 +1,11 @@
 "use strict";
-let thisWidth = 400;
-let thisHeight = 400;
+const thisWidth = 400;
+const thisHeight = 400;
 // function mouseClicked() {
 //   runFlag = false;
 // }
 // ------------------------------------------------------------------------ setup()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function setup() {
     createControlledCanvas(thisWidth, thisHeight);
     background(51);
@@ -12,6 +13,7 @@ function setup() {
     //noLoop();
 }
 // ------------------------------------------------------------------------ draw()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function draw() {
     if (runFlag) {
         background(51);

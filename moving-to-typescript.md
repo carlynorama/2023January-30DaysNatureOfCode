@@ -15,14 +15,18 @@
 - https://stackoverflow.com/questions/63195453/how-can-i-import-p5-js-into-typescript 
 
 ### ESLint
-- https://www.youtube.com/watch?v=qhuFviJn-es freeCodeCamp.org | ESLint Quickstart
+- https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+- https://eslint.org/docs/latest/user-guide/getting-started
+- https://typescript-eslint.io
+- https://stackoverflow.com/questions/48087277/eslint-only-target-a-specific-directory-eslintrc-create-react-app
 
 
 ## Steps
 
 * put all exisitng website files into a `./docs` dir. 
 * (cntrl-backtick, the key press, opens vscode terminal OR cd to the project directory) 
-* add `node_modules` to .gitignore //if forget `git rm -rf node_modules`, followed by `npm install` to refetch
+* add `node_modules` to .gitignore 
+    *if forget `git rm -rf node_modules`, followed by `npm install` to refetch, `git check-ignore` if folder stays bright green in VSCode
 * `npm init`   //use defaults for everything 
 * `npm install typescript --save-dev`  //installs local version that isn't need for run time. 
 * change `package.json` to have the following block
@@ -42,7 +46,10 @@
 * create a proof of concept sketch.ts (src/11-first-day-of-type-script/01)
 * ran `npm run tsc` to generate a folder at the same location in docs, copied in the needed html files. 
 * New files exist! 
-* ALSO bonus, install `npm install --save-dev eslint`, `npm init @eslint/config`
+* ALSO bonus, install ESLint
+    * `npm install --save-dev eslint`,  //On next install see if can just do second line?
+    * `npm init @eslint/config`
+    * add `"ignorePatterns": ['/*', '!/src'],` to `.eslintrc.js` (could be .json, .yml, etc.) so it will only look at the src folder. There are other, better?, ways. See link in resources.  
 
 
 ## tsconfig.json

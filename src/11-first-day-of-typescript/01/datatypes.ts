@@ -1,3 +1,5 @@
+//TODO: Rewrite as overloads?
+
 class Point {
   x: number;
   y: number;

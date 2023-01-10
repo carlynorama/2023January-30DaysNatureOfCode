@@ -17,9 +17,9 @@ class Point {
         return (this.x === x && this.y === y);
     }
     static closeEnough(lhs, rhs, distance) {
-        let left = ((lhs.x - rhs.x) * (lhs.x - rhs.x)) + ((lhs.y - rhs.y) * (lhs.y - rhs.y));
-        let right = distance * distance;
-        let result = left <= right;
+        const left = ((lhs.x - rhs.x) * (lhs.x - rhs.x)) + ((lhs.y - rhs.y) * (lhs.y - rhs.y));
+        const right = distance * distance;
+        const result = left <= right;
         //console.log(result, left, right);
         return result;
     }
@@ -66,8 +66,8 @@ class NumRange {
     }
     static project(val, l1, u1, l2, u2) {
         //check against NumRange.locationInRange();
-        let percent = Math.abs(val - l1) / Math.abs(u1 - l1);
-        let displacement = (u2 - l2) * percent;
+        const percent = Math.abs(val - l1) / Math.abs(u1 - l1);
+        const displacement = (u2 - l2) * percent;
         return l2 + displacement;
     }
     static constrain(val, l, u) {
@@ -91,8 +91,8 @@ class NumRange {
     }
     overlaps(other) {
         //have to have both incase one holds the other and the smaller is the caller.
-        let sideOne = (this.inclusiveContains(other.lower) || this.inclusiveContains(other.upper));
-        let sideTwo = (other.inclusiveContains(this.lower) || other.inclusiveContains(this.upper));
+        const sideOne = (this.inclusiveContains(other.lower) || this.inclusiveContains(other.upper));
+        const sideTwo = (other.inclusiveContains(this.lower) || other.inclusiveContains(this.upper));
         return sideOne || sideTwo;
     }
     //contains would be better, how to overload without types?
@@ -106,6 +106,7 @@ class NumRange {
         return `Range(lower:${this.lower}, upper:${this.upper})`;
     }
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class Bounds {
     constructor(point, size) {
         if (!(typeof (point.x) === 'number' && typeof (point.y) === 'number' && typeof (size.width) === 'number' && typeof (size.height) === 'number')) {
@@ -119,35 +120,35 @@ class Bounds {
         if (!(typeof (x) === 'number' && typeof (y) === 'number' && typeof (w) === 'number' && typeof (h) === 'number')) {
             throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
         }
-        let p = new Point(x, y);
-        let s = new Size(w, h);
-        let b = new Bounds(p, s);
+        const p = new Point(x, y);
+        const s = new Size(w, h);
+        const b = new Bounds(p, s);
         return b;
     }
     static createBoundsFromCenter(centerX, centerY, w, h) {
         if (!(typeof (centerX) === 'number' && typeof (centerY) === 'number' && typeof (w) === 'number' && typeof (h) === 'number')) {
             throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
         }
-        let p = new Point(centerX - w / 2, centerY - h / 2);
-        let s = new Size(w, h);
-        let b = new Bounds(p, s);
+        const p = new Point(centerX - w / 2, centerY - h / 2);
+        const s = new Size(w, h);
+        const b = new Bounds(p, s);
         return b;
     }
     static createBoundsFromPoints(x1, y1, x2, y2) {
-        let w = x2 - x1;
-        let h = y2 - y1;
+        const w = x2 - x1;
+        const h = y2 - y1;
         if (w >= 0 && h >= 0) {
-            let b = Bounds.createBounds(x1, y1, w, h);
+            const b = Bounds.createBounds(x1, y1, w, h);
             return b;
         }
         else if (w < 0 && h < 0) {
-            let b = Bounds.createBounds(x2, y2, Math.abs(w), Math.abs(h));
+            const b = Bounds.createBounds(x2, y2, Math.abs(w), Math.abs(h));
             return b;
         }
         else {
-            let s = new Size(Math.abs(w), Math.abs(h));
-            let p = new Point(Math.min(x2, x2), Math.min(y2, y1));
-            let b = new Bounds(p, s);
+            const s = new Size(Math.abs(w), Math.abs(h));
+            const p = new Point(Math.min(x2, x2), Math.min(y2, y1));
+            const b = new Bounds(p, s);
             return b;
         }
     }
@@ -156,15 +157,10 @@ class Bounds {
     get width() { return this.size.width; }
     get height() { return this.size.height; }
     get minX() { return this.origin.x; }
-    ;
     get minY() { return this.origin.y; }
-    ;
     get maxX() { return this.origin.x + this.size.width; }
-    ;
     get maxY() { return this.origin.y + this.size.height; }
-    ;
     get midX() { return this.size.width / 2 + this.minX; }
-    ;
     get midY() { return this.size.height / 2 + this.minY; }
     get center() { return new Point(this.midX, this.midY); }
     offSetBy(x, y) {
@@ -212,7 +208,7 @@ class Bounds {
     insetOnCenterBy(margin) {
         this.size.width -= margin;
         this.size.height -= margin;
-        let offset = margin / 2;
+        const offset = margin / 2;
         this.offSetBy(offset, offset);
     }
     scale(factor) {
@@ -226,11 +222,11 @@ class Bounds {
         //console.log("contains:", x, y)
         //console.log("MINX", this.minX())
         //console.log("direct", this.origin.x)
-        let xRange = new NumRange(this.minX, this.maxX);
-        let xCheck = xRange.upperInclusiveContains(x);
+        const xRange = new NumRange(this.minX, this.maxX);
+        const xCheck = xRange.upperInclusiveContains(x);
         //console.log("x", xRange.pretty(), x, xCheck);
-        let yRange = new NumRange(this.minY, this.maxY);
-        let yCheck = yRange.upperInclusiveContains(y);
+        const yRange = new NumRange(this.minY, this.maxY);
+        const yCheck = yRange.upperInclusiveContains(y);
         //console.log("y", this.minY, this.maxY, y, yCheck);
         return (xCheck && yCheck);
         //return true;
@@ -239,10 +235,10 @@ class Bounds {
         return this.contains(point.x, point.y);
     }
     static intersects(lhs, rhs) {
-        let lhs_xRange = new NumRange(lhs.minX, lhs.maxX);
-        let lhs_yRange = new NumRange(lhs.minY, lhs.maxY);
-        let rhs_xRange = new NumRange(rhs.minX, rhs.maxX);
-        let rhs_yRange = new NumRange(rhs.minY, rhs.maxY);
+        const lhs_xRange = new NumRange(lhs.minX, lhs.maxX);
+        const lhs_yRange = new NumRange(lhs.minY, lhs.maxY);
+        const rhs_xRange = new NumRange(rhs.minX, rhs.maxX);
+        const rhs_yRange = new NumRange(rhs.minY, rhs.maxY);
         return (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange));
     }
     // Check on this
@@ -263,10 +259,10 @@ class Bounds {
         let originY;
         let w;
         let h;
-        let lhs_xRange = new NumRange(lhs.minX, lhs.maxX);
-        let lhs_yRange = new NumRange(lhs.minY, lhs.maxY);
-        let rhs_xRange = new NumRange(rhs.minX, rhs.maxX);
-        let rhs_yRange = new NumRange(rhs.minY, rhs.maxY);
+        const lhs_xRange = new NumRange(lhs.minX, lhs.maxX);
+        const lhs_yRange = new NumRange(lhs.minY, lhs.maxY);
+        const rhs_xRange = new NumRange(rhs.minX, rhs.maxX);
+        const rhs_yRange = new NumRange(rhs.minY, rhs.maxY);
         if (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange)) {
             if (lhs_xRange.inclusiveContains(rhs.minX)) {
                 originX = rhs.minX;
@@ -296,36 +292,36 @@ class Bounds {
     }
     holds(other) {
         //x y values can be equal
-        let lhs_xRange = new NumRange(this.minX, this.maxX);
-        let lhs_yRange = new NumRange(this.minY, this.maxY);
-        let rhs_xRange = new NumRange(other.minX, other.maxX);
-        let rhs_yRange = new NumRange(other.minY, other.maxY);
+        const lhs_xRange = new NumRange(this.minX, this.maxX);
+        const lhs_yRange = new NumRange(this.minY, this.maxY);
+        const rhs_xRange = new NumRange(other.minX, other.maxX);
+        const rhs_yRange = new NumRange(other.minY, other.maxY);
         return (lhs_xRange.holds(rhs_xRange) && lhs_yRange.holds(rhs_yRange));
     }
     containedBy(other) {
-        let lhs_xRange = new NumRange(this.minX, this.maxX);
-        let lhs_yRange = new NumRange(this.minY, this.maxY);
-        let rhs_xRange = new NumRange(other.minX, other.maxX);
-        let rhs_yRange = new NumRange(other.minY, other.maxY);
+        const lhs_xRange = new NumRange(this.minX, this.maxX);
+        const lhs_yRange = new NumRange(this.minY, this.maxY);
+        const rhs_xRange = new NumRange(other.minX, other.maxX);
+        const rhs_yRange = new NumRange(other.minY, other.maxY);
         return (rhs_xRange.holds(lhs_xRange) && rhs_yRange.holds(lhs_yRange));
     }
     quads() {
         if (this.width < 4 || this.height < 4) {
             console.log('Bounds.quads: this is going to be a really small sub tree.');
         }
-        let minX = this.origin.x;
-        let minY = this.origin.y;
-        let w = (this.size.width) / 2;
-        let h = (this.size.height) / 2;
-        let midX = w + minX;
-        let midY = h + minY;
+        const minX = this.origin.x;
+        const minY = this.origin.y;
+        const w = (this.size.width) / 2;
+        const h = (this.size.height) / 2;
+        const midX = w + minX;
+        const midY = h + minY;
         if (midX === minY || midX === minY) {
             throw new Error('Bounds.quads: is a dimension 0?');
         }
-        let ne = Bounds.createBounds(midX, minY, w, h);
-        let se = Bounds.createBounds(midX, midY, w, h);
-        let sw = Bounds.createBounds(minX, midY, w, h);
-        let nw = Bounds.createBounds(minX, minY, w, h);
+        const ne = Bounds.createBounds(midX, minY, w, h);
+        const se = Bounds.createBounds(midX, midY, w, h);
+        const sw = Bounds.createBounds(minX, midY, w, h);
+        const nw = Bounds.createBounds(minX, minY, w, h);
         return [ne, se, sw, nw];
     }
     //really should only be valid if bounds is a square. 
@@ -338,9 +334,9 @@ class Bounds {
         // let offset = side/2;
         // let innerBounds = new Bounds(x-offset, y-offset,side,side); 
         // if (innerBounds.contains(x,y)) { return true; }
-        let rhs = new Point(x, y);
-        let distance = this.width / 2;
-        let result = this.center.closeEnoughTo(rhs, distance);
+        const rhs = new Point(x, y);
+        const distance = this.width / 2;
+        const result = this.center.closeEnoughTo(rhs, distance);
         //console.log(this.center.x, this.center.y, distance, rhs.x, rhs.y, result);
         return result;
     }
