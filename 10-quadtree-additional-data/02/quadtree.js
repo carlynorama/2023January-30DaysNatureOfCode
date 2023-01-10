@@ -551,8 +551,7 @@ reAddPointToSubTree(point) {
          newPointCollector.push(...newPoints);
        }
    } else {
-     let thesePoints = parent.points.filter(val=> queryBounds.containsPoint(val));
-
+     let thesePoints = parent.points.filter(val=> queryBounds.contains(val.x, val.y));
      for (let point of thesePoints) { owner.clearPointValue(point.x, point.y) }
      return thesePoints;
    }
