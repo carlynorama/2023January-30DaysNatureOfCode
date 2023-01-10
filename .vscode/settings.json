@@ -6,5 +6,6 @@
         "rquery",
         "xoff",
         "yoff"
-    ]
+    ],
+    "git.untrackedChanges": "separate"
 }

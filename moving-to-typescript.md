@@ -14,12 +14,20 @@
 - https://github.com/Gaweph/p5-typescript-starter
 - https://stackoverflow.com/questions/63195453/how-can-i-import-p5-js-into-typescript 
 
+### ESLint
+- https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+- https://eslint.org/docs/latest/user-guide/getting-started
+- https://typescript-eslint.io
+- https://stackoverflow.com/questions/48087277/eslint-only-target-a-specific-directory-eslintrc-create-react-app
+
 
 ## Steps
 
 * put all exisitng website files into a `./docs` dir. 
 * (cntrl-backtick, the key press, opens vscode terminal OR cd to the project directory) 
-* `npn init`   //use defaults for everything
+* add `node_modules` to .gitignore 
+    *if forget `git rm -rf node_modules`, followed by `npm install` to refetch, `git check-ignore` if folder stays bright green in VSCode
+* `npm init`   //use defaults for everything 
 * `npm install typescript --save-dev`  //installs local version that isn't need for run time. 
 * change `package.json` to have the following block
 
@@ -27,14 +35,21 @@
                     "test": "echo \"Error: no test specified\" && exit 1",
                     "tsc": "tsc",
                     "tsc:w": "tsc --watch",
-                    "http-server": "npx http-server ./ -o"
+                    "http-server": "npx http-server ./docs -o"
                 },
 
 * `npm run tsc -- --init`  //starts up local tsc config see below 
 * `npm install p5 @types/p5` //installs p5 type defs maybe? perhaps _just_ the global file below would have been okay? 
     * no, you have to do at least `npm install @types/p5`, but you can leave off installing p5 if you're including it in docs folder by hand. 
 * add `global.d.ts` to the src folder. //Will not be seen in root with the config set the way I have it. 
-* `npm run http-server` to confirm old files are still navigable, the root folder is a directory above docs on the server, which for my purposes, emulating a github pages install, is correct.
+* `npm run http-server` to confirm old files are still navigable.
+* create a proof of concept sketch.ts (src/11-first-day-of-type-script/01)
+* ran `npm run tsc` to generate a folder at the same location in docs, copied in the needed html files. 
+* New files exist! 
+* ALSO bonus, install ESLint
+    * `npm install --save-dev eslint`,  //On next install see if can just do second line?
+    * `npm init @eslint/config`
+    * add `"ignorePatterns": ['/*', '!/src'],` to `.eslintrc.js` (could be .json, .yml, etc.) so it will only look at the src folder. There are other, better?, ways. See link in resources.  
 
 
 ## tsconfig.json

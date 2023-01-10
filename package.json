@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
     "tsc:w": "tsc --watch",
-    "http-server": "npx http-server ./ -o"
+    "http-server": "npx http-server ./docs -o"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,9 @@
   },
   "homepage": "https://github.com/carlynorama/2023January-30DaysNatureOfCode#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "eslint": "^8.31.0",
     "typescript": "^4.9.4"
   },
   "dependencies": {
