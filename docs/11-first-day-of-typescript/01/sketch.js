@@ -1,8 +1,6 @@
 "use strict";
 let thisWidth = 400;
 let thisHeight = 400;
-let element_limit = 6;
-let particleSet;
 // function mouseClicked() {
 //   runFlag = false;
 // }
@@ -10,8 +8,6 @@ let particleSet;
 function setup() {
     createControlledCanvas(thisWidth, thisHeight);
     background(51);
-    particleSet = new ParticleSet(thisWidth, thisHeight, element_limit);
-    particleSet.populateSet(1000);
     console.log("--------- End of Setup ---------");
     //noLoop();
 }
@@ -19,15 +15,13 @@ function setup() {
 function draw() {
     if (runFlag) {
         background(51);
-        particleSet.update();
-        QuadTree.boundsAccess(particleSet.qtree, drawBounds);
-        particleSet.draw();
+        rect(200, 200, 10, 10);
     }
 }
 // ------------------------------------------------------------ functions passed to QuadTree()
-function drawBounds(bounds) {
-    stroke(255, 20);
-    rectMode(CORNER);
-    rect(bounds.x, bounds.y, bounds.width, bounds.height);
-}
+// function drawBounds(bounds) {
+//   stroke(255,20);
+//   rectMode(CORNER);
+//   rect(bounds.x, bounds.y, bounds.width, bounds.height);
+// }
 //# sourceMappingURL=sketch.js.map

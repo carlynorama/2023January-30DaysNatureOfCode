@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
     "tsc:w": "tsc --watch",
-    "http-server": "npx http-server ./ -o"
+    "http-server": "npx http-server ./docs -o"
   },
   "repository": {
     "type": "git",

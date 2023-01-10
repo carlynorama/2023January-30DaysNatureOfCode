@@ -19,7 +19,8 @@
 
 * put all exisitng website files into a `./docs` dir. 
 * (cntrl-backtick, the key press, opens vscode terminal OR cd to the project directory) 
-* `npn init`   //use defaults for everything
+* add `node_modules` to .gitignore //if forget `git rm -rf node_modules`, followed by `npm install` to refetch
+* `npm init`   //use defaults for everything 
 * `npm install typescript --save-dev`  //installs local version that isn't need for run time. 
 * change `package.json` to have the following block
 
