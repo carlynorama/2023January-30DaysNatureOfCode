@@ -1,5 +1,7 @@
 class Point {
-  constructor(x, y) {
+  x: number;
+  y: number;
+  constructor(x: number, y: number) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       throw new Error('\r\n\r\nPoint():values are not numeric');
     }
@@ -7,19 +9,19 @@ class Point {
     this.y = y;
   }
 
-  static matches(lhs, rhs) {
+  static matches(lhs:  { x: number; y: number; }, rhs: { x: number; y: number; }) {
     return (lhs.x === rhs.x && lhs.y === rhs.y)
   }
 
-  matches(other) {
+  matches(other: { x: number; y: number; }) {
     return Point.matches(this, other);
   }
 
-  hasValues(x, y) {
+  hasValues(x: number, y: number) {
     return (this.x === x && this.y === y);
   }
 
-  static closeEnough(lhs, rhs, distance) {
+  static closeEnough(lhs: { x: number; y: number; }, rhs: { x: number; y: number; }, distance: number) {
     let left = ((lhs.x - rhs.x) * (lhs.x - rhs.x)) + ((lhs.y - rhs.y)*(lhs.y - rhs.y))
     let right = distance * distance
     let result = left <= right;
@@ -27,7 +29,7 @@ class Point {
     return  result ;
   }
 
-  closeEnoughTo(other, distance) {
+  closeEnoughTo(other: { x: number; y: number; }, distance:number) {
     return Point.closeEnough(this, other, distance);
   }
 
@@ -37,7 +39,9 @@ class Point {
 }
 
 class Size {
-  constructor(w, h) {
+  width: number;
+  height: number;
+  constructor(w: number, h: number) {
     if (!(typeof(w) === 'number' && typeof(h) === 'number')) {
       throw new Error('\r\n\r\nSize():values are not numeric');
     }
@@ -45,31 +49,34 @@ class Size {
     this.height = h;
   }
 
-  static matches(lhs, rhs) {
+  static matches(lhs: { width: number; height: number; }, rhs: { width: number; height: number; }):boolean {
     return (lhs.width === rhs.width && lhs.height === rhs.height)
   }
 
-  static sidesGreaterThan(lhs, rhs) {
+  static sidesGreaterThan(lhs: { width: number; height: number; }, rhs: { width: number; height: number; }):boolean {
     return (lhs.width >= rhs.width && lhs.height >= rhs.height)
   }
 
-  static areaGreaterThan(lhs, rhs) {
+  static areaGreaterThan(lhs: { area: number; }, rhs: { area: number; }):boolean {
     return (lhs.area >= rhs.area)
   }
 
-  matches(other) {
+  matches(other: { width: number; height: number; }):boolean {
     return Size.matches(this, other);
   }
 
-  get area() { return this.width * this.height }
+  get area():number { return this.width * this.height }
 
-  pretty() {
+  get pretty():string {
     return `Size(${this.width}, ${this.height})`
   }
 }
 
-class Range {
-  constructor(l, u) {
+//TODO: Rename my range? 
+class NumRange {
+  lower: number;
+  upper: number;
+  constructor(l: number, u: number) {
     if (!(typeof(l) === 'number' && typeof(u) === 'number')) {
       throw new Error('\r\n\r\nRange():values are not numeric")');
     }
@@ -77,39 +84,39 @@ class Range {
     this.upper = u;
   }
 
-  static project(val, l1, u1, l2, u2) {
-    //check against range.locationInRange();
+  static project(val: number, l1: number, u1: number, l2: number, u2: number):number {
+    //check against NumRange.locationInRange();
     let percent = Math.abs(val - l1)/Math.abs(u1-l1);
     let displacement = (u2-l2) * percent;
     return l2 + displacement;
   }
 
-  static constrain(val, l, u) {
+  static constrain(val: number, l: number, u: number):number {
     return Math.min(Math.max(val, l), u);
     //Math.clamp(val, l, u) is apparently slow?;
   }
 
-  locationInRange(val) {
+  locationInRange(val: number):number {
       return Math.abs(val - this.lower)/Math.abs(this.upper-this.lower);
   }
 
-  inclusiveContains(x) {
+  inclusiveContains(x: number):boolean {
     return ((x <= this.upper) && (x >= this.lower))
   }
 
-  exclusiveContains(x) {
+  exclusiveContains(x: number):boolean {
     return ((x < this.upper) && (x > this.lower))
   }
 
-  lowerInclusiveContains(x) {
+  lowerInclusiveContains(x: number):boolean {
     return ((x < this.upper) && (x >= this.lower))
   }
 
-  upperInclusiveContains(x) {
+  upperInclusiveContains(x: number):boolean {
     return ((x <= this.upper) && (x > this.lower))
   }
 
-  overlaps(other) {
+  overlaps(other: { lower: number; upper: number; inclusiveContains: (arg0: number) => boolean; }) {
     //have to have both incase one holds the other and the smaller is the caller.
     let sideOne = (this.inclusiveContains(other.lower) ||  this.inclusiveContains(other.upper))
     let sideTwo = (other.inclusiveContains(this.lower) ||  other.inclusiveContains(this.upper))
@@ -117,21 +124,23 @@ class Range {
   }
 
   //contains would be better, how to overload without types?
-  fullyHolds(other) {
+  fullyHolds(other: { lower: number; upper: number; }):boolean {
     return (this.lower < other.lower && this.upper > other.upper)
   }
 
-  holds(other) {
+  holds(other: { lower: number; upper: number; }):boolean {
     return (this.lower <= other.lower && this.upper >= other.upper)
   }
 
-  pretty() {
+  get pretty():string {
     return `Range(lower:${this.lower}, upper:${this.upper})`
   }
 }
 
 class Bounds {
-  constructor(point, size) {
+  origin: Point;
+  size: Size;
+  constructor(point: Point, size: Size) {
     if (!(typeof(point.x) === 'number' && typeof(point.y) === 'number' && typeof(size.width) === 'number' && typeof(size.height) === 'number')) {
       //console.log(point.pretty(), size.pretty())
         throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
@@ -140,7 +149,7 @@ class Bounds {
     this.size = size;
   }
 
-  static createBounds(x, y, w, h) {
+  static createBounds(x: number, y: number, w: number, h: number) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number' && typeof(w) === 'number' && typeof(h) === 'number')) {
       throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
     }
@@ -150,7 +159,7 @@ class Bounds {
     return b;
   }
 
-  static createBoundsFromCenter(centerX, centerY, w, h) {
+  static createBoundsFromCenter(centerX: number, centerY: number, w: number, h: number) {
     if (!(typeof(centerX) === 'number' && typeof(centerY) === 'number' && typeof(w) === 'number' && typeof(h) === 'number')) {
       throw new Error('\r\n\r\nBounds(): at least one value is not numeric');
     }
@@ -160,22 +169,20 @@ class Bounds {
     return b;
   }
 
-  static createBoundsFromPoints(startPoint, endPoint) {
-    let w = endPoint.x - startPoint.x;
-    let h = endPoint.y - startPoint.y;
+  static createBoundsFromPoints(x1:number, y1:number, x2: number, y2:number) {
+    let w = x2 - x1;
+    let h = y2 - y1;
     if (w >= 0 && h >= 0) {
-      let s = new Size(w, h);
-      let b = new Bounds(startPoint, s);
+      let b = Bounds.createBounds(x1, y1, w, h);
       return b;
     } 
     else if (w < 0 && h < 0) {
-      let s = new Size(Math.abs(w), Math.abs(h));
-      let b = new Bounds(endPoint, s);
+      let b = Bounds.createBounds(x2, y2, Math.abs(w), Math.abs(h));
       return b;
     }
     else {
       let s = new Size(Math.abs(w), Math.abs(h));
-      let p = new Point(Math.min(endPoint.x,startPoint.x), Math.min(endPoint.y,startPoint.y));
+      let p = new Point(Math.min(x2,x2), Math.min(y2,y1));
       let b = new Bounds(p, s);
       return b;
     }
@@ -194,12 +201,12 @@ class Bounds {
   get midY() { return this.size.height/2 + this.minY;}
   get center() { return new Point(this.midX, this.midY) }
   
-  offSetBy(x, y) {
+  offSetBy(x: number, y: number) {
     this.origin.x += x;
     this.origin.y += y;
   }
 
-  updateOrigin(x, y) {
+  updateOrigin(x: number, y: number) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       throw new Error('Bounds.updateOrigin: one or both of the values are not numeric.');
     }
@@ -207,7 +214,7 @@ class Bounds {
     this.origin.y = y;
   }
 
-  updateCenter(x, y) {
+  updateCenter(x: number, y: number) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('Bounds.updateCenter: one or both of the values are not numeric.');
@@ -216,137 +223,136 @@ class Bounds {
     this.origin.y = y - this.height/2;
   }
 
-  updateWithin(x, y, bounds) {
+  updateWithin(x: number, y: number, bounds: { minX: number; maxX: number; minY: number; maxY: number; }) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('Bounds.updateOrigin: one or both of the values are not numeric.');
     }
-    this.origin.x = Range.constrain(x, bounds.minX, bounds.maxX);
-    this.origin.y = Range.constrain(y, bounds.minY, bounds.maxY);
+    this.origin.x = NumRange.constrain(x, bounds.minX, bounds.maxX);
+    this.origin.y = NumRange.constrain(y, bounds.minY, bounds.maxY);
   }
-  moveWithin(x, y, bounds) {
+  moveWithin(x: number, y: number, bounds: { minX: number; maxX: number; minY: number; maxY: number; }) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
       throw new Error('Bounds.updateOrigin: one or both of the values are not numeric.');
     }
-    this.origin.x = Range.constrain(x, bounds.minX, bounds.maxX - this.width);
-    this.origin.y = Range.constrain(y, bounds.minY, bounds.maxY - this.height);
+    this.origin.x = NumRange.constrain(x, bounds.minX, bounds.maxX - this.width);
+    this.origin.y = NumRange.constrain(y, bounds.minY, bounds.maxY - this.height);
   }
 
-  moveWithinCentered(x, y, bounds) {
+  moveWithinCentered(x: number, y: number, bounds: Bounds) {
     this.moveWithin(x - this.width/2, y - this.height/2, bounds)
   }
 
-  insetBy(margin) {
+  insetBy(margin: number) {
     this.size.width -= margin;
     this.size.height -= margin;
   }
 
-  insetBy(margin) {
-    this.size.width -= margin;
-    this.size.height -= margin;
-  }
-
-  insetOnCenterBy(margin) {
+  insetOnCenterBy(margin: number) {
     this.size.width -= margin;
     this.size.height -= margin;
     let offset = margin/2;
     this.offSetBy(offset, offset);
   }
 
-  scale(factor) {
-    this.size.width * scale;
-    this.size.height * scale;
+  scale(factor: number) {
+    this.size.width * factor;
+    this.size.height * factor;
   }
 
-  contains(x, y) {
+  contains(x: number, y: number) {
     if (!(typeof(x) === 'number' && typeof(y) === 'number')) {
       throw new Error('Bounds.contains: one or both of the values are not numeric.');
     }
     //console.log("contains:", x, y)
     //console.log("MINX", this.minX())
     //console.log("direct", this.origin.x)
-    let xRange = new Range(this.minX, this.maxX);
+    let xRange = new NumRange(this.minX, this.maxX);
 
     let xCheck = xRange.upperInclusiveContains(x);
     //console.log("x", xRange.pretty(), x, xCheck);
 
-    let yRange = new Range(this.minY, this.maxY);
+    let yRange = new NumRange(this.minY, this.maxY);
     let yCheck = yRange.upperInclusiveContains(y);
     //console.log("y", this.minY, this.maxY, y, yCheck);
     return (xCheck && yCheck);
     //return true;
   }
 
-  containsPoint(point) {
+  containsPoint(point: { x: number; y: number; }) {
     return this.contains(point.x, point.y);
   }
 
 
-  static intersects(lhs, rhs) {
-    let lhs_xRange = new Range(lhs.minX, lhs.maxX);
-    let lhs_yRange = new Range(lhs.minY, lhs.maxY);
-    let rhs_xRange = new Range(rhs.minX, rhs.maxX);
-    let rhs_yRange = new Range(rhs.minY, rhs.maxY);
+  static intersects(lhs: { minX: number; maxX: number; minY: number; maxY: number; }, rhs: { minX: number; maxX: number; minY: number; maxY: number; }):boolean {
+    let lhs_xRange = new NumRange(lhs.minX, lhs.maxX);
+    let lhs_yRange = new NumRange(lhs.minY, lhs.maxY);
+    let rhs_xRange = new NumRange(rhs.minX, rhs.maxX);
+    let rhs_yRange = new NumRange(rhs.minY, rhs.maxY);
 
     return (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange));
   }
 
   // Check on this
-  // static intersection(lhs, rhs) {
-  //   let originX;
-  //   let originY;
-  //   let w;
-  //   let h;
-  //   let lhs_xRange = new Range(lhs.minX, lhs.maxX);
-  //   let lhs_yRange = new Range(lhs.minY, lhs.maxY);
-  //   let rhs_xRange = new Range(rhs.minX, rhs.maxX);
-  //   let rhs_yRange = new Range(rhs.minY, rhs.maxY);
 
-  //   if (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange)) {
 
-  //     if (lhs_xRange.inclusiveContains(rhs.minX)) { originX = rhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-rhs.minX }
-  //     else { originX = lhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-lhs.minX }
-  //     if (lhs_yRange.inclusiveContains(rhs.minY)) { originY = rhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-rhs.minY }
-  //     else { originY = lhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-lhs.minY }
-  //   }
-
-  //   else { return null }
-  //   //console.log(originX, originY, w, h);
-  //   return Bounds.createBounds(originX, originY, w, h);
-  // }
-
-  static matches(lhs, rhs) {
+  static matches(lhs: { origin: Point; size: Size; }, rhs: { origin: Point; size: Size; }):boolean {
     return (lhs.origin.matches(rhs.origin) && lhs.size.matches(rhs.size));
   }
 
-  intersects(other) {
+  intersects(other: Bounds):boolean {
     return Bounds.intersects(this, other);
   }
 
-  intersection(other) {
+  intersection(other: Bounds):Bounds|null {
+    throw new Error("Fix it first.")
     return Bounds.intersection(this, other);
   }
+  //WARNING: This maybe busted.
+  static intersection(lhs:Bounds, rhs:Bounds):Bounds|null {
+    throw new Error("Fix it first.")
+    let originX;
+    let originY;
+    let w;
+    let h;
+    let lhs_xRange = new NumRange(lhs.minX, lhs.maxX);
+    let lhs_yRange = new NumRange(lhs.minY, lhs.maxY);
+    let rhs_xRange = new NumRange(rhs.minX, rhs.maxX);
+    let rhs_yRange = new NumRange(rhs.minY, rhs.maxY);
 
-  matches(other) {
+    if (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange)) {
+
+      if (lhs_xRange.inclusiveContains(rhs.minX)) { originX = rhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-rhs.minX }
+      else { originX = lhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-lhs.minX }
+      if (lhs_yRange.inclusiveContains(rhs.minY)) { originY = rhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-rhs.minY }
+      else { originY = lhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-lhs.minY }
+    }
+
+    else { return null }
+    //console.log(originX, originY, w, h);
+    return Bounds.createBounds(originX, originY, w, h);
+  }
+
+  matches(other: Bounds) {
     return Bounds.matches(this, other);
   }
 
-  holds(other) {
+  holds(other: { minX: number; maxX: number; minY: number; maxY: number; }) {
     //x y values can be equal
-    let lhs_xRange = new Range(this.minX, this.maxX);
-    let lhs_yRange = new Range(this.minY, this.maxY);
-    let rhs_xRange = new Range(other.minX, other.maxX);
-    let rhs_yRange = new Range(other.minY, other.maxY);
+    let lhs_xRange = new NumRange(this.minX, this.maxX);
+    let lhs_yRange = new NumRange(this.minY, this.maxY);
+    let rhs_xRange = new NumRange(other.minX, other.maxX);
+    let rhs_yRange = new NumRange(other.minY, other.maxY);
 
     return (lhs_xRange.holds(rhs_xRange) && lhs_yRange.holds(rhs_yRange))
   }
 
-  containedBy(other) {
-    let lhs_xRange = new Range(this.minX, this.maxX);
-    let lhs_yRange = new Range(this.minY, this.maxY);
-    let rhs_xRange = new Range(other.minX, other.maxX);
-    let rhs_yRange = new Range(other.minY, other.maxY);
+  containedBy(other: { minX: number; maxX: number; minY: number; maxY: number; }) {
+    let lhs_xRange = new NumRange(this.minX, this.maxX);
+    let lhs_yRange = new NumRange(this.minY, this.maxY);
+    let rhs_xRange = new NumRange(other.minX, other.maxX);
+    let rhs_yRange = new NumRange(other.minY, other.maxY);
 
     return (rhs_xRange.holds(lhs_xRange) && rhs_yRange.holds(lhs_yRange))
   }
@@ -378,7 +384,7 @@ class Bounds {
   }
 
   //really should only be valid if bounds is a square. 
-  inscribedCircleContains(x,y) {
+  inscribedCircleContains(x: number,y: number) {
     
     if (!this.contains(x,y)) { return false; }
 

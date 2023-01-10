@@ -15,6 +15,7 @@ function setup() {
 function draw() {
     if (runFlag) {
         background(51);
+        fill(51, 204, 204);
         rect(200, 200, 10, 10);
     }
 }

@@ -51,11 +51,12 @@ class Size {
         return Size.matches(this, other);
     }
     get area() { return this.width * this.height; }
-    pretty() {
+    get pretty() {
         return `Size(${this.width}, ${this.height})`;
     }
 }
-class Range {
+//TODO: Rename my range? 
+class NumRange {
     constructor(l, u) {
         if (!(typeof (l) === 'number' && typeof (u) === 'number')) {
             throw new Error('\r\n\r\nRange():values are not numeric")');
@@ -64,7 +65,7 @@ class Range {
         this.upper = u;
     }
     static project(val, l1, u1, l2, u2) {
-        //check against range.locationInRange();
+        //check against NumRange.locationInRange();
         let percent = Math.abs(val - l1) / Math.abs(u1 - l1);
         let displacement = (u2 - l2) * percent;
         return l2 + displacement;
@@ -101,7 +102,7 @@ class Range {
     holds(other) {
         return (this.lower <= other.lower && this.upper >= other.upper);
     }
-    pretty() {
+    get pretty() {
         return `Range(lower:${this.lower}, upper:${this.upper})`;
     }
 }
@@ -132,22 +133,20 @@ class Bounds {
         let b = new Bounds(p, s);
         return b;
     }
-    static createBoundsFromPoints(startPoint, endPoint) {
-        let w = endPoint.x - startPoint.x;
-        let h = endPoint.y - startPoint.y;
+    static createBoundsFromPoints(x1, y1, x2, y2) {
+        let w = x2 - x1;
+        let h = y2 - y1;
         if (w >= 0 && h >= 0) {
-            let s = new Size(w, h);
-            let b = new Bounds(startPoint, s);
+            let b = Bounds.createBounds(x1, y1, w, h);
             return b;
         }
         else if (w < 0 && h < 0) {
-            let s = new Size(Math.abs(w), Math.abs(h));
-            let b = new Bounds(endPoint, s);
+            let b = Bounds.createBounds(x2, y2, Math.abs(w), Math.abs(h));
             return b;
         }
         else {
             let s = new Size(Math.abs(w), Math.abs(h));
-            let p = new Point(Math.min(endPoint.x, startPoint.x), Math.min(endPoint.y, startPoint.y));
+            let p = new Point(Math.min(x2, x2), Math.min(y2, y1));
             let b = new Bounds(p, s);
             return b;
         }
@@ -192,23 +191,19 @@ class Bounds {
             //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
             throw new Error('Bounds.updateOrigin: one or both of the values are not numeric.');
         }
-        this.origin.x = Range.constrain(x, bounds.minX, bounds.maxX);
-        this.origin.y = Range.constrain(y, bounds.minY, bounds.maxY);
+        this.origin.x = NumRange.constrain(x, bounds.minX, bounds.maxX);
+        this.origin.y = NumRange.constrain(y, bounds.minY, bounds.maxY);
     }
     moveWithin(x, y, bounds) {
         if (!(typeof (x) === 'number' && typeof (y) === 'number')) {
             //https://stackoverflow.com/questions/550574/how-to-terminate-the-script-in-javascript
             throw new Error('Bounds.updateOrigin: one or both of the values are not numeric.');
         }
-        this.origin.x = Range.constrain(x, bounds.minX, bounds.maxX - this.width);
-        this.origin.y = Range.constrain(y, bounds.minY, bounds.maxY - this.height);
+        this.origin.x = NumRange.constrain(x, bounds.minX, bounds.maxX - this.width);
+        this.origin.y = NumRange.constrain(y, bounds.minY, bounds.maxY - this.height);
     }
     moveWithinCentered(x, y, bounds) {
         this.moveWithin(x - this.width / 2, y - this.height / 2, bounds);
-    }
-    insetBy(margin) {
-        this.size.width -= margin;
-        this.size.height -= margin;
     }
     insetBy(margin) {
         this.size.width -= margin;
@@ -221,8 +216,8 @@ class Bounds {
         this.offSetBy(offset, offset);
     }
     scale(factor) {
-        this.size.width * scale;
-        this.size.height * scale;
+        this.size.width * factor;
+        this.size.height * factor;
     }
     contains(x, y) {
         if (!(typeof (x) === 'number' && typeof (y) === 'number')) {
@@ -231,10 +226,10 @@ class Bounds {
         //console.log("contains:", x, y)
         //console.log("MINX", this.minX())
         //console.log("direct", this.origin.x)
-        let xRange = new Range(this.minX, this.maxX);
+        let xRange = new NumRange(this.minX, this.maxX);
         let xCheck = xRange.upperInclusiveContains(x);
         //console.log("x", xRange.pretty(), x, xCheck);
-        let yRange = new Range(this.minY, this.maxY);
+        let yRange = new NumRange(this.minY, this.maxY);
         let yCheck = yRange.upperInclusiveContains(y);
         //console.log("y", this.minY, this.maxY, y, yCheck);
         return (xCheck && yCheck);
@@ -244,32 +239,13 @@ class Bounds {
         return this.contains(point.x, point.y);
     }
     static intersects(lhs, rhs) {
-        let lhs_xRange = new Range(lhs.minX, lhs.maxX);
-        let lhs_yRange = new Range(lhs.minY, lhs.maxY);
-        let rhs_xRange = new Range(rhs.minX, rhs.maxX);
-        let rhs_yRange = new Range(rhs.minY, rhs.maxY);
+        let lhs_xRange = new NumRange(lhs.minX, lhs.maxX);
+        let lhs_yRange = new NumRange(lhs.minY, lhs.maxY);
+        let rhs_xRange = new NumRange(rhs.minX, rhs.maxX);
+        let rhs_yRange = new NumRange(rhs.minY, rhs.maxY);
         return (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange));
     }
     // Check on this
-    // static intersection(lhs, rhs) {
-    //   let originX;
-    //   let originY;
-    //   let w;
-    //   let h;
-    //   let lhs_xRange = new Range(lhs.minX, lhs.maxX);
-    //   let lhs_yRange = new Range(lhs.minY, lhs.maxY);
-    //   let rhs_xRange = new Range(rhs.minX, rhs.maxX);
-    //   let rhs_yRange = new Range(rhs.minY, rhs.maxY);
-    //   if (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange)) {
-    //     if (lhs_xRange.inclusiveContains(rhs.minX)) { originX = rhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-rhs.minX }
-    //     else { originX = lhs.minX; w = Math.min(lhs.maxX,rhs.maxX)-lhs.minX }
-    //     if (lhs_yRange.inclusiveContains(rhs.minY)) { originY = rhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-rhs.minY }
-    //     else { originY = lhs.minY; h = Math.min(lhs.maxY,rhs.maxY)-lhs.minY }
-    //   }
-    //   else { return null }
-    //   //console.log(originX, originY, w, h);
-    //   return Bounds.createBounds(originX, originY, w, h);
-    // }
     static matches(lhs, rhs) {
         return (lhs.origin.matches(rhs.origin) && lhs.size.matches(rhs.size));
     }
@@ -277,24 +253,60 @@ class Bounds {
         return Bounds.intersects(this, other);
     }
     intersection(other) {
+        throw new Error("Fix it first.");
         return Bounds.intersection(this, other);
+    }
+    //WARNING: This maybe busted.
+    static intersection(lhs, rhs) {
+        throw new Error("Fix it first.");
+        let originX;
+        let originY;
+        let w;
+        let h;
+        let lhs_xRange = new NumRange(lhs.minX, lhs.maxX);
+        let lhs_yRange = new NumRange(lhs.minY, lhs.maxY);
+        let rhs_xRange = new NumRange(rhs.minX, rhs.maxX);
+        let rhs_yRange = new NumRange(rhs.minY, rhs.maxY);
+        if (lhs_xRange.overlaps(rhs_xRange) && lhs_yRange.overlaps(rhs_yRange)) {
+            if (lhs_xRange.inclusiveContains(rhs.minX)) {
+                originX = rhs.minX;
+                w = Math.min(lhs.maxX, rhs.maxX) - rhs.minX;
+            }
+            else {
+                originX = lhs.minX;
+                w = Math.min(lhs.maxX, rhs.maxX) - lhs.minX;
+            }
+            if (lhs_yRange.inclusiveContains(rhs.minY)) {
+                originY = rhs.minY;
+                h = Math.min(lhs.maxY, rhs.maxY) - rhs.minY;
+            }
+            else {
+                originY = lhs.minY;
+                h = Math.min(lhs.maxY, rhs.maxY) - lhs.minY;
+            }
+        }
+        else {
+            return null;
+        }
+        //console.log(originX, originY, w, h);
+        return Bounds.createBounds(originX, originY, w, h);
     }
     matches(other) {
         return Bounds.matches(this, other);
     }
     holds(other) {
         //x y values can be equal
-        let lhs_xRange = new Range(this.minX, this.maxX);
-        let lhs_yRange = new Range(this.minY, this.maxY);
-        let rhs_xRange = new Range(other.minX, other.maxX);
-        let rhs_yRange = new Range(other.minY, other.maxY);
+        let lhs_xRange = new NumRange(this.minX, this.maxX);
+        let lhs_yRange = new NumRange(this.minY, this.maxY);
+        let rhs_xRange = new NumRange(other.minX, other.maxX);
+        let rhs_yRange = new NumRange(other.minY, other.maxY);
         return (lhs_xRange.holds(rhs_xRange) && lhs_yRange.holds(rhs_yRange));
     }
     containedBy(other) {
-        let lhs_xRange = new Range(this.minX, this.maxX);
-        let lhs_yRange = new Range(this.minY, this.maxY);
-        let rhs_xRange = new Range(other.minX, other.maxX);
-        let rhs_yRange = new Range(other.minY, other.maxY);
+        let lhs_xRange = new NumRange(this.minX, this.maxX);
+        let lhs_yRange = new NumRange(this.minY, this.maxY);
+        let rhs_xRange = new NumRange(other.minX, other.maxX);
+        let rhs_yRange = new NumRange(other.minY, other.maxY);
         return (rhs_xRange.holds(lhs_xRange) && rhs_yRange.holds(lhs_yRange));
     }
     quads() {
