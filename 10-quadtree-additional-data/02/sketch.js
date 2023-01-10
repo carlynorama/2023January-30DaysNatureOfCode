@@ -90,6 +90,7 @@ if (runFlag) {
 
 function drawBounds(bounds) {
   stroke(255,20);
+  noFill();
   rectMode(CORNER);
   rect(bounds.x, bounds.y, bounds.width, bounds.height);
 }
