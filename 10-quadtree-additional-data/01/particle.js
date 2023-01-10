@@ -53,7 +53,7 @@ class ParticleProperties {
   constructor(x, y) {
     this.start_x = x;
     this.start_y = y;
-    this.radius = 10;
+    this.radius = 2;
     this.wiggle = 6;
     this.touched = false;
    }
@@ -73,8 +73,8 @@ class ParticleSet {
   populateSet(qty) {
     const boundSuccess = this.success.bind(this);
     for (let i = 0; i < qty; i++) {
-      let x = randomGaussian(0, this.width);
-      let y = randomGaussian(0, this.height);
+      let x = random(0, this.width);
+      let y = random(0, this.height);
       let p = new Particle(x, y);
       this.qtree.addPoint(p, boundSuccess);
     }
@@ -116,7 +116,7 @@ class ParticleSet {
       if (point.properties.touched) { return } 
  
       if (point != other) {
-        console.log("check other", other.x, other.y, point.x, point.y);
+        //console.log("check other", other.x, other.y, point.x, point.y);
         if (point.closeEnoughTo(other, (point.properties.radius + other.properties.radius))) {
            point.setTouched(true);
            other.setTouched(true);

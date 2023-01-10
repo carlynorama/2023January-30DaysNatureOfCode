@@ -16,7 +16,7 @@ function setup() {
   background(51);
 
   particleSet = new ParticleSet(thisWidth, thisHeight, element_limit);
-  particleSet.populateSet(500);
+  particleSet.populateSet(1000);
 
 
   console.log("--------- End of Setup ---------");
