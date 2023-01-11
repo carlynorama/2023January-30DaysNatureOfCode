@@ -8,7 +8,6 @@ const thisHeight = 400;
 
 
 function setup() {
-
   createControlledCanvas(thisWidth, thisHeight);
   background(51);
 
@@ -18,9 +17,6 @@ function setup() {
   //noLoop();
 }
 
-
-// ------------------------------------------------------------------------ draw()
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function draw() {
 if (runFlag) {  
  background(51);

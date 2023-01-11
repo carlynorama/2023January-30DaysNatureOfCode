@@ -1,3 +1,4 @@
+// @ts-nocheck
 const thisWidth = 400;
 const thisHeight = 400;
 
