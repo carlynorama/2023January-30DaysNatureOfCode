@@ -13,6 +13,24 @@ let yOffset = 0;
 let slider1, slider2, slider3;
 let c, cx, cy;
 
+function keyPressed() {
+  if (keyCode === UP_ARROW) {
+    showSliders = false;
+    yOffset = 0;
+    background(220);
+    slider1.value = noiseMax;
+    slider2.value = zoff_inc;
+    slider3.value = spikeRange;
+  } else if (keyCode === DOWN_ARROW) {
+    showSliders = true;
+    slider1.style("display", "block");
+    slider2.style("display", "block");
+    slider3.style("display", "block");
+    background(220);
+    yOffset = 30;
+  }
+}
+
 function setup() {
   c = createCanvas(400, 400);
   //c.position();
@@ -20,10 +38,10 @@ function setup() {
   cy = c.position().y;
 
   //min, max, start value, step.
-  if (showSliders) {
+ 
     slider1 = createSlider(0, 10, noiseMax, 0.1);
-    slider2 = createSlider(0, 0.2, zoff_inc, 0.01);
-    slider3 = createSlider(0, 100, spikeRange, 1);
+    slider2 = createSlider(0, 1, zoff_inc, 0.01);
+    slider3 = createSlider(0, 300, spikeRange, 1);
     
     slider1.position(cx+80, cy+20);
     slider1.style('width', '80px');
@@ -31,7 +49,7 @@ function setup() {
     slider2.style('width', '80px');
     slider3.position(cx+80, cy+80);
     slider3.style('width', '80px');
-  }
+
 
 
 }
@@ -70,6 +88,7 @@ function draw() {
   
   //CONTROLS
   if (showSliders) {
+
     push();
     let sliderX = 180;
     let lableX = 20;
@@ -91,6 +110,10 @@ function draw() {
     text(spikeRange, sliderX, lableDY*3 + 2);
     text('r delta', lableX, lableDY*3 + 2);
     pop();
+  } else {
+    slider1.style("display", "none");
+    slider2.style("display", "none");
+    slider3.style("display", "none");
   }
 }
 
