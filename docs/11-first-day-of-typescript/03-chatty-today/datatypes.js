@@ -1,4 +1,7 @@
 "use strict";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+//TODO: Rewrite as overloads?
 class Point {
     constructor(x, y) {
         if (!(typeof (x) === 'number' && typeof (y) === 'number')) {

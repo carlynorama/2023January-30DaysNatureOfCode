@@ -1,6 +1,5 @@
 "use strict";
 //TODO: Rewrite as overloads?
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 class Point {
     constructor(x, y) {

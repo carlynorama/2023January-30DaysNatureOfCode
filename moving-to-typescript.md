@@ -39,18 +39,23 @@
                     "http-server": "npx http-server ./docs -o"
                 },
 
-* `npm run tsc -- --init`  //starts up local tsc config see below 
+* `npm run tsc -- --init`  //starts up local tsc config. see `tscofig.json` below.
 * `npm install p5 @types/p5` //installs p5 type defs maybe? perhaps _just_ the global file below would have been okay? 
     * no, you have to do at least `npm install @types/p5`, but you can leave off installing p5 if you're including it in docs folder by hand. 
-* add `global.d.ts` to the src folder. //Will not be seen in root with the config set the way I have it. 
+* add `global.d.ts` to the src folder or other location included in the `tsconfig.json` 
 * `npm run http-server` to confirm old files are still navigable.
 * create a proof of concept sketch.ts (src/11-first-day-of-type-script/01)
 * ran `npm run tsc` to generate a folder at the same location in docs, copied in the needed html files. 
 * New files exist! 
-* ALSO bonus, install ESLint
-    * `npm install --save-dev eslint`,  //On next install see if can just do second line?
-    * `npm init @eslint/config`
-    * add `"ignorePatterns": ['/*', '!/src'],` to `.eslintrc.js` (could be .json, .yml, etc.) so it will only look at the src folder. There are other, better?, ways. See link in resources.  Ended up adding `"eslint.enable": false,` to `.vscode/settings.json` because it got to be a little much. 
+
+* Note: I will be using the `src` folder as a staging area. Changing the name on the the subfolders will generate a new destination <code>docs</code>directory. That means the TypeScript might not be preserved in stages like the JavaScript, but I think that's okay
+
+I temporarily installed ESLint before I realized that linter lives inside typescript as well? Those steps:
+* `npm install --save-dev eslint`,  //On next install see if can just do second line?
+* `npm init @eslint/config`
+* add `"ignorePatterns": ['/*', '!/src'],` to `.eslintrc.js` (could be .json, .yml, etc.) so it will only look at the src folder. There are other, better?, ways. See link in resources.  
+* Ended up adding `"eslint.enable": false,` to `.vscode/settings.json` because it got to be a little much. 
+* ended up nuking modules and reinstalling with eslint removed.  (`rm -rf node_modules`, followed by `npm install` to refetch. ) 
 
 
 ## tsconfig.json
@@ -79,7 +84,7 @@
             /* Type Checking */
             "strict": true,                                      /* Enable all strict type-checking options. */
         },
-        "include": ["src"]
+        "include": ["global","src/todays/location/folder"]
     }
 
 
@@ -91,4 +96,35 @@
         import module = require('p5');
         export = module;
         export as namespace p5;
+
+
+## package.json Scripts
+
+Nice set to get started. 
+* tes -  tests placehode
+* tsc - runs typescript once
+* tsc:w - keeps typescript running
+* http-server - Points webserver at docs page.  -o opens the page. `npx http-server --help` to learn more. 
+
+        "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1",
+            "tsc": "tsc",
+            "tsc:w": "tsc --watch",
+            "http-server": "npx http-server ./docs -o"
+        },
+
+### Other Scripts
+
+Add an auto reloading browser window in repo: 
+* `npm install --save-dev browser-sync`
+* https://browsersync.io
+
+  "scripts": {
+    "start-run": "browser-sync start --server -w"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.12",
+  }
+
+
 
