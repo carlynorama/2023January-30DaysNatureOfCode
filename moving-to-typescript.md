@@ -24,9 +24,10 @@
 ## Steps
 
 * put all exisitng website files into a `./docs` dir. 
-* (cntrl-backtick, the key press, opens vscode terminal OR cd to the project directory) 
 * add `node_modules` to .gitignore 
-    *if forget `git rm -rf node_modules`, followed by `npm install` to refetch, `git check-ignore` if folder stays bright green in VSCode
+    *if forget can later `git rm -rf node_modules`, followed by `npm install` to refetch, `git check-ignore` if folder stays bright green in VSCode
+* get in the right place to run commands on project directory 
+    *(cntrl-backtick opens vscode terminal OR cd to the project directory) 
 * `npm init`   //use defaults for everything 
 * `npm install typescript --save-dev`  //installs local version that isn't need for run time. 
 * change `package.json` to have the following block
@@ -49,7 +50,7 @@
 * ALSO bonus, install ESLint
     * `npm install --save-dev eslint`,  //On next install see if can just do second line?
     * `npm init @eslint/config`
-    * add `"ignorePatterns": ['/*', '!/src'],` to `.eslintrc.js` (could be .json, .yml, etc.) so it will only look at the src folder. There are other, better?, ways. See link in resources.  
+    * add `"ignorePatterns": ['/*', '!/src'],` to `.eslintrc.js` (could be .json, .yml, etc.) so it will only look at the src folder. There are other, better?, ways. See link in resources.  Ended up adding `"eslint.enable": false,` to `.vscode/settings.json` because it got to be a little much. 
 
 
 ## tsconfig.json

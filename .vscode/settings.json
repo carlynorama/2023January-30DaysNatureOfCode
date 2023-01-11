@@ -7,5 +7,6 @@
         "xoff",
         "yoff"
     ],
-    "git.untrackedChanges": "separate"
+    "git.untrackedChanges": "mixed",
+    "eslint.enable": false,
 }
