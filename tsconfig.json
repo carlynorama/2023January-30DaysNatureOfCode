@@ -100,5 +100,5 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/global", "src/11-first-day-of-typescript/02-hello-angles"]
+  "include": ["global","src/11-first-day-of-typescript/02-hello-angles"]
 }

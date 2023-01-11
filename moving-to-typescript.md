@@ -50,7 +50,7 @@
 * ALSO bonus, install ESLint
     * `npm install --save-dev eslint`,  //On next install see if can just do second line?
     * `npm init @eslint/config`
-    * add `"ignorePatterns": ['/*', '!/src'],` to `.eslintrc.js` (could be .json, .yml, etc.) so it will only look at the src folder. There are other, better?, ways. See link in resources.  
+    * add `"ignorePatterns": ['/*', '!/src'],` to `.eslintrc.js` (could be .json, .yml, etc.) so it will only look at the src folder. There are other, better?, ways. See link in resources.  Ended up adding `"eslint.enable": false,` to `.vscode/settings.json` because it got to be a little much. 
 
 
 ## tsconfig.json

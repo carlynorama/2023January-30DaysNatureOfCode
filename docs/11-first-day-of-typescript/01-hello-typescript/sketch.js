@@ -4,6 +4,8 @@ const thisHeight = 400;
 // function mouseClicked() {
 //   runFlag = false;
 // }
+// ------------------------------------------------------------------------ setup()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function setup() {
     createControlledCanvas(thisWidth, thisHeight);
     background(51);
