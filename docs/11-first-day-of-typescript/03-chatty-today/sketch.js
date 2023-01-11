@@ -1,23 +1,17 @@
-//coding train challege 136.1: 
-//https://www.youtube.com/watch?v=ZI1dmHv3MeM
-//https://p5js.org/reference/#/p5/createSlider
-//https://p5js.org/examples/dom-slider.html
-//https://forum.processing.org/two/discussion/17074/placing-slider-relative-to-canvas-in-instance-mode.html
+//see 02-charlie-browns-teacher
 
-//NOTE: look into textOutput()
-
-let noiseMax = 0.5;
-let zoff_inc = 0.1;
+let noiseMax = 5;
+let zoff_inc = 0.05; //also liked 0.5
+let spikeRange = 300; //500 was cool.
 
 let zoff = 0; //Z is time. 
-let spikeRange = 50;
 
-let showSliders = true;
+
+let showSliders = false;
+let yOffset = 0;
+
 let slider1, slider2, slider3;
 let c, cx, cy;
-
-// //B/C dom objects are relative to WINDOW by default. 
-
 
 function setup() {
   c = createCanvas(400, 400);
@@ -26,16 +20,19 @@ function setup() {
   cy = c.position().y;
 
   //min, max, start value, step.
-  slider1 = createSlider(0, 10, 1, 0.1);
-  slider2 = createSlider(0, 0.2, 0.05, 0.01);
-  slider3 = createSlider(0, 100, 50, 1);
-  
-  slider1.position(cx+80, cy+20);
-  slider1.style('width', '80px');
-  slider2.position(cx+80, cy+50);
-  slider2.style('width', '80px');
-  slider3.position(cx+80, cy+80);
-  slider3.style('width', '80px');
+  if (showSliders) {
+    slider1 = createSlider(0, 10, noiseMax, 0.1);
+    slider2 = createSlider(0, 0.2, zoff_inc, 0.01);
+    slider3 = createSlider(0, 100, spikeRange, 1);
+    
+    slider1.position(cx+80, cy+20);
+    slider1.style('width', '80px');
+    slider2.position(cx+80, cy+50);
+    slider2.style('width', '80px');
+    slider3.position(cx+80, cy+80);
+    slider3.style('width', '80px');
+  }
+
 
 }
 
@@ -44,7 +41,7 @@ function setup() {
 function draw() {
   ////note can choose the noise seed to make things the same every time. 
   //noiseSeed(99); 
-  background(220);
+  background(220, 10);
   
   
 
@@ -53,7 +50,7 @@ function draw() {
   //drawing a circle (w/zoff sphere) in the noise space, 
   //those are seperate thoughts. And then using it to draw a circle.
   push();
-  translate(width/2, height/2 + 30);
+  translate(width/2, height/2 + yOffset);
   noFill();
   beginShape();
   for (let a = 0; a < TWO_PI; a +=0.1) {
