@@ -24,9 +24,10 @@
 ## Steps
 
 * put all exisitng website files into a `./docs` dir. 
-* (cntrl-backtick, the key press, opens vscode terminal OR cd to the project directory) 
 * add `node_modules` to .gitignore 
-    *if forget `git rm -rf node_modules`, followed by `npm install` to refetch, `git check-ignore` if folder stays bright green in VSCode
+    *if forget can later `git rm -rf node_modules`, followed by `npm install` to refetch, `git check-ignore` if folder stays bright green in VSCode
+* get in the right place to run commands on project directory 
+    *(cntrl-backtick opens vscode terminal OR cd to the project directory) 
 * `npm init`   //use defaults for everything 
 * `npm install typescript --save-dev`  //installs local version that isn't need for run time. 
 * change `package.json` to have the following block
