@@ -24,7 +24,7 @@ The meat of much of this code already lives there in Coding Train accounts.
 
 p5js is web embeddable focused, so why not build this as a website? Originally I served this website from the root of the main branch. I'd `cd` into the the directory that has this repo, type `python3 -m http.server` and browse away. Nice side effect, it was immediate available as a website.
 
-* <https://carlynorama.github.io/2023January-30DaysOfNatureOfCode/>
+* <https://carlynorama.github.io/2023January-30DaysNatureOfCode/>
 
 Over the past weeks I really really really was missing working in a strongly typed language so I decided to migrate to TypeScript. The bulk of the files now live in the docs folder, with JUST the `.ts` files living in the `src` folder. 
 
