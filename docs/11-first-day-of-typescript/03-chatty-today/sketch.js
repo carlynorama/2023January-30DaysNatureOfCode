@@ -23,9 +23,9 @@ function keyPressed() {
     slider3.value = spikeRange;
   } else if (keyCode === DOWN_ARROW) {
     showSliders = true;
-    slider1.style("display", "block");
-    slider2.style("display", "block");
-    slider3.style("display", "block");
+    slider1.style("visibility", "visible");
+    slider2.style("visibility", "visible");
+    slider3.style("visibility", "visible");
     background(220);
     yOffset = 30;
   }
@@ -111,9 +111,9 @@ function draw() {
     text('r delta', lableX, lableDY*3 + 2);
     pop();
   } else {
-    slider1.style("display", "none");
-    slider2.style("display", "none");
-    slider3.style("display", "none");
+    slider1.style("visibility", "hidden");
+    slider2.style("visibility", "hidden");
+    slider3.style("visibility", "hidden");
   }
 }
 
