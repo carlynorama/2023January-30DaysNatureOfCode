@@ -57,6 +57,7 @@ function setup() {
 
 
 function draw() {
+  
   ////note can choose the noise seed to make things the same every time. 
   //noiseSeed(99); 
   background(220, 10);
