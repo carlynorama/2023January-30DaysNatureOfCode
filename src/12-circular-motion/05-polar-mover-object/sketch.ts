@@ -3,7 +3,10 @@ let originy = 200;
 
 let angle = 0;
 let r = 150;
+let direction = 1;
 
+
+let mover:PolarMover;
 
 
 function setup() {
@@ -11,30 +14,10 @@ function setup() {
   originx = width/2;
   originy = height/2;
 
+  mover = PolarMover.createPolarMover(angle, r);
+
   background(51);
 }
-
-let lastX:number, lastY:number;
-//Assumes translate will happen before. 
-function drawPolar(angle:number, r:number, drawCall: (x: number, y:number, a:number) => void) {
-  //check that r is always +? 
-  push();
-  let x = r * cos(angle);
-  let y = r * sin(angle);
-
-  //this is the vector of the derivative dx, dy
-  let a = new Vector(x - lastX, y - lastY).angle();
-
-  //pass it angle and it faces out.
-  drawCall(x, y, a);
-
-  lastX = x; lastY = y;
-  pop();
-}
-
-let direction = 1;
-
-
 
 function draw() {
   
@@ -51,7 +34,8 @@ function draw() {
 
     //draw polor sends push and pop
     translate(originx, originy);
-    drawPolar(angle, r, drawMe)
+    mover.setPosition(angle, r);
+    mover.needsCartesian(drawMe);
   
     angle += 0.04;
     r -= 0.2 * direction;
@@ -71,6 +55,7 @@ function draw() {
 }
 
 function drawMe(x:number, y:number, a:number) {
+  push();
   let color1 = color(51, 204, 153, 100);
   stroke(color1);
   strokeWeight(2);
@@ -80,5 +65,6 @@ function drawMe(x:number, y:number, a:number) {
   rotate(a);
   triangle(-size, -size / 2, -size, size / 2, size, 0);
   //point(x, y);
+  pop();
   pop();
 }

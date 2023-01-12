@@ -98,13 +98,7 @@ class Vector {
     length() { return Math.hypot(...this.components) }
     magnitude() { return Math.hypot(...this.components) }
     magnitudeSquared() { 
-        // let mag = Math.hypot(...this.components); 
-        // return mag ** 2 
-        // return this.components.map((component) =>  component ** 2).reduce(function(sum, value) {
-        //     return sum + value;
-        // }, 0);
         return this.components.reduce(function(sumSq, value) { return sumSq + (value**2); }, 0);
-
     }
 
     rotated(angle:number):Vector {
