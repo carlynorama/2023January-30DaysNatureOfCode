@@ -26,9 +26,9 @@
   },
   "homepage": "https://github.com/carlynorama/2023January-30DaysNatureOfCode#readme",
   "devDependencies": {
+    "@types/p5": "^1.4.3",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
-    "typescript": "^4.9.4",
-    "@types/p5": "^1.4.3"
+    "typescript": "^4.9.4"
   }
 }
