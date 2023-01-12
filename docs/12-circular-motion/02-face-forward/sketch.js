@@ -1,0 +1,68 @@
+"use strict";
+let movers = [];
+let attractor;
+const numMovers = 10;
+let originx = 200;
+let originy = 200;
+function setup() {
+    let color1 = color(204, 204, 0, 255);
+    let color2 = color(0, 204, 204, 255);
+    let color3 = color(204);
+    createControlledCanvas(400, 400);
+    originx = width / 2;
+    originy = height / 2;
+    background(51);
+    for (let i = 0; i < numMovers; i++) {
+        let base = Vector.random2D();
+        movers[i] = new Mover(base.withLength(random(50, 150)), base.rotated(PI / 2).withLength(5), Vector.zero2D(), random(50, 150));
+    }
+    attractor = new Mover(Vector.zero2D(), Vector.zero2D(), Vector.zero2D(), 100000);
+    // noLoop();
+}
+function draw() {
+    if (runFlag) {
+        background(51, 50);
+        translate(originx, originy);
+        movers.forEach(mover => {
+            attractor.attract(mover);
+            movers.forEach(other => {
+                if (other !== mover) {
+                    mover.attract(other);
+                }
+            });
+        });
+        movers.forEach(mover => {
+            mover.attract(attractor);
+            mover.update();
+            renderMover(mover);
+        });
+        attractor.update();
+        renderAttractor(attractor);
+    }
+}
+function renderAttractor(attractor) {
+    stroke(255);
+    strokeWeight(2);
+    fill(255, 100);
+    push();
+    translate(attractor.position.x, attractor.position.y);
+    rotate(attractor.angle);
+    ellipseMode(CENTER);
+    line(0, 0, 10, 0);
+    ellipse(0, 0, 20);
+    pop();
+}
+function renderMover(mover) {
+    stroke(255);
+    strokeWeight(2);
+    fill(255, 100);
+    let size = 10; //mover.mass;
+    push();
+    translate(mover.position.x, mover.position.y);
+    rotate(mover.angle);
+    triangle(-size, -size / 2, -size, size / 2, size, 0);
+    //line(0,0,this.r,0);
+    //ellipse(0, 0, this.r * 2);
+    pop();
+}
+//# sourceMappingURL=sketch.js.map

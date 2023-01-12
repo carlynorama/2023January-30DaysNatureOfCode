@@ -1,8 +1,10 @@
   class Mover {
+    static G = 0.01;
     position: Vector;
     velocity: Vector;
     acceleration: Vector;
     mass: number;
+    angle: number;
     // r: number;
     // diameter: number;
     //constructor(x: number, y: number, vx: number, vy: number, ax: number, ay: number, mass: number, density: number) {
@@ -11,10 +13,13 @@
       this.velocity = velocity;
       this.acceleration = acceleration;
       this.mass = mass;
+
+      this.angle = 0;
       
     //   this.r = sqrt(this.mass) * d;
     //   this.diameter = this.r * 2;
     }
+
 
     static createMover(x:number, y:number, vx=0, vy=0, ax = 0, ay = 0, m = 10) {
       return new Mover(new Vector(x, y), new Vector(vx, vy), new Vector(ax, ay), m);
@@ -29,15 +34,17 @@
       let force = this.position.subtracted(mover.position);
       let distanceSq = constrain(force.magnitudeSquared(), 100, 1000);
       
-      let strength = ((this.mass * mover.mass)) / distanceSq;
+      let strength = Mover.G * ((this.mass * mover.mass)) / distanceSq;
       force = force.withLength(strength);
       mover.applyForce(force);
     }
   
     update() {
       this.velocity = this.velocity.added(this.acceleration);
+      this.angle = this.velocity.angle();
       this.position = this.position.added(this.velocity);
-      this.acceleration = Vector.zero2D();
+      this.acceleration = Vector.zero2D();    
+      
     }
   
 

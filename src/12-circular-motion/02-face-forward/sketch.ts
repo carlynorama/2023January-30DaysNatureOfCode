@@ -1,6 +1,6 @@
 let movers:Mover[] = [];
 let attractor:Mover;
-const numMovers = 100;
+const numMovers = 10;
 
 let originx = 200;
 let originy = 200;
@@ -20,19 +20,23 @@ function setup() {
     let base = Vector.random2D();
 
     movers[i] = new Mover(
-        base.withLength(random(150,150)), 
+        base.withLength(random(50,150)), 
         base.rotated(PI/2).withLength(5), 
         Vector.zero2D(),
-        10);
+        random(50, 150));
   }
 
   attractor = new Mover(
     Vector.zero2D(), 
     Vector.zero2D(), 
     Vector.zero2D(),
-    1000);
+    100000);
+
+   // noLoop();
 
 }
+
+
 
 function draw() {
   if (runFlag) {
@@ -49,22 +53,46 @@ function draw() {
     });
 
     movers.forEach(mover => {
+      mover.attract(attractor);
       mover.update();
-      renderMover(mover, 10);
-
+      renderMover(mover);
     });
 
     attractor.update();
-    //attractor.render();
+    renderAttractor(attractor);
   }
 
 
 }
 
+function renderAttractor(attractor:Mover) {
+  stroke(255);
+  strokeWeight(2);
+  fill(255, 100);
+  
+  push();
+  translate(attractor.position.x, attractor.position.y);
+  rotate(attractor.angle)
+  ellipseMode(CENTER);
+  
+  line(0,0,10,0);
+  ellipse(0, 0, 20);
+  pop();
+}
 
-function renderMover(mover:Mover, diameter:number) {
-    fill(255);
-    stroke(153);
-    ellipseMode(CENTER);
-    ellipse(mover.position.x, mover.position.y, diameter);
+function renderMover(mover:Mover) {
+  stroke(255);
+  strokeWeight(2);
+  fill(255, 100);
+
+  let size = 10; //mover.mass;
+
+  push();
+  translate(mover.position.x, mover.position.y);
+  rotate(mover.angle)
+  triangle(-size, -size / 2, -size, size / 2, size, 0);
+
+  //line(0,0,this.r,0);
+  //ellipse(0, 0, this.r * 2);
+  pop();
   }

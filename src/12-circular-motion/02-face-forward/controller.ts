@@ -35,3 +35,10 @@ function stop() {
     runFlag = false;
   }
 }
+
+
+function keyPressed() {
+  if (keyCode === UP_ARROW) {
+    if (runFlag) {runFlag = false} else {runFlag = true};
+  } 
+}
