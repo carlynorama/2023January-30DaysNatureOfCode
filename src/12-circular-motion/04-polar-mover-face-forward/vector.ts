@@ -121,7 +121,7 @@ class Vector {
     angle() { return Math.atan2(this.y, this.x); }
     flippedVAngle() { return Math.atan2(-this.y, this.x); }
     flippedHAngle() { return Math.atan2(this.y, -this.x); }
-    rotated90Angle() { return Math.atan2(this.x, -this.y); }  //compare to angle + PI/2
+    perpendicularAngle() { return Math.atan2(this.x, -this.y); }  //compare to angle + PI/2
     inverseAngle() { return Math.atan2(-this.x, -this.y); }   //compare to angle + PI
 
     //The dot product tells us how similar two vectors are to each other. 

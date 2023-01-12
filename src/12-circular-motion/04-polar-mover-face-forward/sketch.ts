@@ -14,18 +14,27 @@ function setup() {
   background(51);
 }
 
-
+let lastX:number, lastY:number;
 //Assumes translate will happen before. 
-function drawPolar(angle:number, r:number, drawCall: (x: number, y:number) => void) {
+function drawPolar(angle:number, r:number, drawCall: (x: number, y:number, a:number) => void) {
   //check that r is always +? 
   push();
-  drawCall(r * cos(angle),r * sin(angle));
+  let x = r * cos(angle);
+  let y = r * sin(angle);
+
+  //this is the vector of the derivative dx, dy
+  let a = new Vector(x - lastX, y - lastY).angle();
+
+  //pass it angle and it faces out.
+  drawCall(x, y, a);
+
+  lastX = x; lastY = y;
   pop();
 }
 
 let direction = 1;
 
-let lastX, lastY;
+
 
 function draw() {
   
@@ -61,9 +70,15 @@ function draw() {
   }
 }
 
-function drawMe(x:number, y:number) {
+function drawMe(x:number, y:number, a:number) {
   let color1 = color(51, 204, 153, 100);
-  strokeWeight(16);
   stroke(color1);
-  point(x, y);
+  strokeWeight(2);
+  let size = 10; //mover.mass;
+  push();
+  translate(x, y);
+  rotate(a);
+  triangle(-size, -size / 2, -size, size / 2, size, 0);
+  //point(x, y);
+  pop();
 }
