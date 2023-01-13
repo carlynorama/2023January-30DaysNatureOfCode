@@ -10,7 +10,8 @@ let originx = 200;
 let originy = 200;
 let noiseMax = 2;
 let spikeRange = 50;
-let noiseLoop;
+let noiseLoop1;
+let noiseLoop2;
 let angle = 0;
 let angle_inc = 0.01;
 //let r = 150;
@@ -21,11 +22,12 @@ let mover3;
 let zoff = 0.001; //Z is time. 
 let zoff_inc = 0.001;
 function setup() {
-    //noiseSeed(12);
+    noiseSeed(12);
     createControlledCanvas(400, 400);
     originx = width / 2;
     originy = height / 2;
-    noiseLoop = new NoiseLoop(noiseMax / 2);
+    noiseLoop1 = new NoiseLoop(noiseMax / 2);
+    noiseLoop2 = new NoiseLoop(noiseMax / 2);
     //------------------------------------------------- MAKE THE MOVER
     //------------------  Make sure mover has the right start velocity. 
     //move to 1 behind zero and create the conditions to seed the mover. 
@@ -53,8 +55,8 @@ function draw() {
         let yoff = map(sin(angle), -1, 1, 0, noiseMax);
         let r1 = map(noise(xoff, yoff), 0, 1, 100 - spikeRange, 100 + spikeRange);
         // let r2 = noiseLoop.scaledValueWithSlide(angle, zoff, 100-spikeRange, 100+spikeRange);
-        let r2 = noiseLoop.scaledValueOldStyle(angle, 100 - spikeRange, 100 + spikeRange);
-        let r3 = noiseLoop.scaledValue(angle, 100 - spikeRange, 100 + spikeRange);
+        let r2 = noiseLoop1.scaledValue(angle, 100 - spikeRange, 100 + spikeRange);
+        let r3 = noiseLoop2.scaledValue(angle, 100 - spikeRange, 100 + spikeRange);
         //console.log(mover.pretty());
         mover1.setPosition(angle, r1);
         mover2.setPosition(angle, r2);

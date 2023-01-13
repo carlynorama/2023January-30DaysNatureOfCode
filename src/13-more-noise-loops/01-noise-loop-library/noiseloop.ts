@@ -14,19 +14,16 @@
 class NoiseLoop {
     radius: number;
     root: Vector;
-    //seed: number;
 
     get diameter() { return this.radius * 2 }
   
     constructor(radius:number) {
       this.radius = radius;
-      this.root = new Vector(0,0);
-      //this.root = new Vector(Math.random() * 1000, Math.random() * 1000);
-      //this.seed = 12;
+      //this.root = new Vector(0,0);
+      this.root = new Vector(Math.random() * 1000, Math.random() * 1000);
     }
 
     static project(val: number, l1: number, u1: number, l2: number, u2: number):number {
-        //check against NumRange.locationInRange();
         const percent = Math.abs(val - l1)/Math.abs(u1-l1);
         const displacement = (u2-l2) * percent;
         return l2 + displacement;
@@ -50,10 +47,9 @@ class NoiseLoop {
     scaledValueOldStyle = (at: number, min:number, max:number) => {
         let xoff = map(cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
         let yoff = map(sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
-        let seedTest = noise(5,2);
         let rawLoop = noise(xoff, yoff);
         let result = map(rawLoop, 0, 1, min, max);
-        console.log("manual", rawLoop, result, at, min, max,  seedTest, xoff);
+        //console.log("manual", rawLoop, result, at, min, max,  seedTest, xoff);
         return result;
     }
 

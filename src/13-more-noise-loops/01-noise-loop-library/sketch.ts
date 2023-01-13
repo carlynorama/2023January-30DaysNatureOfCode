@@ -15,7 +15,9 @@ let originy = 200;
 let noiseMax = 2;
 let spikeRange = 50;
 
-let noiseLoop:NoiseLoop;
+let noiseLoop1:NoiseLoop;
+let noiseLoop2:NoiseLoop;
+let noiseLoop3:NoiseLoop;
 
 let angle = 0;
 let angle_inc = 0.01;
@@ -31,25 +33,31 @@ let mover3:PolarMover;
 
 
 function setup() {
-  //noiseSeed(12);
+  noiseSeed(12);
   createControlledCanvas(400, 400);
   originx = width/2;
   originy = height/2;
 
-  noiseLoop = new NoiseLoop(noiseMax/2);
+  noiseLoop1 = new NoiseLoop(noiseMax);
+  noiseLoop2 = new NoiseLoop(noiseMax);
+  noiseLoop3 = new NoiseLoop(noiseMax);
 
   //------------------------------------------------- MAKE THE MOVER
   //------------------  Make sure mover has the right start velocity. 
   //move to 1 behind zero and create the conditions to seed the mover. 
   let prepAngle = angle - 1 * angle_inc;
-  //let prepzoff = zoff - 1 * zoff_inc;
-  let xoff = map(cos(prepAngle), -1, 1, 0, noiseMax);   
-  let yoff = map(sin(prepAngle), -1, 1, 0, noiseMax);
-  let r = map(noise(xoff, yoff), 0, 1, 100-spikeRange, 100+spikeRange);
-
-  mover1 = PolarMover.createPolarMover(prepAngle, r);
-  mover2 = PolarMover.createPolarMover(prepAngle, r);
-  mover3 = PolarMover.createPolarMover(prepAngle, r);
+  mover1 = PolarMover.createPolarMover(
+    prepAngle, 
+    noiseLoop1.scaledValue(prepAngle, 100-spikeRange, 100+spikeRange)
+    );
+  mover2 = PolarMover.createPolarMover(
+    prepAngle, 
+    noiseLoop2.scaledValue(prepAngle, 100-spikeRange, 100+spikeRange)
+    );
+  mover3 = PolarMover.createPolarMover(
+    prepAngle, 
+    noiseLoop3.scaledValue(prepAngle, 100-spikeRange, 100+spikeRange)
+    );
   //------------------------------------------------------------------
   
   
@@ -74,8 +82,8 @@ function draw() {
     let r1 = map(noise(xoff, yoff), 0, 1, 100-spikeRange, 100+spikeRange);
 
     // let r2 = noiseLoop.scaledValueWithSlide(angle, zoff, 100-spikeRange, 100+spikeRange);
-    let r2 = noiseLoop.scaledValueOldStyle(angle, 100-spikeRange, 100+spikeRange);
-    let r3 = noiseLoop.scaledValue(angle, 100-spikeRange, 100+spikeRange);
+    let r2 = noiseLoop1.scaledValue(angle, 100-spikeRange, 100+spikeRange);
+    let r3 = noiseLoop2.scaledValue(angle, 100-spikeRange, 100+spikeRange);
 
     //console.log(mover.pretty());
     mover1.setPosition(angle, r1);
