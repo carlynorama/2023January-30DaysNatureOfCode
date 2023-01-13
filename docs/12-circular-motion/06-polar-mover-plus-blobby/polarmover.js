@@ -5,6 +5,8 @@ class PolarMover {
         this.origin = new Vector(0, 0);
         this.lastPosition = position;
         this.velocity = Vector.zero2D();
+        // this.lastPosition = new Vector(position.x, position.y-0.1);
+        // this.velocity = new Vector(0, 1);
     }
     static createPolarMover(angle, magnitude) {
         return new PolarMover(Vector.createAngleVector(angle, magnitude));
@@ -28,7 +30,7 @@ class PolarMover {
         callback(this.position.x, this.position.y, this.velocity.angle());
     }
     pretty() {
-        return `PolarMover(${this.position.x}, ${this.position.y})`;
+        return `PolarMover(x:${this.position.x}, y:${this.position.y}, lx:${this.lastPosition.x}, ly:${this.lastPosition.y}, vx:${this.velocity.x}, vy:${this.velocity.y})`;
     }
 }
 //# sourceMappingURL=polarmover.js.map

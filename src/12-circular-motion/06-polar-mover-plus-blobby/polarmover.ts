@@ -11,6 +11,8 @@
 
       this.lastPosition = position;
       this.velocity = Vector.zero2D();
+      // this.lastPosition = new Vector(position.x, position.y-0.1);
+      // this.velocity = new Vector(0, 1);
     }
 
     static createPolarMover(angle:number, magnitude:number) {
@@ -40,7 +42,7 @@
     }
 
     pretty():string {
-      return `PolarMover(${this.position.x}, ${this.position.y})`
+      return `PolarMover(x:${this.position.x}, y:${this.position.y}, lx:${this.lastPosition.x}, ly:${this.lastPosition.y}, vx:${this.velocity.x}, vy:${this.velocity.y})`
      }
 
   
