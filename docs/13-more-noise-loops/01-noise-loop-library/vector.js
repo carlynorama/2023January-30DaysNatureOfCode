@@ -1,7 +1,13 @@
 "use strict";
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// vector.ts
+// adapted by calynorama 2023 Jan 12 from 
+// https://radzion.com/blog/linear-algebra/vectors
+//
 //https://www.robinwieruch.de/linear-algebra-matrix-javascript/
-//A large chunck of this code is from the following tutorial. Great way to learn the map syntax! WooHoo!
-//https://radzion.com/blog/linear-algebra/vectors
 class Vector {
     constructor(...components) {
         this.scaledBy = (value) => {

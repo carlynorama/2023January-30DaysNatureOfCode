@@ -1,14 +1,15 @@
 "use strict";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// eslint-disable-next-line no-var
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// controller.ts
+// written by calynorama 2023 Jan 13
+//
 var runFlag = true;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createControlledCanvas(x, y) {
-    // eslint-disable-next-line prefer-const
     let canvas = createCanvas(x, y);
     //let myParent = canvas.parent();
-    // eslint-disable-next-line prefer-const
     let selection = select('#embedded-p5js');
     if (selection) {
         console.log(selection);
@@ -42,5 +43,18 @@ function keyPressed() {
             runFlag = true;
         }
         ;
+    }
+}
+// MUST decrease frame rate in order to use without skipping frames. 
+function recordSeries(x, min, max, nameRoot = 'output_gif-') {
+    if (x > max) {
+        return "widow is past";
+    }
+    else if (x < min) {
+        return "not yet";
+    }
+    else {
+        save(nameRoot + nf(x, 3) + '.png');
+        return "saved frame";
     }
 }

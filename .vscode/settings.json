@@ -10,4 +10,5 @@
     "git.untrackedChanges": "mixed",
     "eslint.enable": false,
     "jupyter.disableJupyterAutoStart": true,
+    "editor.wordWrap": "bounded",
 }
