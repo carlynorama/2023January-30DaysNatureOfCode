@@ -36,7 +36,7 @@ function setup() {
   originx = width/2;
   originy = height/2;
 
-  noiseLoop = new NoiseLoop(noiseMax);
+  noiseLoop = new NoiseLoop(noiseMax/2);
 
   //------------------------------------------------- MAKE THE MOVER
   //------------------  Make sure mover has the right start velocity. 

@@ -12,12 +12,14 @@
 
 //REQUIRES p5js
 class NoiseLoop {
-    diameter: number;
+    radius: number;
     root: Vector;
     //seed: number;
+
+    get diameter() { return this.radius * 2 }
   
-    constructor(diameter:number) {
-      this.diameter = diameter;
+    constructor(radius:number) {
+      this.radius = radius;
       this.root = new Vector(0,0);
       //this.root = new Vector(Math.random() * 1000, Math.random() * 1000);
       //this.seed = 12;
@@ -30,28 +32,29 @@ class NoiseLoop {
         return l2 + displacement;
       }
   
-    // loopValue(at:number) {
-    // //   let xoff = map(cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
-    // //   let yoff = map(sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
-    // //   return noise(xoff, yoff);
-    // }
-
     loopValue = (at:number) => {
-        let vector = Vector.createAngleVector(at, this.diameter).added(this.root);
+        let vector = Vector.createAngleVector(at, this.radius)
+        .added(this.root) // move to root
+        .added(new Vector(this.radius, this.radius)); // perlin noise function can only accept positive values
+
+        //P5JS Dependency
         return noise(vector.x, vector.y);
     }
 
     scaledValue = (at: number, min:number, max:number) => {
-        //return map(this.loopValue(at), 0, 1, min, max);
-        let xoff = map(Math.cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
-        let yoff = map(Math.sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
-        return map(noise(xoff, yoff), 0, 1, min, max);
+        let rawLoop = this.loopValue(at);
+        let result = NoiseLoop.project(rawLoop, 0, 1, min, max);
+        return result;
     }
 
     scaledValueOldStyle = (at: number, min:number, max:number) => {
         let xoff = map(cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
         let yoff = map(sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
-        return map(noise(xoff, yoff), 0, 1, min, max);
+        let seedTest = noise(5,2);
+        let rawLoop = noise(xoff, yoff);
+        let result = map(rawLoop, 0, 1, min, max);
+        console.log("manual", rawLoop, result, at, min, max,  seedTest, xoff);
+        return result;
     }
 
     loopValueWithSlide = (at:number, slide:number) => {

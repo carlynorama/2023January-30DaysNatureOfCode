@@ -25,7 +25,7 @@ function setup() {
     createControlledCanvas(400, 400);
     originx = width / 2;
     originy = height / 2;
-    noiseLoop = new NoiseLoop(noiseMax);
+    noiseLoop = new NoiseLoop(noiseMax / 2);
     //------------------------------------------------- MAKE THE MOVER
     //------------------  Make sure mover has the right start velocity. 
     //move to 1 behind zero and create the conditions to seed the mover. 
