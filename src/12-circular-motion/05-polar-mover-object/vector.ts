@@ -10,8 +10,15 @@ class Vector {
     }
 
     static createAngleVector(angle:number, magnitude = 1):Vector {
+        if (magnitude < 0) { return Vector.createEqualAndOpposite(angle, Math.abs(magnitude)) }
         return new Vector(cos(angle)* magnitude, sin(angle)*magnitude);
     }
+
+    static createEqualAndOpposite(angle:number, magnitude = 1):Vector {
+      if (magnitude < 0) { return Vector.createAngleVector(angle, Math.abs(magnitude)) }
+      let newAngle = angle + Math.PI
+      return new Vector(cos(newAngle)* magnitude, sin(newAngle)*magnitude);
+  }
 
     get x():number { return this.components[0] }  //i-hat
     get y():number { return this.components[1] }  //j-hat
@@ -115,7 +122,8 @@ class Vector {
     angle() { return Math.atan2(this.y, this.x); }
     flippedVAngle() { return Math.atan2(-this.y, this.x); }
     flippedHAngle() { return Math.atan2(this.y, -this.x); }
-    perpendicularAngle() { return Math.atan2(this.x, -this.y); }  //compare to angle + PI/2
+    perpendicularAngle() { return Math.atan2(this.x, -this.y); } //compare to angle + PI/2
+    deflectedIn() { return Math.atan2(this.x/2, -this.y); } //45?
     inverseAngle() { return Math.atan2(-this.x, -this.y); }   //compare to angle + PI
 
     //The dot product tells us how similar two vectors are to each other. 

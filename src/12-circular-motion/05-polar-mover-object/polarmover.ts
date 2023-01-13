@@ -22,10 +22,11 @@
     }
 
     updatePosition(dTheta:number, dMagnitude:number) {
-      let change = Vector.createAngleVector(dTheta, dMagnitude);
-      this.lastPosition = this.position.copy();
-      this.position = this.position.added(change);
-      this.updateVelocity();
+        //createAngleVector can handle negative magnitude
+        let change = Vector.createAngleVector(dTheta, dMagnitude);
+        this.lastPosition = this.position.copy();
+        this.position = this.position.added(change);
+        this.updateVelocity();
     }
 
     setPosition(theta:number, magnitude:number) {
@@ -38,6 +39,9 @@
       callback(this.position.x, this.position.y, this.velocity.angle());
     }
 
+    pretty():string {
+      return `PolarMover(${this.position.x}, ${this.position.y})`
+     }
 
   
 

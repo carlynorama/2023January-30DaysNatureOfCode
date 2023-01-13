@@ -13,6 +13,7 @@ class PolarMover {
         this.velocity = this.position.subtracted(this.lastPosition);
     }
     updatePosition(dTheta, dMagnitude) {
+        //createAngleVector can handle negative magnitude
         let change = Vector.createAngleVector(dTheta, dMagnitude);
         this.lastPosition = this.position.copy();
         this.position = this.position.added(change);
@@ -25,6 +26,9 @@ class PolarMover {
     }
     needsCartesian(callback) {
         callback(this.position.x, this.position.y, this.velocity.angle());
+    }
+    pretty() {
+        return `PolarMover(${this.position.x}, ${this.position.y})`;
     }
 }
 //# sourceMappingURL=polarmover.js.map

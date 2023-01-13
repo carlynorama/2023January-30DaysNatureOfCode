@@ -10,7 +10,17 @@ class Vector {
         this.components = components;
     }
     static createAngleVector(angle, magnitude = 1) {
+        if (magnitude < 0) {
+            return Vector.createEqualAndOpposite(angle, Math.abs(magnitude));
+        }
         return new Vector(cos(angle) * magnitude, sin(angle) * magnitude);
+    }
+    static createEqualAndOpposite(angle, magnitude = 1) {
+        if (magnitude < 0) {
+            return Vector.createAngleVector(angle, Math.abs(magnitude));
+        }
+        let newAngle = angle + Math.PI;
+        return new Vector(cos(newAngle) * magnitude, sin(newAngle) * magnitude);
     }
     get x() { return this.components[0]; } //i-hat
     get y() { return this.components[1]; } //j-hat
@@ -52,11 +62,6 @@ class Vector {
     length() { return Math.hypot(...this.components); }
     magnitude() { return Math.hypot(...this.components); }
     magnitudeSquared() {
-        // let mag = Math.hypot(...this.components); 
-        // return mag ** 2 
-        // return this.components.map((component) =>  component ** 2).reduce(function(sum, value) {
-        //     return sum + value;
-        // }, 0);
         return this.components.reduce(function (sumSq, value) { return sumSq + (value ** 2); }, 0);
     }
     rotated(angle) {
@@ -72,6 +77,7 @@ class Vector {
     flippedVAngle() { return Math.atan2(-this.y, this.x); }
     flippedHAngle() { return Math.atan2(this.y, -this.x); }
     perpendicularAngle() { return Math.atan2(this.x, -this.y); } //compare to angle + PI/2
+    deflectedIn() { return Math.atan2(this.x / 2, -this.y); } //45?
     inverseAngle() { return Math.atan2(-this.x, -this.y); } //compare to angle + PI
     //The dot product tells us how similar two vectors are to each other. 
     //It takes two vectors as input and produces a single number as an output.
