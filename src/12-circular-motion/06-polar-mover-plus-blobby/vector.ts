@@ -10,8 +10,15 @@ class Vector {
     }
 
     static createAngleVector(angle:number, magnitude = 1):Vector {
+        if (magnitude < 0) { return Vector.createEqualAndOpposite(angle, Math.abs(magnitude)) }
         return new Vector(cos(angle)* magnitude, sin(angle)*magnitude);
     }
+
+    static createEqualAndOpposite(angle:number, magnitude = 1):Vector {
+      if (magnitude < 0) { return Vector.createAngleVector(angle, Math.abs(magnitude)) }
+      let newAngle = angle + Math.PI
+      return new Vector(cos(newAngle)* magnitude, sin(newAngle)*magnitude);
+  }
 
     get x():number { return this.components[0] }  //i-hat
     get y():number { return this.components[1] }  //j-hat
@@ -19,14 +26,19 @@ class Vector {
 
     copy() { return new Vector(...this.components) }
 
+    //MATH HELPERS
     //how small of a difference do we care about when doing comparisons. 
     static EPSILON = 0.00000001 
     static floatsAreEqual = (lhs:number, rhs:number, epsilon = Vector.EPSILON) =>
   Math.abs(lhs - rhs) < epsilon
     static toDegrees = (radians: number ) => (radians * 180) / Math.PI
     static toRadians = (degrees: number) => (degrees * Math.PI) / 180
+    static randomF = (scalar = 1) => { return (Math.random() - 0.5) * 2 * scalar }
+    static randomInRange = (min:number, max:number) => { return Math.random() * (max - min) + min; } 
+
+
     static zero2D = () => {return new Vector(0,0);}
-    static random2D = (scalar = 1) => { return new Vector(Math.random()*scalar, Math.random()*1);}
+    static random2D = (scalar = 1) => { return new Vector(Vector.randomF(scalar), Vector.randomF(scalar));}
   
     //add({ components }) //TypeScript had trouble with this?
     //ahhh this is the fix dotProduct({ components } : { components: number[] })
@@ -93,13 +105,7 @@ class Vector {
     length() { return Math.hypot(...this.components) }
     magnitude() { return Math.hypot(...this.components) }
     magnitudeSquared() { 
-        // let mag = Math.hypot(...this.components); 
-        // return mag ** 2 
-        // return this.components.map((component) =>  component ** 2).reduce(function(sum, value) {
-        //     return sum + value;
-        // }, 0);
         return this.components.reduce(function(sumSq, value) { return sumSq + (value**2); }, 0);
-
     }
 
     rotated(angle:number):Vector {
@@ -113,10 +119,12 @@ class Vector {
     }
 
     //only valid on 2D vectors
-    angle() {
-        let n = this.normalized();
-        return Math.atan2(n.y, n.x);
-    }
+    angle() { return Math.atan2(this.y, this.x); }
+    flippedVAngle() { return Math.atan2(-this.y, this.x); }
+    flippedHAngle() { return Math.atan2(this.y, -this.x); }
+    perpendicularAngle() { return Math.atan2(this.x, -this.y); } //compare to angle + PI/2
+    deflectedIn() { return Math.atan2(this.x/2, -this.y); } //45?
+    inverseAngle() { return Math.atan2(-this.x, -this.y); }   //compare to angle + PI
 
     //The dot product tells us how similar two vectors are to each other. 
     //It takes two vectors as input and produces a single number as an output.

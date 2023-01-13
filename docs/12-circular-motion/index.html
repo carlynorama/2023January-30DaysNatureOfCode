@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="daypage.css">
+  <title>carlynorama | 2023 January 12</title>
+</head>
+
+<body>
+  <main>
+    <p><a href="../">TOC</a></p>
+    <H1>Day 12: TypeSript and Perlin Noise Loops</H1>
+    <p><a href="https://github.com/carlynorama/2023January-30DaysNatureOfCode/tree/main/docs/12-circular-motion">Repo for Day 12</a></p>
+
+    <p>So TypeScript came in handy today because I was writing my own classes. The process of just changing the name in the <code>src</code> directory to generate a new sketch folder in the <code>docs</code> directory seems to be working.</p>
+
+    <ol>
+      <li>Made a <code>Vector</code>> class so I could use return types.</li>
+      <li>Updated <code>>GravityMover</code> to work with new vector library and to face the direction its headed.</li>
+      <li>Made a <code>PolarMover</code> that is moved by setting its location with polar coordinates. This object has two different update types: set with a new value, update old by an increment.</li>
+      <li>Combined <code>PolarMover</code> and blobby from yesterday.</li>
+    </ol> 
+    
+    <p>Hover the mouse over the first sketch to make it run. Not much happens, explanation in the link. The second and third just run because I need to update my <code>controlledCanvas</code> to work with other DOM objects. 3rd sketch can show and hide the sliders once using the up and down arrow keys, but then something gets glitchy.</p>
+    
+    <ol>
+      <li><a href="01-ts-mover">01-ts-mover</a></li>
+      <li><a href="02-face-forward">02-face-forward</a></li>
+      <li><a href="03-polar-mover">03-polar-mover</a></li>
+      <li><a href="04-polar-mover-face-forward">04-polar-mover-face-forward</a></li>
+      <li><a href="05-polar-mover-object">05-polar-mover-object</a></li>
+      <li><a href="06-polar-mover-plus-blobby">06-polar-mover-plus-blobby</a></li>
+      </ol>
+      
+      <div class="grid-container">
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="01-ts-mover/embed.html"></iframe>
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="02-face-forward/embed.html"></iframe>
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="03-polar-mover/embed.html"></iframe>
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="04-polar-mover-face-forward/embed.html"></iframe>
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="05-polar-mover-object/embed.html"></iframe>
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="06-polar-mover-plus-blobby/embed.html"></iframe>
+      </div>
+
+  </main>
+</body>
+</html>
