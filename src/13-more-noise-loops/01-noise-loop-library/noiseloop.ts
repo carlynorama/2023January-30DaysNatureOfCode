@@ -17,10 +17,22 @@ class NoiseLoop {
 
     get diameter() { return this.radius * 2 }
   
-    constructor(radius:number) {
-      this.radius = radius;
-      //this.root = new Vector(0,0);
-      this.root = new Vector(Math.random() * 1000, Math.random() * 1000);
+    constructor(radius:number, root:Vector) {
+        this.radius = radius;
+        this.root = root;
+
+    }
+
+    static create2D(radius:number, rootWooble:number) {
+        //this.root = new Vector(0,0);
+       let variation = rootWooble;
+        let root = new Vector(Math.random() * variation, Math.random() * variation);
+        return new NoiseLoop(radius, root);
+    }
+
+    static createSpecific2D(radius:number, x:number, y:number) {
+        let root = new Vector(x, y);
+        return new NoiseLoop(radius, root);
     }
 
     static project(val: number, l1: number, u1: number, l2: number, u2: number):number {
@@ -29,10 +41,11 @@ class NoiseLoop {
         return l2 + displacement;
       }
   
+    //TODO: Redo for n length.   
     loopValue = (at:number) => {
         let vector = Vector.createAngleVector(at, this.radius)
         .added(this.root) // move to root
-        .added(new Vector(this.radius, this.radius)); // perlin noise function can only accept positive values
+        .addedValues(this.radius, this.radius); // perlin noise function can only accept positive values
 
         //P5JS Dependency
         return noise(vector.x, vector.y);
@@ -44,14 +57,14 @@ class NoiseLoop {
         return result;
     }
 
-    scaledValueOldStyle = (at: number, min:number, max:number) => {
-        let xoff = map(cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
-        let yoff = map(sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
-        let rawLoop = noise(xoff, yoff);
-        let result = map(rawLoop, 0, 1, min, max);
-        //console.log("manual", rawLoop, result, at, min, max,  seedTest, xoff);
-        return result;
-    }
+    // scaledValueOldStyle = (at: number, min:number, max:number) => {
+    //     let xoff = map(cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
+    //     let yoff = map(sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
+    //     let rawLoop = noise(xoff, yoff);
+    //     let result = map(rawLoop, 0, 1, min, max);
+    //     //console.log("manual", rawLoop, result, at, min, max,  seedTest, xoff);
+    //     return result;
+    // }
 
     loopValueWithSlide = (at:number, slide:number) => {
         let vector = Vector.createAngleVector(at, this.diameter).added(this.root);

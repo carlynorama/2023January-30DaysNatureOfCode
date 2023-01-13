@@ -11,11 +11,12 @@
 //REQUIRES p5js
 class NoiseLoop {
     get diameter() { return this.radius * 2; }
-    constructor(radius) {
+    constructor(radius, root) {
+        //TODO: Redo for n length.   
         this.loopValue = (at) => {
             let vector = Vector.createAngleVector(at, this.radius)
                 .added(this.root) // move to root
-                .added(new Vector(this.radius, this.radius)); // perlin noise function can only accept positive values
+                .addedValues(this.radius, this.radius); // perlin noise function can only accept positive values
             //P5JS Dependency
             return noise(vector.x, vector.y);
         };
@@ -24,14 +25,14 @@ class NoiseLoop {
             let result = NoiseLoop.project(rawLoop, 0, 1, min, max);
             return result;
         };
-        this.scaledValueOldStyle = (at, min, max) => {
-            let xoff = map(cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
-            let yoff = map(sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
-            let rawLoop = noise(xoff, yoff);
-            let result = map(rawLoop, 0, 1, min, max);
-            //console.log("manual", rawLoop, result, at, min, max,  seedTest, xoff);
-            return result;
-        };
+        // scaledValueOldStyle = (at: number, min:number, max:number) => {
+        //     let xoff = map(cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
+        //     let yoff = map(sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
+        //     let rawLoop = noise(xoff, yoff);
+        //     let result = map(rawLoop, 0, 1, min, max);
+        //     //console.log("manual", rawLoop, result, at, min, max,  seedTest, xoff);
+        //     return result;
+        // }
         this.loopValueWithSlide = (at, slide) => {
             let vector = Vector.createAngleVector(at, this.diameter).added(this.root);
             return noise(vector.x, vector.y, slide);
@@ -40,8 +41,17 @@ class NoiseLoop {
             return map(this.loopValueWithSlide(at, slide), 0, 1, min, max);
         };
         this.radius = radius;
+        this.root = root;
+    }
+    static create2D(radius, rootWooble) {
         //this.root = new Vector(0,0);
-        this.root = new Vector(Math.random() * 1000, Math.random() * 1000);
+        let variation = rootWooble;
+        let root = new Vector(Math.random() * variation, Math.random() * variation);
+        return new NoiseLoop(radius, root);
+    }
+    static createSpecific2D(radius, x, y) {
+        let root = new Vector(x, y);
+        return new NoiseLoop(radius, root);
     }
     static project(val, l1, u1, l2, u2) {
         const percent = Math.abs(val - l1) / Math.abs(u1 - l1);
