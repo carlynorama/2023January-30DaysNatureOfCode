@@ -10,6 +10,7 @@
 //https://github.com/CodingTrain/Coding-Challenges/tree/main/136_Polar_Noise_Loop_2
 //REQUIRES p5js
 class NoiseLoop {
+    //seed: number;
     constructor(diameter) {
         // loopValue(at:number) {
         // //   let xoff = map(cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
@@ -21,17 +22,27 @@ class NoiseLoop {
             return noise(vector.x, vector.y);
         };
         this.scaledValue = (at, min, max) => {
-            return map(this.loopValue(at), 0, 1, min, max);
+            //return map(this.loopValue(at), 0, 1, min, max);
+            let xoff = map(Math.cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
+            let yoff = map(Math.sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
+            return map(noise(xoff, yoff), 0, 1, min, max);
         };
-        this.loopValueWithZSlide = (at, zoff) => {
+        this.scaledValueOldStyle = (at, min, max) => {
+            let xoff = map(cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
+            let yoff = map(sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
+            return map(noise(xoff, yoff), 0, 1, min, max);
+        };
+        this.loopValueWithSlide = (at, slide) => {
             let vector = Vector.createAngleVector(at, this.diameter).added(this.root);
-            return noise(vector.x, vector.y, zoff);
+            return noise(vector.x, vector.y, slide);
         };
-        this.scaledValueWithZSlide = (at, zoff, min, max) => {
-            return map(this.loopValueWithZSlide(at, zoff), 0, 1, min, max);
+        this.scaledValueWithSlide = (at, slide, min, max) => {
+            return map(this.loopValueWithSlide(at, slide), 0, 1, min, max);
         };
         this.diameter = diameter;
-        this.root = new Vector(Math.random() * 1000, Math.random() * 1000);
+        this.root = new Vector(0, 0);
+        //this.root = new Vector(Math.random() * 1000, Math.random() * 1000);
+        //this.seed = 12;
     }
     static project(val, l1, u1, l2, u2) {
         //check against NumRange.locationInRange();

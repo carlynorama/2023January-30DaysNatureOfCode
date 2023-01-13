@@ -11,13 +11,13 @@ class Vector {
 
     static createAngleVector(angle:number, magnitude = 1):Vector {
         if (magnitude < 0) { return Vector.createEqualAndOpposite(angle, Math.abs(magnitude)) }
-        return new Vector(cos(angle)* magnitude, sin(angle)*magnitude);
+        return new Vector(Math.cos(angle)* magnitude, Math.sin(angle)*magnitude);
     }
 
     static createEqualAndOpposite(angle:number, magnitude = 1):Vector {
       if (magnitude < 0) { return Vector.createAngleVector(angle, Math.abs(magnitude)) }
       let newAngle = angle + Math.PI
-      return new Vector(cos(newAngle)* magnitude, sin(newAngle)*magnitude);
+      return new Vector(Math.cos(newAngle)* magnitude, Math.sin(newAngle)*magnitude);
   }
 
     get x():number { return this.components[0] }  //i-hat

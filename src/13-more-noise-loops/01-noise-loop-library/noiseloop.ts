@@ -14,10 +14,13 @@
 class NoiseLoop {
     diameter: number;
     root: Vector;
+    //seed: number;
   
     constructor(diameter:number) {
       this.diameter = diameter;
-      this.root = new Vector(Math.random() * 1000, Math.random() * 1000);
+      this.root = new Vector(0,0);
+      //this.root = new Vector(Math.random() * 1000, Math.random() * 1000);
+      //this.seed = 12;
     }
 
     static project(val: number, l1: number, u1: number, l2: number, u2: number):number {
@@ -39,15 +42,24 @@ class NoiseLoop {
     }
 
     scaledValue = (at: number, min:number, max:number) => {
-        return map (this.loopValue(at), 0, 1, min, max);
+        //return map(this.loopValue(at), 0, 1, min, max);
+        let xoff = map(Math.cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
+        let yoff = map(Math.sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
+        return map(noise(xoff, yoff), 0, 1, min, max);
     }
 
-    loopValueWithZSlide = (at:number, zoff:number) => {
+    scaledValueOldStyle = (at: number, min:number, max:number) => {
+        let xoff = map(cos(at), -1, 1, this.root.x, this.root.x + this.diameter);
+        let yoff = map(sin(at), -1, 1, this.root.y, this.root.y + this.diameter);
+        return map(noise(xoff, yoff), 0, 1, min, max);
+    }
+
+    loopValueWithSlide = (at:number, slide:number) => {
         let vector = Vector.createAngleVector(at, this.diameter).added(this.root);
-        return noise(vector.x, vector.y, zoff);
+        return noise(vector.x, vector.y, slide);
     }
 
-    scaledValueWithZSlide= (at: number, zoff:number, min:number, max:number) => {
-        return map (this.loopValueWithZSlide(at, zoff), 0, 1, min, max);
+    scaledValueWithSlide= (at: number, slide:number, min:number, max:number) => {
+        return map (this.loopValueWithSlide(at, slide), 0, 1, min, max);
     }
 }
