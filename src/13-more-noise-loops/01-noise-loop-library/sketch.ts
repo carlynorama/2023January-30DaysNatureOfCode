@@ -16,7 +16,12 @@ let spikeRange = 50;
 let seed = 100;
 
 let angle = 0;
-let angle_inc = 0.01;
+
+let doneRecording = false;
+let spacing = 1;
+let angle_inc =  0.01745329 * spacing//0.01745329 == 1 degree in radians. 
+let detectionMark = angle_inc * (180/spacing); // should be a value ~3.14 etc. Using Math.PI will not work with modulo. 
+let loopCounter = 0;
 
 let noiseLoop1:NoiseLoop;
 let noiseLoop2:NoiseLoop;
@@ -103,8 +108,37 @@ function draw() {
     mover3.needsCartesian(drawMe);
     
     angle += angle_inc;
-    
 
+  //  angle_inc is 
+  //   if (!doneRecording) {
+  //   if (angle % (angle_inc * 180) < 0.000001) { 
+  //     console.log("loopCounter", loopCounter );
+  //     loopCounter += 1 
+  //   }
+  //   let result = recordWindow(loopCounter, 2, 3, "noiseLoop_");
+  //   console.log(result);
+  //   if (result[0] == 'w') {
+  //     doneRecording = true;
+  //     frameRate(30);
+  //   } 
+  // }
+
+//let angle_inc =  0.01745329 * 3//0.01745329; //1 degree in radians. 
+//let detectionMark = angle_inc * (180/3); // should be a value ~3.14 etc. Using 
+      if (!doneRecording) {
+        //0.000001 is epsilon
+    if (angle % (detectionMark) < 0.000001) { 
+      console.log("loopCounter", loopCounter );
+      loopCounter += 1 
+    }
+    let result = recordWindow(loopCounter, 2, 3, 3, "noiseLoop_");
+    console.log(result);
+    if (result[0] == 'w') {
+      doneRecording = true;
+      frameRate(30);
+    } 
+  }
+  
   }
 }
 
