@@ -64,14 +64,15 @@ function draw() {
         // stroke(0, 51, 102, 200);
         // if (angle % 0.0314 < 0.01) { line(0, 0, mover.position.x, mover.position.y);}
         //line(0, 0, mover.position.x, mover.position.y);
-        stroke(51, 0, 0, 200);
-        fill(102, 0, 0, 100);
+        stroke(51, 0, 0, 100);
+        fill(102, 0, 0, 80);
         mover1.needsCartesian(drawMe);
-        stroke(0, 51, 0, 200);
-        fill(51, 102, 0, 100);
+        stroke(0, 51, 0, 100);
+        fill(51, 102, 0, 80);
         mover2.needsCartesian(drawMe);
-        stroke(0, 0, 51, 200);
-        fill(0, 51, 102, 100);
+        stroke(0, 0, 51, 100);
+        fill(0, 51, 102, 200);
+        mover3.needsCartesian(drawMe);
         mover3.needsCartesian(drawMe);
         angle += angle_inc;
         //  angle_inc is 

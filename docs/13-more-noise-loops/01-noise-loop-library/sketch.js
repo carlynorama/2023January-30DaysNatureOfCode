@@ -26,7 +26,7 @@ let mover2;
 let mover3;
 function setup() {
     noiseSeed(seed);
-    pixelDensity(1);
+    //pixelDensity(1);
     createControlledCanvas(400, 400);
     originx = width / 2;
     originy = height / 2;
