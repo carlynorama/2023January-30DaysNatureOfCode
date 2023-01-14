@@ -8,6 +8,7 @@
 //
 //https://github.com/CodingTrain/Coding-Challenges/tree/main/135_GIF_Loop
 //https://github.com/CodingTrain/Coding-Challenges/tree/main/136_Polar_Noise_Loop_2
+//TODO: Provide a "locationInLoop" service that when given an angle it will return a revolutions count, the remainder and the percentage. 
 //REQUIRES p5js
 class NoiseLoop {
     get diameter() { return this.radius * 2; }

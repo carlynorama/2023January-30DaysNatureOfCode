@@ -13,9 +13,9 @@ let rootOffsets = 100;
 let spikeRange = 50;
 let seed = 100;
 let angle = 0;
-let doneRecording = false;
+let doneRecording = true; //Should be false at start if actually should run.
 let spacing = 1;
-let angle_inc = 0.01745329 * spacing; //0.01745329 == 1 degree in radians. 
+let angle_inc = 0.01745329 * spacing; //0.01745329 == 1 degree in radians. radians(1) 
 let detectionMark = angle_inc * (180 / spacing); // should be a value ~3.14 etc. Using Math.PI will not work with modulo. 
 let loopCounter = 0;
 let noiseLoop1;
@@ -91,7 +91,7 @@ function draw() {
         if (!doneRecording) {
             //0.000001 is epsilon
             if (angle % (detectionMark) < 0.000001) {
-                console.log("loopCounter", loopCounter);
+                //console.log("loopCounter", loopCounter );
                 loopCounter += 1;
             }
             let result = recordWindow(loopCounter, 2, 3, 3, "noiseLoop_");

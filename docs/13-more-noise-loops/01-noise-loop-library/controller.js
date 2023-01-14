@@ -60,8 +60,12 @@ function recordFrames(x, min, max, nameRoot = 'output_gif-') {
     }
 }
 function recordWindow(x, min, max, sampleRate = 1, nameRoot = 'output_gif-') {
-    if (x > max) { return "widow is past"; }
-    else if (x < min) { return "not yet"; }
+    if (x > max) {
+        return "window is past";
+    }
+    else if (x < min) {
+        return "not yet";
+    }
     else {
         frameRate(3);
         if (frameCount % sampleRate == 0) {
