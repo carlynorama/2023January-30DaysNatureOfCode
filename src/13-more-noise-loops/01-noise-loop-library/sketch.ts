@@ -19,7 +19,7 @@ let angle = 0;
 
 
 let doneRecording = true; //Should be false at start if actually should run.
-let spacing = 1;
+let spacing = 3;
 let angle_inc =  0.01745329 * spacing//0.01745329 == 1 degree in radians. radians(1) 
 let detectionMark = angle_inc * (180/spacing); // should be a value ~3.14 etc. Using Math.PI will not work with modulo. 
 let loopCounter = 0;
@@ -35,7 +35,7 @@ let mover3:PolarMover;
 
 function setup() {
   noiseSeed(seed);
-
+  pixelDensity(1);
   createControlledCanvas(400, 400);
   originx = width/2;
   originy = height/2;
@@ -79,7 +79,7 @@ function setup() {
 function draw() {
   
   if (runFlag) {
-  //background(204, 1);
+  background(204, 5);
     strokeWeight(1);
     translate(originx, originy);
 
@@ -132,7 +132,7 @@ function draw() {
         //console.log("loopCounter", loopCounter );
         loopCounter += 1 
       }
-      let result = recordWindow(loopCounter, 2, 3, 3, "noiseLoop_");
+      let result = recordWindow(loopCounter, 6, 7, 1, "noiseLoop_");
       console.log(result);
       if (result[0] == 'w') {
         doneRecording = true;

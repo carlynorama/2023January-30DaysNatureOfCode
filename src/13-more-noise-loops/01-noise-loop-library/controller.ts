@@ -84,10 +84,16 @@ function recordWindow(x: number, min:number, max:number, sampleRate:number = 1, 
 //     return "saved frame" } 
 // }
 
+//------------------------
 //in the sketch. 
+//------------------------ 
+//--header
 //let doneRecording = false;
 //let angle_inc =  0.01745329 * 3//0.01745329; //1 degree in radians. 
 //let detectionMark = angle_inc * (180/3); // should be a value ~3.14 etc. Using 
+//--setup
+//pixelDensity(1);
+//--draw loop
 // if (!doneRecording) {
 //   //0.000001 is epsilon
 // if (angle % (detectionMark) < 0.000001) { 

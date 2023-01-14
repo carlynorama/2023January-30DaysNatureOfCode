@@ -15,24 +15,29 @@
 
 <body>
   <main>
-    <p>Uses the mover <a href="../../12-circular-motion/06-polar-mover-plus-blobby/">from yesterday</a>, but now there are 3 of them all governed by a <code>NoiseLoop</code> library.</p>
+    <p>Uses the mover <a href="../../12-circular-motion/06-polar-mover-plus-blobby/">from yesterday</a>, but now there are 3 of them all governed by a <code>NoiseLoop</code> library. The gif is quite compressed but I liked the dithering in the trails. It is "only" 482 KB. It is the one on the left.</p>
     
     <ol>
       <li>Move noise loop code into library.</li>
       <li>Update it to use vectors.</li>
       <li>Make the results reproducible. Same sketch will load every time.</li>
-      <li>Automatically Record during a user defined window (not frame count dependent). That is turned off on the posted sketch. Both recording every frame at a lower sample rate.  </li>
-      <li>FFMPEG Options</li>
-      <ul><li><code></code></li>
-        <li><a href="https://ffmpeg.org/ffmpeg.html">https://ffmpeg.org/ffmpeg.</a></li>
-        <li>https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/</li>
-        <li>http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html</li>
-        <li>https://github.com/mpenkov/ffmpeg-tutorial/</li>
-        <li>https://cassidy.codes/blog/2017/04/25/ffmpeg-frames-to-gif-optimization/</li>
-        <li>https://www.bannerbear.com/blog/how-to-make-gifs-from-images-using-ffmpeg/</li>
-        <li>https://stackoverflow.com/questions/3688870/create-animated-gif-from-a-set-of-jpeg-images</li>
+      <li>Automatically Record during a user defined window (not frame count dependent). That is turned off on the posted sketch. Both recording every frame at a lower sample rate. Note: The <code>pixelDensity</code> was set to 1.</li>
+      <li>Frames -> gif options: They can get GIANT for embedding in a web page. Also, when optimizing the first version I did, it made the movers disappear. I turned the background back on.</li>
+      <ul><li>ImageMagick</li>
+        <ul>
+          <li>The included gif:<code>convert *.png -loop 0 -layers OptimizeFrame first_output.gif</code> is the way to go, but on this particular animation the movers are very hard to see.</li>
+          <li><code>convert first_output.gif -loop 0 -colors 32 second_output.gif</code></li>
+          <li>Not used, but add <code>-delay 50</code> to get 2 frames/second for example. That said, I did not see much of a speed differnece when i was trying it. Instead I deleted all the even file names to tighten it up.</li>
+        <li><code>-loop 0</code> loops the frames forever</li>
+        <li><code>-colors 64</code> changes the colors depth.</li>
+        <li><a href="https://www.imagemagick.org/Usage/anim_opt/">more image optimization</a></li>
+      </ul>
+       <li>FFMPEG: Much nicer looking using the simple command, but GIANT gif files. Will consider using it for mpeg files.</li>
+      <ul><li><code>ffmpeg -pattern_type glob -i '*.png' output_all.gif</code></li>
+        <li>https://stackoverflow.com/questions/3688870/create-animated-gif-from-a-set-of-jpeg-images</li></ul>  
       </ul>
     </ol>
+    <img src="second_output_32.gif">
     
   </main>
 </body>
