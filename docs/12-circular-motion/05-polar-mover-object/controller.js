@@ -44,4 +44,3 @@ function keyPressed() {
         ;
     }
 }
-//# sourceMappingURL=controller.js.map

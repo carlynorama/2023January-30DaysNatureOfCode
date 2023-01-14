@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>carlynorama | 2023 January 13</title>
+  <script src="../../p5.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="controller.js"></script>
+  <script src="polarmover.js"></script>
+  <script src="noiseloop.js"></script>
+  <script src="vector.js"></script>
+</head>
+
+<body>
+  <main>
+    <p>Uses the mover <a href="../../12-circular-motion/06-polar-mover-plus-blobby/">from yesterday</a>, but now there are 3 of them all governed by a <code>NoiseLoop</code> library. The gif is quite compressed but I liked the dithering in the trails. It is "only" 482 KB. It is the one on the left.</p>
+    
+    <ol>
+      <li>Move noise loop code into library.</li>
+      <li>Update it to use vectors.</li>
+      <li>Make the results reproducible. Same sketch will load every time.</li>
+      <li>Automatically Record during a user defined window (not frame count dependent). That is turned off on the posted sketch. Both recording every frame at a lower sample rate. Note: The <code>pixelDensity</code> was set to 1.</li>
+      <li>Frames -> gif options: They can get GIANT for embedding in a web page. Also, when optimizing the first version I did, it made the movers disappear. I turned the background back on.</li>
+      <ul><li>ImageMagick</li>
+        <ul>
+          <li>The included gif:<code>convert *.png -loop 0 -layers OptimizeFrame first_output.gif</code> is the way to go, but on this particular animation the movers are very hard to see.</li>
+          <li><code>convert first_output.gif -loop 0 -colors 32 second_output.gif</code></li>
+          <li>Not used, but add <code>-delay 50</code> to get 2 frames/second for example. That said, I did not see much of a speed differnece when i was trying it. Instead I deleted all the even file names to tighten it up.</li>
+        <li><code>-loop 0</code> loops the frames forever</li>
+        <li><code>-colors 64</code> changes the colors depth.</li>
+        <li><a href="https://www.imagemagick.org/Usage/anim_opt/">more image optimization</a></li>
+      </ul>
+       <li>FFMPEG: Much nicer looking using the simple command, but GIANT gif files. Will consider using it for mpeg files.</li>
+      <ul><li><code>ffmpeg -pattern_type glob -i '*.png' output_all.gif</code></li>
+        <li><a href="https://ffmpeg.org/ffmpeg.html"></a>ffmpeg docs</li></ul>
+      </ul>
+    </ol>
+    <img src="second_output_skipped_evens_32.gif">
+    <img src="first_output_allframes.gif">
+    
+  </main>
+</body>
+
+</html>
