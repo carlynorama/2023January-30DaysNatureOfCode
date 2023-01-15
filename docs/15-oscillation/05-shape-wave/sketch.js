@@ -11,7 +11,7 @@ const d = 20;
 
 function setup() {
   
-  createCanvas(400, 400);
+  createControlledCanvas(400, 400);
   background(204);
   angle_yV = radians(1);
   total = floor(width/spacing);

@@ -8,7 +8,7 @@ const ballD = 20;
 const lineWidth = 5;
 
 function setup() {
-  createCanvas(600, 400);
+  createControlledCanvas(600, 400);
   background(204);
   for(let i = 0; i < total; i++ ) {
       waves.push(new Wave(random(20,200), random(100,600), random(0,TWO_PI), 4*PI/180));
