@@ -132,6 +132,8 @@ Add an auto reloading browser window in repo:
 
 Using npm means that the packages by default assume that they will run in a node.js enviromment. If the module writer has not already provided a web-target, you may have to download and recomplile the module. This mess is why people use things like Webpack. 
 
+See this example: https://github.com/carlynorama/open-simplex-noise-for-web-js
+
 ### Step one - try for easy.
 
     npm install --save module-name
