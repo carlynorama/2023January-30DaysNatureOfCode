@@ -1,41 +1,52 @@
-import { makeNoise2D } from "../../addons/open-simplex-noise/main.js";
-let sketch = function (p) {
-    let a = 100;
-    let b = 100;
-    let noiseMaker;
-    p.setup = function () {
-        p.createCanvas(200, 200);
-        noiseMaker = makeNoise2D(Date.now());
-        p.noLoop();
-    };
-    p.draw = function () {
-        p.background(0);
-        p.fill(255);
-        p.rect(a, b, 50, 50);
-        for (let x = 0; x < p.width; x++) {
-            for (let y = 0; y < p.height; y++) {
-                //const i = (x + y * p.width) * 4;
-                const value = (noiseMaker(x, y) + 1) * 128;
-                //console.log(value);
-                //let bright = value > 0 ? 255 : 0;
-                p.stroke(value);
-                p.point(x, y);
-            }
-        }
-    };
+import { makeNoise2D } from "open-simplex-noise";
+import { Noise2D } from "open-simplex-noise/lib/2d";
+//../../addons/open-simplex-noise/main.js
+
+let sketch = function(p:p5) {
+  let a = 100;
+  let b = 100;
+  let noiseMaker:Noise2D;
+
+  p.setup = function() {
+    p.createCanvas(200, 200);
+    noiseMaker = makeNoise2D(Date.now());
+    p.noLoop();
+  };
+
+  p.draw = function() {
+    p.background(0);
+    p.fill(255);
+    p.rect(a, b, 50, 50);
+      for (let x = 0; x < p.width; x++) {
+          for (let y = 0; y < p.height; y++) {
+              //const i = (x + y * p.width) * 4;
+              const value = (noiseMaker(x, y) + 1) * 128;
+              //console.log(value);
+              //let bright = value > 0 ? 255 : 0;
+              p.stroke(value);
+              p.point(x, y);
+          }
+      }
+  };
 };
+  
 let myp5 = new p5(sketch);
+
+
 // import { makeNoise2D } from "open-simplex-noise";
 // import { Noise2D } from "open-simplex-noise/lib/2d";
+
 // let ctx: { createImageData: (arg0: number, arg1: number) => { data: number[]; }; putImageData: (arg0: { data: number[]; }, arg1: number, arg2: number) => void; };
 // let imageData: { data: number[]; };
 // let noise2D: Noise2D;
+
 // function setup() {
 //   createCanvas(200, 200);
 //   ctx = drawingContext();
 //   imageData = ctx.createImageData(width, height);
 //   noise2D = makeNoise2D(Date.now());
 // }
+
 // function draw() {
 //   for (let x = 0; x < width; x++) {
 //     for (let y = 0; y < height; y++) {
@@ -49,22 +60,32 @@ let myp5 = new p5(sketch);
 //   }
 //   ctx.putImageData(imageData, 0, 0);
 // }
+
+
+
+
 // // // 4D Open Simplex Noise Loop
 // // // Daniel Shiffman
 // // // https://thecodingtrain.com/CodingChallenges/137-4d-opensimplex-noise-loop
 // // // https://youtu.be/3_0Ax95jIrk
+
 // // // let capturer = new CCapture( { 
 // // //     format: 'png', 
 // // //     name: 'open_simplex_noise_loop',
 // // //   } );
+
 // // import { makeNoise4D } from "open-simplex-noise";
 // // //import { Noise4D } from "open-simplex-noise";
+
 // //   const totalFrames:number = 360;
 // //   let counter:number = 0;
 // //   const record:boolean = false;
+  
 // //   const increment:number = 0.03;
+  
 // //   // Just for non-looping demo
 // //   let zoff:number = 0;
+  
 // //   let this_noise: { (x: number, y: number, z: number, w: number): number; noise4D?: any; noise3D?: any; };
 // //   // the canvas variable is needed for the capturer
 // //   let this_canvas;
@@ -74,6 +95,7 @@ let myp5 = new p5(sketch);
 // //     this_noise = makeNoise4D(Date.now());
 // //     //if (record) capturer.start();
 // //   }
+  
 // //   function draw() {
 // //     rect(0,0, 50,50);
 // //     let percent = (counter % totalFrames) / totalFrames;
@@ -93,6 +115,7 @@ let myp5 = new p5(sketch);
 // //     // }
 // //     counter++;
 // //   }
+  
 // //   function render(percent:number) {
 // //     let uoff,voff;
 // //     // Only doing calculations if recording to save on computation
@@ -101,6 +124,8 @@ let myp5 = new p5(sketch);
 // //       uoff = map(sin(angle), -1, 1, 0, 2);
 // //       voff = map(sin(angle), -1, 1, 0, 2);
 // //     }
+    
+  
 // //     let xoff = 0;
 // //     for (let x = 0; x < width; x++) {
 // //       let yoff = 0;
