@@ -25,8 +25,6 @@ function setup() {
 
 }
 
-
-
 function draw() {
   if (runFlag) {
   background(204, 200);
@@ -45,5 +43,5 @@ function draw() {
       angles[i] += anglesV[i];
   }
   endShape(CLOSE);
-}
+  }
 }
