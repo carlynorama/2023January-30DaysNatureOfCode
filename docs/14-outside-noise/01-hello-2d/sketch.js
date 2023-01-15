@@ -1,65 +1,30 @@
 import { NoiseMaker } from "./noisemaker.js";
-
-
-let sketch = function(p) {
+let sketch = function (p) {
     let a = 100;
     let b = 100;
     let noiseMaker;
-  
-    p.setup = function() {
-      p.createCanvas(700, 410);
-      noiseMaker = new NoiseMaker();
-      noLoop();
+    p.setup = function () {
+        p.createCanvas(200, 200);
+        noiseMaker = new NoiseMaker();
+        p.noLoop();
     };
-  
-    p.draw = function() {
-      p.background(0);
-      p.fill(255);
-      p.rect(a, b, 50, 50);
+    p.draw = function () {
+        p.background(0);
+        p.fill(255);
+        p.rect(a, b, 50, 50);
         for (let x = 0; x < p.width; x++) {
             for (let y = 0; y < p.height; y++) {
-                const i = (x + y * p.width) * 4;
+                //const i = (x + y * p.width) * 4;
                 const value = (noiseMaker.noise2D(x, y) + 1) * 128;
                 console.log(value);
-                let bright = value > 0 ? 255 : 0;
-                p.stroke(bright);
+                //let bright = value > 0 ? 255 : 0;
+                p.stroke(value);
                 p.point(x, y);
             }
         }
     };
-
-    // function draw() {
-//     for (let x = 0; x < width; x++) {
-//         for (let y = 0; y < height; y++) {
-//             const i = (x + y * width) * 4;
-//             const value = (noiseMaker.noise2D(x, y) + 1) * 128;
-//             console.log(value);
-//             let bright = value > 0 ? 255 : 0;
-//             stroke(bright);
-//             point(x, y);
-//         }
-//     }
-// }
-  };
-  
-  let myp5 = new p5(sketch);
-
-// function setup() {
-//     createCanvas(200, 200);
-//     noiseMaker = new NoiseMaker();
-// }
-// function draw() {
-//     for (let x = 0; x < width; x++) {
-//         for (let y = 0; y < height; y++) {
-//             const i = (x + y * width) * 4;
-//             const value = (noiseMaker.noise2D(x, y) + 1) * 128;
-//             console.log(value);
-//             let bright = value > 0 ? 255 : 0;
-//             stroke(bright);
-//             point(x, y);
-//         }
-//     }
-// }
+};
+let myp5 = new p5(sketch);
 // import { makeNoise2D } from "open-simplex-noise";
 // import { Noise2D } from "open-simplex-noise/lib/2d";
 // let ctx: { createImageData: (arg0: number, arg1: number) => { data: number[]; }; putImageData: (arg0: { data: number[]; }, arg1: number, arg2: number) => void; };

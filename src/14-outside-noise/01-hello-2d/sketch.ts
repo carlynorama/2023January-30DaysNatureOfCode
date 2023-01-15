@@ -7,9 +7,9 @@ let sketch = function(p:p5) {
   let noiseMaker:NoiseMaker;
 
   p.setup = function() {
-    p.createCanvas(700, 410);
+    p.createCanvas(200, 200);
     noiseMaker = new NoiseMaker();
-    noLoop();
+    p.noLoop();
   };
 
   p.draw = function() {
@@ -18,11 +18,11 @@ let sketch = function(p:p5) {
     p.rect(a, b, 50, 50);
       for (let x = 0; x < p.width; x++) {
           for (let y = 0; y < p.height; y++) {
-              const i = (x + y * p.width) * 4;
+              //const i = (x + y * p.width) * 4;
               const value = (noiseMaker.noise2D(x, y) + 1) * 128;
               console.log(value);
-              let bright = value > 0 ? 255 : 0;
-              p.stroke(bright);
+              //let bright = value > 0 ? 255 : 0;
+              p.stroke(value);
               p.point(x, y);
           }
       }
