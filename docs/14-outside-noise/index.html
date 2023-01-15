@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="daypage14.css">
+  <title>carlynorama | 2023 January 14</title>
+</head>
+
+<body>
+  <main>
+    <p><a href="../">TOC</a></p>
+    <H1>Day 14: OpenSimplex Noise</H1>
+    <p><a href="https://github.com/carlynorama/2023January-30DaysNatureOfCode/tree/main/docs/14-outside-noise">Repo for Day 14</a></p>
+
+    <p>All three sketches use <a href="https://en.wikipedia.org/wiki/OpenSimplex_noise">OpenSimplex Noise</a> as per<a href="https://www.youtube.com/watch?v=3_0Ax95jIrk">Coding Challenge 137</a> I'm not clear exactly on why but these seem to run a little bit faster. I did recompile the <a href="https://github.com/joshforisha/open-simplex-noise-js">original TypeScript module</a> to learn how to compile <a href="https://github.com/carlynorama/open-simplex-noise-for-web-js">TypeScript for the web</a> rather than a node project. Those infrastructure questions, and then how to use modules with p5js is what took most of the day.</p>
+
+    <ol>
+      <li>Made a seperate repo to explore how to compile<a href="https://github.com/carlynorama/open-simplex-noise-for-web-js">TypeScript for the web. </a> </li>
+      <li>Copied the recompiled files into the addons folder. There is an <a href="../addons/open-simplex-noise/example.html">example page.</a></li>
+      <li>Made and then threw out a Class wrapper hoping that would avoid the need for instance mode.</li>
+    </ol> 
+    
+    <!-- <p>Hover the mouse over a sketch to make it run. </p> -->
+    <p>These sketches run freely until I can figure out how to make my controller work with instance mode.</p>
+    
+    <ol>
+      <li><a href="01-hello-2d/">01-hello-2d</a></li>
+      <li><a href="02-hello-3d/">02-hello-3d</a></li>
+      <li><a href="03-hello-4d/">03-hello-4d</a></li>
+    </ol>
+      
+      <div class="grid-container">
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="01-hello-2d/embed.html"></iframe>
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="02-hello-3d/embed.html"></iframe>
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="03-hello-4d/embed.html"></iframe>
+      </div>
+
+  </main>
+</body>
+</html>
