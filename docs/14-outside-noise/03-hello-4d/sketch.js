@@ -1,3 +1,10 @@
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// sketch.js
+// written by calynorama 2023 Jan 14
+//
 import { makeNoise3D } from "../../addons/open-simplex-noise/main.js";
 //../../addons/open-simplex-noise/main.js
 let sketch = function (p) {
