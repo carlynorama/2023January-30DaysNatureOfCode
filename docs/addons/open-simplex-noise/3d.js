@@ -1,4 +1,5 @@
 // This is free and unencumbered software released into the public domain
+// https://github.com/joshforisha/open-simplex-noise-js
 import shuffleSeed from "./shuffle_seed.js";
 const NORM_3D = 1.0 / 103.0;
 const SQUISH_3D = (Math.sqrt(3 + 1) - 1) / 3;

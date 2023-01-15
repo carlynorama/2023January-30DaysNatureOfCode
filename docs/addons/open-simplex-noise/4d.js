@@ -1,5 +1,6 @@
 // This is free and unencumbered software released into the public domain
-import shuffleSeed from "./shuffle_seed";
+// https://github.com/joshforisha/open-simplex-noise-js
+import shuffleSeed from "./shuffle_seed.js";
 const NORM_4D = 1.0 / 30.0;
 const SQUISH_4D = (Math.sqrt(4 + 1) - 1) / 4;
 const STRETCH_4D = (1 / Math.sqrt(4 + 1) - 1) / 4;
