@@ -57,39 +57,6 @@ I temporarily installed ESLint before I realized that linter lives inside typesc
 * Ended up adding `"eslint.enable": false,` to `.vscode/settings.json` because it got to be a little much. 
 * ended up nuking modules and reinstalling with eslint removed.  (`rm -rf node_modules`, followed by `npm install` to refetch. ) 
 
-## Installing Modules Needed For Sketch 
-
-This section is still a WIP. Using npm means that the packages by default assume that they are ment to run in a node.js enviromment. If the module writer has not already done so you may have to download and recomplile the module. 
-
-### Step one - try for easy.
-
-    npm install --save module-name
-    npm install --save @types/module-name  //<- may not be necessary if module writer included them.
-
-* TRY 
-    * going to the  node_modules folder and copy the `.js` files (*if any yet) into a folder in `addons`, then add the module's root file like: `<script type="module" src="../../addons/open-simplex-noise/mod.js"></script>` 
-    * call it directly from a cdn like `<script src="https://cdn.jsdelivr.net/npm/open-simplex-noise@2.5.0/lib/mod.min.js"></script>`
-    * See if they included a "Univeral" version: `https://unpkg.com/:package@:version/` so going to `https://unpkg.com/open-simplex-noise/` will give `https://unpkg.com/browse/open-simplex-noise@2.5.0/`
-
-### If TypeScript, clone the repo and recompile
-
-* https://blog.rendall.dev/posts/2019/1/14/problem-typescript-adds-objectdefinepropertyexports-esmodule-value-true/
-* https://medium.com/@salathielgenese/setup-typescript-for-modern-browser-a75d699673f6
-    * https://github.com/SalathielGenese/ts-web 
-
-    "compilerOptions": {
-        "moduleResolution": "node", 
-        "module": "ES2020",   //or "CommonJS" or "ES6" ???
-    }
-
-
-
-
-
-### Misc other module info
-
-* https://www.digitalocean.com/community/tutorials/how-to-use-modules-in-typescript
-* https://tutorial.tips/how-to-load-any-npm-module-in-browser/
 
 ## tsconfig.json
 
@@ -161,3 +128,37 @@ Add an auto reloading browser window in repo:
 
 
 
+## Installing Modules Needed For Sketch 
+
+Using npm means that the packages by default assume that they will run in a node.js enviromment. If the module writer has not already provided a web-target, you may have to download and recomplile the module. This mess is why people use things like Webpack. 
+
+See this example: https://github.com/carlynorama/open-simplex-noise-for-web-js
+
+### Step one - try for easy.
+
+    npm install --save module-name
+    npm install --save @types/module-name  //<- may not be necessary if module writer included them.
+
+* TRY 
+    * going to the  node_modules folder and copy the `.js` files into a folder in `addons`, then add the module's root file like: `<script type="module" src="../../addons/open-simplex-noise/mod.js"></script>` 
+    * Call it directly from a cdn like `<script src="https://cdn.jsdelivr.net/npm/open-simplex-noise@2.5.0/lib/mod.min.js"></script>`
+    * If they included a "Univeral" version: `https://unpkg.com/:package@:version/` so going to `https://unpkg.com/open-simplex-noise/` will give `https://unpkg.com/browse/open-simplex-noise@2.5.0/`
+
+### If TypeScript, clone the repo and recompile
+
+* https://blog.rendall.dev/posts/2019/1/14/problem-typescript-adds-objectdefinepropertyexports-esmodule-value-true/
+* https://medium.com/@salathielgenese/setup-typescript-for-modern-browser-a75d699673f6
+    * https://github.com/SalathielGenese/ts-web 
+* https://blog.rendall.dev/posts/2019/1/14/problem-typescript-adds-objectdefinepropertyexports-esmodule-value-true/
+
+    "compilerOptions": {
+        "moduleResolution": "node", 
+        "module": "ES2020",
+        "moduleResolution": "node", //may make the next line unnecessary?   
+        "lib": ["DOM","ES2020"]     // might not be necessary.
+    }
+
+### Misc other module info
+
+* https://www.digitalocean.com/community/tutorials/how-to-use-modules-in-typescript
+* https://tutorial.tips/how-to-load-any-npm-module-in-browser/
