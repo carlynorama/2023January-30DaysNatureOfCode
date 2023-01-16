@@ -78,7 +78,7 @@
     }
 
     walk(constant:number, location:Vector, callback: (location:Vector, pendulum:Pendulum) => void) {
-      this.applyGravity(constant);
+      this.applyGravity(constant); //<- TODO: how does it know what direction is down in the actual translation? 
       let root = location.added(this.position);
       if (this.child) { 
         //this.child.angularVelocity += this.angularVelocity;
