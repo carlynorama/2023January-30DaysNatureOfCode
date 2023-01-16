@@ -3,7 +3,7 @@
   // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
   //
   // polarmover.ts
-  // written by calynorama 2023 Jan 12
+  // written by calynorama 2023 Jan 15
   //
 
   class TetheredPolarMover {
