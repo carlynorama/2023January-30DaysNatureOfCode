@@ -1,0 +1,123 @@
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// 16-swing-time/03-stacked-pendulum/sketch.ts
+// written by calynorama 2023 Jan 15
+//
+
+
+let originx = 200;
+let originy = 200;
+
+let angle = -Math.PI/6;
+
+let movers:TetheredPolarMover[] = []
+let numMovers = 5;
+
+//need to have that many colors in the arrays.
+let fillColors = [];
+let strokeColors = [];
+
+let gravity = 0.01;
+
+
+function setup() {
+  //noiseSeed(12);
+  createControlledCanvas(400, 400);
+  originx = width/2;
+  originy = height/2;
+
+  fillColors = [color(0, 51, 102, 200), color(153, 102, 0, 200), color(102, 0, 0, 200), color(51, 102, 0, 200), color(51, 0, 102, 200), color(102, 0, 51, 200)]
+
+  strokeColors = [color(0, 0, 51, 200), color(51, 0, 0, 200), color(51, 0, 0, 200), color(0, 51, 0, 200), color(0, 0, 51, 200), color(51, 0, 0, 200)]
+
+
+  for (let m = 0; m < numMovers; m++) {
+    if (m != 0) {
+      movers[m] = TetheredPolarMover.createStackedMover(random(-Math.PI, Math.PI), random(10, 50), movers[m-1].position);
+    } else {
+      movers[0] = TetheredPolarMover.createPolarMover(angle, random(20, 30));
+    }
+
+  }
+
+  background(204);
+}
+
+function draw() {
+  
+  if (runFlag) {
+  background(204);
+    strokeWeight(1);
+    translate(originx, originy);
+
+    //An alternative would be to let p5js draw handle the translate.
+    //might be faster. 
+    for (let i = 0; i < movers.length; i++) {
+
+      if (i != 0) { 
+        movers[i].origin = movers[i-1].translatedPosition
+        movers[i].incrementAngle(movers[i-1].angularVelocity);
+      } 
+      let root = movers[i].origin;
+
+      movers[i].applyGravity(gravity);
+      stroke(51, 200);
+      line(root.x, root.y, movers[i].translatedPosition.x, movers[i].translatedPosition.y);
+      stroke(strokeColors[i]);
+      fill(fillColors[i]);
+      movers[i].needsTranslatedCartesian(drawMe);
+    }
+
+  }
+}
+
+
+function drawMe(x:number, y:number, a:number) {
+  push();
+  let size = 10; 
+
+  ellipseMode(CENTER);
+  circle(x, y, size*2);
+
+  push();
+  //stroke(204);
+  translate(x, y);
+  line(-size/2,0,size/2,0);
+  rotate(a);
+  line(-size,0,size,0);
+  pop();
+
+
+  // 
+  // rotate(a + mover.angularVelocity);
+  // triangle(-size/2, -size / 2, -size/2, size / 2, size/2, 0);
+  
+  //stroke(51);
+  //point(x, y);
+  pop();
+}
+
+
+
+
+
+
+// let a:Vector;
+// let b:Vector;
+// let c:Vector;
+
+// a = Vector.createAngleVector(Math.PI/3, 100);
+// b = Vector.createAngleVector(Math.PI/6, 100);
+// c = a.added(b);
+
+// function drawVectorAdd(a:Vector, b:Vector) {
+//   push();
+//   strokeWeight(1);
+//   c = a.added(b);
+//   line(0, 0, a.x, a.y);
+//   line(a.x, a.y, a.x + b.x, a.y + b.y);
+//   line(0, 0, c.x, c.y);
+//   pop();
+// }
