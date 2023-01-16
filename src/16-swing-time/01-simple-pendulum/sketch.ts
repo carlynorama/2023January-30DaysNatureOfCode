@@ -9,7 +9,7 @@ let r = 150;
 
 let mover:TetheredPolarMover;
 
-let gravity = 1;
+let gravity = 0.01;
 
 
 function setup() {
@@ -18,7 +18,7 @@ function setup() {
   originx = width/2;
   originy = height/2;
 
-  mover = TetheredPolarMover.createPolarMover(Math.PI, r);
+  mover = TetheredPolarMover.createPolarMover(angle, r);
   background(204);
   //noLoop();
 }
@@ -26,21 +26,20 @@ function setup() {
 function draw() {
   
   if (runFlag) {
-  //background(204, 1);
+  background(204);
     strokeWeight(1);
     translate(originx, originy);
 
-    let force = gravity * sin(angle);
-    angleA = (-1 * force) / r;
+    let force = gravity * Math.cos(angle);
+    angleA = (force) / r;
     angleV += angleA;
     angle += angleV;
+    console.log("angleA", angleA, "theta, c(t)", angle, Math.cos(angle));
 
-    // mover.applyGravity(gravity);
-    // mover.update();
-
-    mover.setAngle(angle);
-    
-
+    //mover.incrementAngle(angleV);
+    mover.applyGravity(gravity);
+    //mover.update();
+    //mover.setAngle(angle);
     //console.log(mover.pretty());
 
     stroke(0, 51, 102, 200);
@@ -49,6 +48,7 @@ function draw() {
 
     stroke(0, 0, 51,255);
     fill(0, 51, 102, 200);
+    //mover.needsTranslatedCartesian(drawMe);
     mover.needsCartesian(drawMe);
     
     //line(0, 0, mover.position.x, mover.position.y);
@@ -63,15 +63,25 @@ function draw() {
 function drawMe(x:number, y:number, a:number) {
   push();
   let size = 10; 
-  
+
+  ellipseMode(CENTER);
+  circle(x, y, size*2);
+
   push();
+  //stroke(204);
   translate(x, y);
+  line(-size/2,0,size/2,0);
   rotate(a);
-  triangle(-size, -size / 2, -size, size / 2, size, 0);
-  
+  line(-size,0,size,0);
   pop();
+
+
+  // 
+  // rotate(a + mover.angularVelocity);
+  // triangle(-size/2, -size / 2, -size/2, size / 2, size/2, 0);
+  
   //stroke(51);
-  point(x, y);
+  //point(x, y);
   pop();
 }
 

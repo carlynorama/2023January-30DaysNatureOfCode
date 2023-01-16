@@ -7,18 +7,20 @@
 // written by calynorama 2023 Jan 12
 //
 class TetheredPolarMover {
+    // mass: number;
     //Root is always ZERO!
     constructor(position) {
         this.position = position;
         this.origin = new Vector(0, 0);
         this.lastPosition = position;
         this.velocity = Vector.zero2D();
+        this.angularVelocity = 0;
         // this.lastPosition = new Vector(position.x, position.y-0.1);
         // this.velocity = new Vector(0, 1);
         this.tetherLength = this.position.length(); //update if add root. 
-        this.lastVelocity = Vector.zero2D();
-        this.acceleration = Vector.zero2D();
-        this.mass = 1;
+        // this.lastVelocity = Vector.zero2D();
+        // this.acceleration = Vector.zero2D();
+        //this.mass = 1;
     }
     static createPolarMover(angle, magnitude) {
         return new TetheredPolarMover(Vector.createAngleVector(angle, magnitude));
@@ -39,41 +41,41 @@ class TetheredPolarMover {
         this.position = Vector.createAngleVector(theta, magnitude);
         this.updateVelocity();
     }
+    incrementPosition(vector) {
+        this.lastPosition = this.position.copy();
+        this.position = this.position.added(vector);
+        this.updateVelocity();
+    }
     setAngle(theta) {
         this.lastPosition = this.position.copy();
         this.position = Vector.createAngleVector(theta, this.position.length());
         this.updateVelocity();
     }
+    incrementAngle(theta) {
+        this.lastPosition = this.position.copy();
+        this.position = Vector.createAngleVector(this.position.angle() + theta, this.position.length());
+        this.updateVelocity();
+    }
     needsCartesian(callback) {
+        let location = this.origin.added(this.position);
         callback(this.position.x, this.position.y, this.velocity.angle());
+    }
+    needsTranslatedCartesian(callback) {
+        let location = this.origin.added(this.position);
+        callback(location.x, location.y, this.velocity.angle());
     }
     pretty() {
         return `TPMover(x:${this.position.x}, y:${this.position.y}, lx:${this.lastPosition.x}, ly:${this.lastPosition.y}, vx:${this.velocity.x}, vy:${this.velocity.y})`;
     }
-    applyForce(force) {
-        let f = Vector.scaledBy(force, 1 / this.mass);
-        this.acceleration = this.acceleration.added(f);
-    }
-    applyGravity(constant) {
-        let force = new Vector(0, constant * Math.sin(this.position.angle()));
-        let f = Vector.scaledBy(force, 1 / (this.mass * this.position.length()));
-        this.acceleration = this.acceleration.added(f);
-    }
-    // force = gravity * sin(angle);
-    // angleA = (-1 * force) / len;
-    // angleV += angleA;
-    // angle += angleV;
-    // attract(mover:Mover) {
-    //   let force = this.position.subtracted(mover.position);
-    //   let distanceSq = constrain(force.magnitudeSquared(), 100, 1000);
-    //   let strength = Mover.G * ((this.mass * mover.mass)) / distanceSq;
-    //   force = force.withLength(strength);
-    //   mover.applyForce(force);
+    //assumes the zero angle is the one out and to the right of the origin. 
+    // applyGravity(constant:number) {
+    //   let delta = Vector.createAngleVector(this.position.perpendicularAngle(), constant * Math.cos(this.position.angle()));
+    //   this.incrementPosition(delta);
     // }
-    update() {
-        this.velocity = this.velocity.added(this.acceleration);
-        this.position = this.position.added(this.velocity);
-        //console.log(this.pretty());
-        this.acceleration = Vector.zero2D();
+    applyGravity(constant) {
+        let angularAccleration = constant * Math.cos(this.position.angle()) / this.tetherLength;
+        this.angularVelocity += angularAccleration;
+        // let delta = Vector.createAngleVector(this.position.perpendicularAngle(), );
+        this.incrementAngle(this.angularVelocity);
     }
 }

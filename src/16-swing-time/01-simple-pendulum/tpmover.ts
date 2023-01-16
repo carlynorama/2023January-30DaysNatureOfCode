@@ -8,14 +8,15 @@
 
   class TetheredPolarMover {
   
-    position: Vector;
+    position: Vector; //location relative to the root at zero.
     origin:Vector;
     lastPosition:Vector;
-    velocity:Vector;
-    lastVelocity: Vector;
-    acceleration: Vector;
+    velocity:Vector; //value in meters/second.
+    // lastVelocity: Vector;
+    // acceleration: Vector;
+    angularVelocity:number; //value in radians/second.
     tetherLength:number;
-    mass: number;
+    // mass: number;
 
     //Root is always ZERO!
     constructor(position:Vector) {
@@ -24,16 +25,18 @@
 
       this.lastPosition = position;
       this.velocity = Vector.zero2D();
+      
+      this.angularVelocity = 0; 
 
       // this.lastPosition = new Vector(position.x, position.y-0.1);
       // this.velocity = new Vector(0, 1);
 
       this.tetherLength = this.position.length();  //update if add root. 
 
-      this.lastVelocity = Vector.zero2D();
-      this.acceleration = Vector.zero2D();
+      // this.lastVelocity = Vector.zero2D();
+      // this.acceleration = Vector.zero2D();
 
-      this.mass = 1;
+      //this.mass = 1;
       
     }
 
@@ -46,6 +49,7 @@
     }
 
     get heading()  { return this.velocity.angle }
+
 
     updatePosition(dTheta:number, dMagnitude:number) {
         //createAngleVector can handle negative magnitude
@@ -61,6 +65,12 @@
       this.updateVelocity();
     }
 
+    incrementPosition(vector:Vector) {
+      this.lastPosition = this.position.copy();
+      this.position = this.position.added(vector);
+      this.updateVelocity();
+    }
+
 
     setAngle(theta:number) {
       this.lastPosition = this.position.copy();
@@ -68,27 +78,42 @@
       this.updateVelocity();
     }
 
+    incrementAngle(theta:number) {
+      this.lastPosition = this.position.copy();
+      this.position = Vector.createAngleVector(this.position.angle() + theta, this.position.length());
+      this.updateVelocity();
+    }
+
     needsCartesian(callback: (x: number, y:number, a:number) => void) {
+      let location = this.origin.added(this.position);
       callback(this.position.x, this.position.y, this.velocity.angle());
+    }
+
+    needsTranslatedCartesian(callback: (x: number, y:number, a:number) => void) {
+      let location = this.origin.added(this.position);
+      callback(location.x, location.y, this.velocity.angle());
     }
 
     pretty():string {
       return `TPMover(x:${this.position.x}, y:${this.position.y}, lx:${this.lastPosition.x}, ly:${this.lastPosition.y}, vx:${this.velocity.x}, vy:${this.velocity.y})`
     }
 
-    applyForce(force:Vector) {
-      let f:Vector = Vector.scaledBy(force, 1/this.mass);
-      this.acceleration = this.acceleration.added(f);
+
+
+    //assumes the zero angle is the one out and to the right of the origin. 
+    // applyGravity(constant:number) {
+    //   let delta = Vector.createAngleVector(this.position.perpendicularAngle(), constant * Math.cos(this.position.angle()));
+    //   this.incrementPosition(delta);
+    // }
+      applyGravity(constant:number) {
+      let angularAccleration = constant * Math.cos(this.position.angle()) / this.tetherLength;
+      this.angularVelocity += angularAccleration;
+      // let delta = Vector.createAngleVector(this.position.perpendicularAngle(), );
+      this.incrementAngle(this.angularVelocity);
     }
 
-    applyGravity(constant:number) {
-      let force = new Vector(0, constant * Math.sin(this.position.angle()));
-      let f:Vector = Vector.scaledBy(force, 1/(this.mass * this.position.length()));
-      this.acceleration = this.acceleration.added(f);
-    }
-
-    // force = gravity * sin(angle);
-    // angleA = (-1 * force) / len;
+    // force = gravity * cos(angle);
+    // angleA = (force) / len;
     // angleV += angleA;
     // angle += angleV;
   
@@ -100,13 +125,18 @@
     //   force = force.withLength(strength);
     //   mover.applyForce(force);
     // }
+
+    // applyForce(force:Vector) {
+    //   let f:Vector = Vector.scaledBy(force, 1/this.mass);
+    //   this.acceleration = this.acceleration.added(f);
+    // }
   
-    update() {
-      this.velocity = this.velocity.added(this.acceleration);
-      this.position = this.position.added(this.velocity);
-      //console.log(this.pretty());
-      this.acceleration = Vector.zero2D();
-    }
+    // update() {
+    //   this.velocity = this.velocity.added(this.acceleration);
+    //   this.position = this.position.added(this.velocity);
+    //   console.log("update", this.pretty());
+    //   this.acceleration = Vector.zero2D();
+    // }
   
 
   }
