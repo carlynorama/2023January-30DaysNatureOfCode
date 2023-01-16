@@ -2,7 +2,7 @@
 // 2023 January Creative Coding Journal
 // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
 //
-// 16-swing-time/02-mulit-pendulum/sketch.ts
+// 16-swing-time/03-stacked-pendulum/sketch.ts
 // written by calynorama 2023 Jan 15
 //
 
