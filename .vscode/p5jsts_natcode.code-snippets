@@ -31,7 +31,7 @@
   "Link": {
     "prefix": "_a",
     "body": [
-      "<a href\"$1\">$TM_SELECTED_TEXT</a>",
+      "<a href=\"$1\">$TM_SELECTED_TEXT</a>",
     ],
     "description": "Creates a link with the selected text"
 	},
