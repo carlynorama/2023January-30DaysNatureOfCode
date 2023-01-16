@@ -6,55 +6,37 @@
   // written by calynorama 2023 Jan 15
   //
 
-  class TetheredPolarMover {
+  class Pendulum {
   
     position: Vector; //location relative to the root at zero.
-    origin:Vector;
+    
     lastPosition:Vector;
     velocity:Vector; //value in meters/second.
-    // lastVelocity: Vector;
-    // acceleration: Vector;
     angularVelocity:number; //value in radians/second.
     tetherLength:number;
-    // mass: number;
+
+    child?:Pendulum;
 
     //Root is always ZERO!
-    constructor(position:Vector, origin:Vector) {
+    constructor(position:Vector) {
       this.position = position;
-      this.origin = origin;
-
       this.lastPosition = position;
       this.velocity = Vector.zero2D();
-      
       this.angularVelocity = 0; 
-
-      // this.lastPosition = new Vector(position.x, position.y-0.1);
-      // this.velocity = new Vector(0, 1);
-
       this.tetherLength = this.position.length();  //update if add root. 
-
-      // this.lastVelocity = Vector.zero2D();
-      // this.acceleration = Vector.zero2D();
-
-      //this.mass = 1;
-      
     }
 
-    static createPolarMover(angle:number, magnitude:number) {
-      return new TetheredPolarMover(Vector.createAngleVector(angle, magnitude), Vector.zero2D());
-    }
-
-    static createStackedMover(angle:number, magnitude:number, root:Vector) {
-      return new TetheredPolarMover(Vector.createAngleVector(angle, magnitude), root);
+    static createPendulum(angle:number, magnitude:number) {
+      return new Pendulum(Vector.createAngleVector(angle, magnitude));
     }
 
     updateVelocity() {
       this.velocity = this.position.subtracted(this.lastPosition);
     }
 
-    get heading()  { return this.velocity.angle }
-    get translatedPosition() { return this.origin.added(this.position)} 
-
+    get heading() { return this.velocity.angle() }
+    get x() { return this.position.x }
+    get y() { return this.position.y }
 
     updatePosition(dTheta:number, dMagnitude:number) {
         //createAngleVector can handle negative magnitude
@@ -76,7 +58,6 @@
       this.updateVelocity();
     }
 
-
     setAngle(theta:number) {
       this.lastPosition = this.position.copy();
       this.position = Vector.createAngleVector(theta, this.position.length());
@@ -89,14 +70,22 @@
       this.updateVelocity();
     }
 
-    needsCartesian(callback: (x: number, y:number, a:number) => void) {
-      let location = this.origin.added(this.position);
-      callback(this.position.x, this.position.y, this.velocity.angle());
+    applyGravity(constant:number) {
+      let angularAccleration = constant * Math.cos(this.position.angle()) / this.tetherLength;
+      this.angularVelocity += angularAccleration;
+      // let delta = Vector.createAngleVector(this.position.perpendicularAngle(), );
+      this.incrementAngle(this.angularVelocity);
     }
 
-    needsTranslatedCartesian(callback: (x: number, y:number, a:number) => void) {
-      let location = this.origin.added(this.position);
-      callback(location.x, location.y, this.velocity.angle());
+    walk(constant:number, location:Vector, callback: (location:Vector, pendulum:Pendulum) => void) {
+      this.applyGravity(constant);
+      let root = location.added(this.position);
+      if (this.child) { 
+        //this.child.angularVelocity += this.angularVelocity;
+        this.child.walk(constant, root, callback) 
+      }
+      callback(location, this);
+      
     }
 
     pretty():string {
@@ -104,18 +93,6 @@
     }
 
 
-
-    //assumes the zero angle is the one out and to the right of the origin. 
-    // applyGravity(constant:number) {
-    //   let delta = Vector.createAngleVector(this.position.perpendicularAngle(), constant * Math.cos(this.position.angle()));
-    //   this.incrementPosition(delta);
-    // }
-      applyGravity(constant:number) {
-      let angularAccleration = constant * Math.cos(this.position.angle()) / this.tetherLength;
-      this.angularVelocity += angularAccleration;
-      // let delta = Vector.createAngleVector(this.position.perpendicularAngle(), );
-      this.incrementAngle(this.angularVelocity);
-    }
 
     // force = gravity * cos(angle);
     // angleA = (force) / len;
@@ -143,6 +120,26 @@
     //   this.acceleration = Vector.zero2D();
     // }
   
+        // needsCartesian(callback: (x: number, y:number, a:number) => void) {
+    //   callback(this.position.x, this.position.y, this.velocity.angle());
+    // }
+    //translatedTo(root:Vector) { return root.added(this.position) } ;
+    // translateCartesianT(root:Vector, callback: (x: number, y:number, a:number) => void) {
+    //   let location = root.added(this.position);
+    //   callback(location.x, location.y, this.velocity.angle());
+    //   callback(this.position.x, this.position.y, this.velocity.angle());
+    // }
 
+    // get translatedPosition() { return this.origin.added(this.position)} 
+    // needsTranslatedCartesian(callback: (x: number, y:number, a:number) => void) {
+    //   let location = this.origin.added(this.position);
+    //   callback(location.x, location.y, this.velocity.angle());
+    // }
+
+       //assumes the zero angle is the one out and to the right of the origin. 
+    // applyGravity(constant:number) {
+    //   let delta = Vector.createAngleVector(this.position.perpendicularAngle(), constant * Math.cos(this.position.angle()));
+    //   this.incrementPosition(delta);
+    // }
   }
   

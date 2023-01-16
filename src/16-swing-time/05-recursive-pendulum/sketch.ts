@@ -10,10 +10,17 @@
 let originx = 200;
 let originy = 200;
 
-let angle = -Math.PI/6;
+let size = 20; 
 
-let movers:TetheredPolarMover[] = []
-let numMovers = 5;
+let angle = 0;
+
+let movers:Pendulum[] = []
+// let numMovers = 5;
+
+let pendulumA:Pendulum
+let pendulumB:Pendulum
+let pendulumC:Pendulum
+let pendulumD:Pendulum
 
 //need to have that many colors in the arrays.
 let fillColors = [];
@@ -26,21 +33,21 @@ function setup() {
   //noiseSeed(12);
   createControlledCanvas(400, 400);
   originx = width/2;
-  originy = height/2;
+  originy = 0;
 
   fillColors = [color(0, 51, 102, 200), color(153, 102, 0, 200), color(102, 0, 0, 200), color(51, 102, 0, 200), color(51, 0, 102, 200), color(102, 0, 51, 200)]
 
   strokeColors = [color(0, 0, 51, 200), color(51, 0, 0, 200), color(51, 0, 0, 200), color(0, 51, 0, 200), color(0, 0, 51, 200), color(51, 0, 0, 200)]
 
 
-  for (let m = 0; m < numMovers; m++) {
-    if (m != 0) {
-      movers[m] = TetheredPolarMover.createStackedMover(random(-Math.PI, Math.PI), random(10, 50), movers[m-1].position);
-    } else {
-      movers[0] = TetheredPolarMover.createPolarMover(angle, random(20, 30));
-    }
+  pendulumA = Pendulum.createPendulum(0, random(50, 80));
+  pendulumB = Pendulum.createPendulum(random(-Math.PI, Math.PI), random(50, 80));
+  pendulumC = Pendulum.createPendulum(random(-Math.PI, Math.PI), random(50, 80));
+  pendulumD = Pendulum.createPendulum(random(-Math.PI, Math.PI), random(50, 80));
 
-  }
+  pendulumC.child = pendulumD;
+  pendulumB.child = pendulumC;
+  pendulumA.child = pendulumB;
 
   background(204);
 }
@@ -52,50 +59,70 @@ function draw() {
     strokeWeight(1);
     translate(originx, originy);
 
-    //An alternative would be to let p5js draw handle the translate.
-    //might be faster. 
-    for (let i = 0; i < movers.length; i++) {
+    pendulumA.walk(gravity, new Vector(0,0), drawMe);
 
-      if (i != 0) { 
-        movers[i].origin = movers[i-1].translatedPosition
-        movers[i].incrementAngle(movers[i-1].angularVelocity);
-      } 
-      let root = movers[i].origin;
+    // //An alternative would be to let p5js draw handle the translate.
+    // //might be faster. 
+    // for (let i = 0; i < movers.length; i++) {
 
-      movers[i].applyGravity(gravity);
-      stroke(51, 200);
-      line(root.x, root.y, movers[i].translatedPosition.x, movers[i].translatedPosition.y);
-      stroke(strokeColors[i]);
-      fill(fillColors[i]);
-      movers[i].needsTranslatedCartesian(drawMe);
-    }
+    //   if (i != 0) { 
+    //     movers[i].origin = movers[i-1].translatedPosition
+    //     movers[i].incrementAngle(movers[i-1].angularVelocity);
+    //   } 
+    //   let root = movers[i].origin;
+
+    //   movers[i].applyGravity(gravity);
+    //   stroke(51, 200);
+    //   line(root.x, root.y, movers[i].translatedPosition.x, movers[i].translatedPosition.y);
+    //   stroke(strokeColors[i]);
+    //   fill(fillColors[i]);
+    //   movers[i].needsTranslatedCartesian(drawMe);
+    // }
 
   }
 }
 
 
-function drawMe(x:number, y:number, a:number) {
+function drawMe(location:Vector, pendulum:Pendulum) {
+  //let coords = pendulum.cartesian
   push();
-  let size = 10; 
+  translate(location.x, location.y);
+  
 
+  push();
+  
+  translate(pendulum.x, pendulum.y);
+  rotate(pendulum.heading);
   ellipseMode(CENTER);
-  circle(x, y, size*2);
-
-  push();
-  //stroke(204);
-  translate(x, y);
+  circle(0, 0, size*2);
   line(-size/2,0,size/2,0);
-  rotate(a);
+  
   line(-size,0,size,0);
   pop();
 
-
-  // 
-  // rotate(a + mover.angularVelocity);
-  // triangle(-size/2, -size / 2, -size/2, size / 2, size/2, 0);
+  line(0, 0, pendulum.x, pendulum.y);
   
-  //stroke(51);
-  //point(x, y);
+  //rotate(Math.PI/3);
+  //
+  
+  //
+  //line(0,0,pendulum.x,pendulum.y);
+  //line(0,0,location.x, location.y);
+  
+
+
+  //line(-size,0,size,0);
+  //circle(pendulum.x, pendulum.y, size*2);
+
+  // push();
+  // //stroke(204);
+  // translate(0, 0);
+  // translate(pendulum.x, pendulum.y);
+  // //translate(location.x, location.y);
+  // line(-size/2,0,size/2,0);
+  // rotate(pendulum.heading);
+  // line(-size,0,size,0);
+  // pop();
   pop();
 }
 
