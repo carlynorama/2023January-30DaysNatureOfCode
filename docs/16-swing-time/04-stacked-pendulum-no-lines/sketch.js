@@ -34,7 +34,7 @@ function setup() {
 }
 function draw() {
     if (runFlag) {
-        background(204);
+        //background(204,1);
         strokeWeight(1);
         translate(originx, originy);
         //An alternative would be to let p5js draw handle the translate.
@@ -46,8 +46,8 @@ function draw() {
             }
             let root = movers[i].origin;
             movers[i].applyGravity(gravity);
-            stroke(51, 200);
-            //noStroke();
+            //stroke(51, 200);
+            noStroke();
             line(root.x, root.y, movers[i].translatedPosition.x, movers[i].translatedPosition.y);
             stroke(strokeColors[i]);
             fill(fillColors[i]);
