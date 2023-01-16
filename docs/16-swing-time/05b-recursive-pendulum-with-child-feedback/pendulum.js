@@ -84,19 +84,8 @@ class Pendulum {
         let myFactor = this.tetherTension * this.velocity.y / this.tetherLength;
         return myFactor;
     }
-    // walk(constant:number, location:Vector, callback: (location:Vector, pendulum:Pendulum) => void) {
-    //   //this.sumForces(location, constant);
-    //   //this.applyGravity(constant); //<- TODO: how does it know what direction is down in the actual translation? 
-    //   let root = location.added(this.position);
-    //   if (this.child) { 
-    //     //this.child.angularVelocity += this.angularVelocity;
-    //     this.child.walk(constant, root, callback) 
-    //   }
-    //   callback(location, this);
-    // }
+
     updatePendulum(constant, location, callback) {
-        //this.sumForces(location, constant);
-        //this.applyGravity(constant); //<- TODO: how does it know what direction is down in the actual translation? 
         let root = location.added(this.position);
         let childFactor = 0;
         if (this.child) {
@@ -107,6 +96,7 @@ class Pendulum {
         callback(location, this);
         return myFactor;
     }
+    
     pretty() {
         return `TPMover(x:${this.position.x}, y:${this.position.y}, lx:${this.lastPosition.x}, ly:${this.lastPosition.y}, vx:${this.velocity.x}, vy:${this.velocity.y})`;
     }
