@@ -19,9 +19,9 @@
     // mass: number;
 
     //Root is always ZERO!
-    constructor(position:Vector) {
+    constructor(position:Vector, origin:Vector) {
       this.position = position;
-      this.origin = new Vector(0,0);
+      this.origin = origin;
 
       this.lastPosition = position;
       this.velocity = Vector.zero2D();
@@ -41,7 +41,11 @@
     }
 
     static createPolarMover(angle:number, magnitude:number) {
-      return new TetheredPolarMover(Vector.createAngleVector(angle, magnitude));
+      return new TetheredPolarMover(Vector.createAngleVector(angle, magnitude), Vector.zero2D());
+    }
+
+    static createStackedMover(angle:number, magnitude:number, root:Vector) {
+      return new TetheredPolarMover(Vector.createAngleVector(angle, magnitude), root);
     }
 
     updateVelocity() {
@@ -49,6 +53,7 @@
     }
 
     get heading()  { return this.velocity.angle }
+    get translatedPosition() { return this.origin.added(this.position)} 
 
 
     updatePosition(dTheta:number, dMagnitude:number) {

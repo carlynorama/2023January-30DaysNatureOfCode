@@ -2,9 +2,9 @@
 let originx = 200;
 let originy = 200;
 let angle = 0;
-let angle_inc = 0.01;
-let angleV = 0;
-let angleA = 0;
+// let angle_inc = 0.01;
+// let angleV = 0;
+// let angleA = 0;
 let r = 150;
 let mover;
 let gravity = 0.01;
@@ -20,10 +20,10 @@ function draw() {
         background(204);
         strokeWeight(1);
         translate(originx, originy);
-        let force = gravity * Math.cos(angle);
-        angleA = (force) / r;
-        angleV += angleA;
-        angle += angleV;
+        // let force = gravity * Math.cos(angle);
+        // angleA = (force) / r;
+        // angleV += angleA;
+        // angle += angleV;
         mover.applyGravity(gravity);
         stroke(0, 51, 102, 200);
         line(0, 0, mover.position.x, mover.position.y);

@@ -9,9 +9,9 @@
 class TetheredPolarMover {
     // mass: number;
     //Root is always ZERO!
-    constructor(position) {
+    constructor(position, origin) {
         this.position = position;
-        this.origin = new Vector(0, 0);
+        this.origin = origin;
         this.lastPosition = position;
         this.velocity = Vector.zero2D();
         this.angularVelocity = 0;
@@ -23,12 +23,16 @@ class TetheredPolarMover {
         //this.mass = 1;
     }
     static createPolarMover(angle, magnitude) {
-        return new TetheredPolarMover(Vector.createAngleVector(angle, magnitude));
+        return new TetheredPolarMover(Vector.createAngleVector(angle, magnitude), Vector.zero2D());
+    }
+    static createStackedMover(angle, magnitude, root) {
+        return new TetheredPolarMover(Vector.createAngleVector(angle, magnitude), root);
     }
     updateVelocity() {
         this.velocity = this.position.subtracted(this.lastPosition);
     }
     get heading() { return this.velocity.angle; }
+    get translatedPosition() { return this.origin.added(this.position); }
     updatePosition(dTheta, dMagnitude) {
         //createAngleVector can handle negative magnitude
         let change = Vector.createAngleVector(dTheta, dMagnitude);

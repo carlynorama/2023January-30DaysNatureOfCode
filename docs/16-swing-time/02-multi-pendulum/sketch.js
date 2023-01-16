@@ -16,7 +16,6 @@ let fillColors = [];
 let strokeColors = [];
 let gravity = 0.01;
 function setup() {
-    //noiseSeed(12);
     createControlledCanvas(400, 400);
     originx = width / 2;
     originy = height / 2;
