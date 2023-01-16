@@ -5,6 +5,7 @@
   // polarmover.ts
   // written by calynorama 2023 Jan 15
   //
+  // NOTE: THE PHYSICS IS LIKELY WRONG.
 
   class Pendulum {
   

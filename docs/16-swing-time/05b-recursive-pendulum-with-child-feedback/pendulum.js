@@ -14,9 +14,18 @@ class Pendulum {
         this.velocity = Vector.zero2D();
         this.angularVelocity = 0;
         this.tetherLength = this.position.length(); //update if add root. 
+        this.tetherTension = 0.001;
     }
     static createPendulum(angle, magnitude) {
         return new Pendulum(Vector.createAngleVector(angle, magnitude));
+    }
+    static createPendulumStack(angle, magnitude, child, stack_length, current) {
+        if (current == stack_length) {
+            return child;
+        }
+        let parent = this.createPendulum(angle, magnitude);
+        parent.child = child;
+        return this.createPendulumStack(angle, magnitude, parent, stack_length, current + 1);
     }
     updateVelocity() {
         this.velocity = this.position.subtracted(this.lastPosition);
@@ -65,23 +74,38 @@ class Pendulum {
         this.incrementAngle(this.angularVelocity);
     }
     //TODO: sum the pull from the children?
-    sumForces(location, constant) {
+    sumForces(location, constant, childFactor) {
         let test = location.added(this.position);
         let angularAccleration = constant * Math.cos(test.angle()) / this.tetherLength;
         //ADD PULL FROM THE CHILD;
-        this.angularVelocity += angularAccleration;
+        this.angularVelocity += angularAccleration + childFactor;
         this.incrementAngle(this.angularVelocity);
+        //DIFFERENTCONSTANT
+        let myFactor = this.tetherTension * this.velocity.y / this.tetherLength;
+        return myFactor;
     }
-    walk(constant, location, callback) {
+    // walk(constant:number, location:Vector, callback: (location:Vector, pendulum:Pendulum) => void) {
+    //   //this.sumForces(location, constant);
+    //   //this.applyGravity(constant); //<- TODO: how does it know what direction is down in the actual translation? 
+    //   let root = location.added(this.position);
+    //   if (this.child) { 
+    //     //this.child.angularVelocity += this.angularVelocity;
+    //     this.child.walk(constant, root, callback) 
+    //   }
+    //   callback(location, this);
+    // }
+    updatePendulum(constant, location, callback) {
         //this.sumForces(location, constant);
-        this.sumGravity(location, constant);
         //this.applyGravity(constant); //<- TODO: how does it know what direction is down in the actual translation? 
         let root = location.added(this.position);
+        let childFactor = 0;
         if (this.child) {
             //this.child.angularVelocity += this.angularVelocity;
-            this.child.walk(constant, root, callback);
+            childFactor = this.child.updatePendulum(constant, root, callback);
         }
+        let myFactor = this.sumForces(location, constant, childFactor);
         callback(location, this);
+        return myFactor;
     }
     pretty() {
         return `TPMover(x:${this.position.x}, y:${this.position.y}, lx:${this.lastPosition.x}, ly:${this.lastPosition.y}, vx:${this.velocity.x}, vy:${this.velocity.y})`;
