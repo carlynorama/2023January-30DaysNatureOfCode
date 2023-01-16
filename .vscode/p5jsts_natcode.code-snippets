@@ -27,5 +27,19 @@
 				"// written by calynorama ${CURRENT_YEAR} ${CURRENT_MONTH_NAME_SHORT} ${CURRENT_DATE}",
 				"//",
 		 ]
-	}
+	},
+  "Link": {
+    "prefix": "_a",
+    "body": [
+      "<a href\"$1\">$TM_SELECTED_TEXT</a>",
+    ],
+    "description": "Creates a link with the selected text"
+	},
+	"Code": {
+	  "prefix": "_c",
+	  "body": [
+		"<code>$TM_SELECTED_TEXT</code>",
+	  ],
+	  "description": "Wraps the selected text in a code tag"
+	  }
 }
