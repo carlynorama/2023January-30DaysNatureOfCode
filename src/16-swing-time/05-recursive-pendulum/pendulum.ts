@@ -77,9 +77,31 @@
       this.incrementAngle(this.angularVelocity);
     }
 
+    sumGravity(location:Vector, constant:number) {
+      let test = location.added(this.position);
+      let angularAccleration = constant * Math.cos(test.angle()) / this.tetherLength;
+      this.angularVelocity += angularAccleration;
+      // let delta = Vector.createAngleVector(this.position.perpendicularAngle(), );
+      this.incrementAngle(this.angularVelocity);
+    }
+
+    //TODO: sum the pull from the children?
+    sumForces(location:Vector, constant:number) {
+      let test = location.added(this.position);
+      let angularAccleration = constant * Math.cos(test.angle()) / this.tetherLength;
+
+      //ADD PULL FROM THE CHILD;
+
+      this.angularVelocity += angularAccleration;
+      this.incrementAngle(this.angularVelocity);
+    }
+
     walk(constant:number, location:Vector, callback: (location:Vector, pendulum:Pendulum) => void) {
-      this.applyGravity(constant); //<- TODO: how does it know what direction is down in the actual translation? 
+      //this.sumForces(location, constant);
+      this.sumGravity(location, constant);
+      //this.applyGravity(constant); //<- TODO: how does it know what direction is down in the actual translation? 
       let root = location.added(this.position);
+      
       if (this.child) { 
         //this.child.angularVelocity += this.angularVelocity;
         this.child.walk(constant, root, callback) 
