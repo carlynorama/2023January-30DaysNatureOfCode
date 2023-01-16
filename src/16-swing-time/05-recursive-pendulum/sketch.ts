@@ -10,9 +10,7 @@
 let originx = 200;
 let originy = 200;
 
-let size = 20; 
-
-let angle = 0;
+let size = 20;
 
 let movers:Pendulum[] = []
 // let numMovers = 5;
@@ -33,17 +31,18 @@ function setup() {
   //noiseSeed(12);
   createControlledCanvas(400, 400);
   originx = width/2;
-  originy = 0;
+  originy = 0;//height/2;
 
   fillColors = [color(0, 51, 102, 200), color(153, 102, 0, 200), color(102, 0, 0, 200), color(51, 102, 0, 200), color(51, 0, 102, 200), color(102, 0, 51, 200)]
 
   strokeColors = [color(0, 0, 51, 200), color(51, 0, 0, 200), color(51, 0, 0, 200), color(0, 51, 0, 200), color(0, 0, 51, 200), color(51, 0, 0, 200)]
 
-
+  let minA = -Math.PI/3;
+  let maxA = Math.PI/3;
   pendulumA = Pendulum.createPendulum(0, random(50, 80));
-  pendulumB = Pendulum.createPendulum(random(-Math.PI, Math.PI), random(50, 80));
-  pendulumC = Pendulum.createPendulum(random(-Math.PI, Math.PI), random(50, 80));
-  pendulumD = Pendulum.createPendulum(random(-Math.PI, Math.PI), random(50, 80));
+  pendulumB = Pendulum.createPendulum(random(minA, maxA), random(50, 80));
+  pendulumC = Pendulum.createPendulum(random(minA, maxA), random(50, 80));
+  pendulumD = Pendulum.createPendulum(random(minA, maxA), random(50, 80));
 
   pendulumC.child = pendulumD;
   pendulumB.child = pendulumC;
