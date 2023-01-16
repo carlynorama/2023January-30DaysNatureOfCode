@@ -7,7 +7,8 @@ let angleV = 0;
 let angleA = 0;
 let r = 150;
 
-let mover:TetheredPolarMover;
+let moverA:TetheredPolarMover;
+let moverB:TetheredPolarMover;
 
 let gravity = 0.01;
 
@@ -18,7 +19,8 @@ function setup() {
   originx = width/2;
   originy = height/2;
 
-  mover = TetheredPolarMover.createPolarMover(angle, r);
+  moverA = TetheredPolarMover.createPolarMover(angle, r);
+  moverB = TetheredPolarMover.createPolarMover(angle, r/2);
   background(204);
   //noLoop();
 }
@@ -30,28 +32,28 @@ function draw() {
     strokeWeight(1);
     translate(originx, originy);
 
-    let force = gravity * Math.cos(angle);
-    angleA = (force) / r;
-    angleV += angleA;
-    angle += angleV;
-    console.log("angleA", angleA, "theta, c(t)", angle, Math.cos(angle));
+    moverA.applyGravity(gravity);
+    moverB.applyGravity(gravity);
 
-    //mover.incrementAngle(angleV);
-    mover.applyGravity(gravity);
-    //mover.update();
-    //mover.setAngle(angle);
-    //console.log(mover.pretty());
-
+    //MOVER A
     stroke(0, 51, 102, 200);
-    // if (angle % 0.0314 < 0.01) { line(0, 0, mover.position.x, mover.position.y);}
-    line(0, 0, mover.position.x, mover.position.y);
+    // if (angle % (22/7) < 0.01) { line(0, 0, moverA.position.x, moverA.position.y);}
+    line(0, 0, moverA.position.x, moverA.position.y);
 
     stroke(0, 0, 51,255);
     fill(0, 51, 102, 200);
     //mover.needsTranslatedCartesian(drawMe);
-    mover.needsCartesian(drawMe);
-    
-    //line(0, 0, mover.position.x, mover.position.y);
+    moverA.needsCartesian(drawMe);
+
+    //MOVER B
+    stroke(0, 102, 51, 200);
+    // if (angle % (22/7) < 0.01) { line(0, 0, moverA.position.x, moverA.position.y);}
+    line(0, 0, moverB.position.x, moverB.position.y);
+
+    stroke(0, 51, 0,255);
+    fill(0, 102, 51, 200);
+    //mover.needsTranslatedCartesian(drawMe);
+    moverB.needsCartesian(drawMe);
     
 
   }
