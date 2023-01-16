@@ -16,7 +16,7 @@ let fillColors = [];
 let strokeColors = [];
 let gravity = 0.01;
 function setup() {
-    //noiseSeed(12);
+
     createControlledCanvas(400, 400);
     originx = width / 2;
     originy = height / 2;
@@ -34,7 +34,7 @@ function setup() {
 }
 function draw() {
     if (runFlag) {
-        background(204);
+        //background(204,1);
         strokeWeight(1);
         translate(originx, originy);
         //An alternative would be to let p5js draw handle the translate.
@@ -46,7 +46,8 @@ function draw() {
             }
             let root = movers[i].origin;
             movers[i].applyGravity(gravity);
-            stroke(51, 200);
+            //stroke(51, 200);
+            noStroke();
             line(root.x, root.y, movers[i].translatedPosition.x, movers[i].translatedPosition.y);
             stroke(strokeColors[i]);
             fill(fillColors[i]);
@@ -66,25 +67,5 @@ function drawMe(x, y, a) {
     rotate(a);
     line(-size, 0, size, 0);
     pop();
-    // 
-    // rotate(a + mover.angularVelocity);
-    // triangle(-size/2, -size / 2, -size/2, size / 2, size/2, 0);
-    //stroke(51);
-    //point(x, y);
     pop();
 }
-// let a:Vector;
-// let b:Vector;
-// let c:Vector;
-// a = Vector.createAngleVector(Math.PI/3, 100);
-// b = Vector.createAngleVector(Math.PI/6, 100);
-// c = a.added(b);
-// function drawVectorAdd(a:Vector, b:Vector) {
-//   push();
-//   strokeWeight(1);
-//   c = a.added(b);
-//   line(0, 0, a.x, a.y);
-//   line(a.x, a.y, a.x + b.x, a.y + b.y);
-//   line(0, 0, c.x, c.y);
-//   pop();
-// }
