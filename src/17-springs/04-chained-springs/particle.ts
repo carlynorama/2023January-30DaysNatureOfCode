@@ -35,6 +35,7 @@ class Particle {
       this.velocity.scaledBy(this.dampening);
       this.velocity = this.velocity.added(this.acceleration);
       this.position = this.position.added(this.velocity);
+      //console.log(this.position.x, this.position.y);
       this.acceleration = new Vector(0,0);
     }
   

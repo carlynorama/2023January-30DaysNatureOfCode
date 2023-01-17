@@ -11,54 +11,43 @@
 // The Coding Train / Daniel Shiffman
 // https://thecodingtrain.com/CodingChallenges/160-spring-forces.html
 // https://youtu.be/Rr-5HiXquhw
-// Simple Spring: https://editor.p5js.org/codingtrain/sketches/dcd6-2mWa
-// Spring Vector: https://editor.p5js.org/codingtrain/sketches/_A2pm_SSg
-// Spring OOP: https://editor.p5js.org/codingtrain/sketches/9BAoEn4Po
 // Soft Spring: https://editor.p5js.org/codingtrain/sketches/S5dY7qjxP
 //see also https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-oscillations/a/spring-forces
 /*
 F_spring =−k X displacement
 */
-let bob;
-let anchor;
-let spring;
+let springChain;
 //let gravity;
 // let counter = 0;
 // let threshold = 1000;
 function setup() {
     createControlledCanvas(400, 400);
-    bob = new Particle(50, 50);
-    anchor = new Particle(350, 350);
-    spring = new SpringForce(0.01, 300);
+    springChain = new SpringyChain();
     //@todobot for the spin! 
-    bob.applyForce(new Vector(0, 1));
-    anchor.applyForce(new Vector(0, -1));
+    // bob.applyForce (new Vector(0, 1));
+    // anchor.applyForce (new Vector(0, -1));
     //gravity = createVector(0, 0.1);
     //noLoop();
-    let testA = bob.position.dotProduct(bob.position);
-    let testB = bob.position.magnitudeSquared();
-    console.log("A", testA, "B", testB);
+    console.log("---------- END SETUP ----------");
 }
 function draw() {
     if (runFlag) {
         //blendMode(HARD_LIGHT);
         background(204, 30);
-        showSpringBetween(spring, bob, anchor);
-        let effect = spring.calculateBetween(bob, anchor);
-        anchor.applyForce(effect);
-        bob.applyForce(effect.scaledBy(-1));
-        showParticle(bob);
-        bob.update();
-        showParticle(anchor);
-        anchor.update();
+        showSpringBetween(springChain.child, springChain.me);
+        springChain.updateNode();
+        showParticle(springChain.child);
+        springChain.child.update();
+        showParticle(springChain.me);
+        springChain.me.update();
         if (mouseIsPressed) {
-            bob.position = new Vector(mouseX, mouseY);
-            bob.velocity = Vector.zero2D();
+            springChain.child.position = new Vector(mouseX, mouseY);
+            springChain.child.velocity = Vector.zero2D();
         }
         //counter += 1;
     }
 }
-function showSpringBetween(spring, a, b) {
+function showSpringBetween(a, b) {
     //strokeWeight;
     stroke(0, 0, 51);
     line(a.position.x, a.position.y, b.position.x, b.position.y);
