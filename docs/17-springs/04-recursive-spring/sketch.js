@@ -3,7 +3,7 @@
 // 2023 January Creative Coding Journal
 // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
 //
-// 17-springs/01-simple-start.ts
+// 17-springs/04-recursive-spring.ts
 // written by calynorama 2023 Jan 16
 //
 // Derived From
@@ -29,19 +29,24 @@ function setup() {
     createControlledCanvas(400, 400);
     bob = new Particle(50, 50);
     anchor = new Particle(350, 350);
-    spring = new Spring(0.01, 300, bob, anchor);
+    spring = new SpringForce(0.01, 300);
     //@todobot for the spin! 
     bob.applyForce(new Vector(0, 1));
     anchor.applyForce(new Vector(0, -1));
     //gravity = createVector(0, 0.1);
     //noLoop();
+    let testA = bob.position.dotProduct(bob.position);
+    let testB = bob.position.magnitudeSquared();
+    console.log("A", testA, "B", testB);
 }
 function draw() {
     if (runFlag) {
         //blendMode(HARD_LIGHT);
         background(204, 30);
-        showSpring(spring);
-        spring.update();
+        showSpringBetween(spring, bob, anchor);
+        let effect = spring.calculateBetween(bob, anchor);
+        anchor.applyForce(effect);
+        bob.applyForce(effect.scaledBy(-1));
         showParticle(bob);
         bob.update();
         showParticle(anchor);
@@ -53,10 +58,10 @@ function draw() {
         //counter += 1;
     }
 }
-function showSpring(spring) {
-    //strokeWeight(4);
+function showSpringBetween(spring, a, b) {
+    //strokeWeight;
     stroke(0, 0, 51);
-    line(spring.a.position.x, spring.a.position.y, spring.b.position.x, spring.b.position.y);
+    line(a.position.x, a.position.y, b.position.x, b.position.y);
 }
 function showParticle(particle) {
     //strokeWeight(2);

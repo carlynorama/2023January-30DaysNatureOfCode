@@ -1,12 +1,14 @@
-// Spring Forces (Spring OOP)
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// spring_simple.ts
+// adapted by calynorama 2023 Jan 16
+// from Spring Forces (Spring OOP)
 // The Coding Train / Daniel Shiffman
 // https://thecodingtrain.com/CodingChallenges/160-spring-forces.html
 // https://youtu.be/Rr-5HiXquhw
-
-// Simple Spring: https://editor.p5js.org/codingtrain/sketches/dcd6-2mWa
-// Spring Vector: https://editor.p5js.org/codingtrain/sketches/_A2pm_SSg
 // Spring OOP: https://editor.p5js.org/codingtrain/sketches/9BAoEn4Po
-// Soft Spring: https://editor.p5js.org/codingtrain/sketches/S5dY7qjxP
 
 class Spring {
     k: number;
@@ -32,7 +34,6 @@ class Spring {
       this.b.applyForce(n.scaledBy(-1));
       //console.log("b", this.b.acceleration.x, this.b.acceleration.y);
     }
-  
 
   }
   
