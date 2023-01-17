@@ -16,7 +16,7 @@
 
     <p>Following along with <a href="https://www.youtube.com/watch?v=Rr-5HiXquhw&list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&index=31">Coding Challenge #160</a>(<a href="https://editor.p5js.org/codingtrain/sketches/dcd6-2mWa">starting code</a>)</p>
 
-    <p>Continuation of Note From Yesterday: He did not use recursion for the springs, which makes sense because springs are just one element in the world acting on each particle. It's easy to sum the forces this way. So easy I diverged from the original by the end and just made a spring force without making a string object.</p>
+    <p>Continuation of Note From Yesterday: He did not use recursion for the springs, which makes sense because he wrote his spring object as two particle objects and a force between them, not a thether with an origin point and an end object, like with the pendulum. By having a broken out particle object it is easier to sum the forces from the global frame of refences all at once (no cosine on the gravity). So easy I diverged from the original by the end and just made a spring force stand alone object without the particles.</p>
 
 
     <!-- 
