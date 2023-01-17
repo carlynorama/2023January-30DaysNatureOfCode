@@ -39,6 +39,7 @@ function setup() {
 function draw() {
     if (runFlag) {
         //blendMode(HARD_LIGHT);
+        showRoot(rootParticle);
         background(204, 30);
         //console.log("applying forces");
         for (let p = 0; p < numParticles; p++) {
@@ -55,7 +56,7 @@ function draw() {
             }
         }
         drawParticles(particles, rootParticle);
-        showRoot(rootParticle);
+        
         showSpringBetween(rootParticle, particles[0]);
         //console.log("updating");
         for (let p = 0; p < numParticles; p++) {

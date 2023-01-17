@@ -24,11 +24,11 @@ let rootParticle;
 let particles = [];
 const numParticles = 5;
 //NOTE Particles have a dissipation factor to chill out the world.
-const k = 0.008;
+const k = 0.08;
 const g = 0.1;
 let gravity;
 const particleSize = 5;
-const spacing = 10;
+const spacing = 20;
 function setup() {
     background(204);
     createControlledCanvas(400, 400);
