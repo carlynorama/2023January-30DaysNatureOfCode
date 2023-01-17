@@ -2,21 +2,24 @@
 // 2023 January Creative Coding Journal
 // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
 //
-// 17-springs/04-chained-spring.ts
+// 17-springs/05-chained-springs-refined.ts
 // written by calynorama 2023 Jan 16
 //
 // Derived From
-// Spring Forces (Spring OOP)
 // The Coding Train / Daniel Shiffman
 // https://thecodingtrain.com/CodingChallenges/160-spring-forces.html
-// https://youtu.be/Rr-5HiXquhw
-// Soft Spring: https://editor.p5js.org/codingtrain/sketches/S5dY7qjxP
-
-//see also https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-oscillations/a/spring-forces
 
 /*
 F_spring =−k X displacement
 */
+
+// let angle_x = Math.PI;
+// let angle_xV:number;
+
+// let angle_y = Math.PI;
+// let angle_yV:number;
+
+const r = 150;
 
 let originX:number;
 let originY:number;
@@ -24,36 +27,64 @@ let originY:number;
 let springForce:SpringForce;
 let rootParticle:Particle;
 let particles:Particle[] = []
-let numParticles = 5;
+const numParticles = 5;
 
-let particleSize = 20;
-let spacing = 10;
+//NOTE Particles have a dissipation factor to chill out the world.
+const k = 0.008;
+const g = 0.1;
+let gravity:Vector;
 
-//let gravity = 0.01;
+const particleSize = 5;
+const spacing = 10;
 
 function setup() {
+  background(204);
   createControlledCanvas(400, 400);
   originX = width/2;
-  originY = height/10;
+  originY = height/2;
+
+ 
+
+  gravity = new Vector(0, g);
+
+  // angle_xV = radians(0.3);
+  // angle_yV = radians(0.2);
+
+  // let s = cos(angle_x);
+  // let c = sin(angle_y);
+
+  // let y = r*s + originY;
+  // let x = r*c + originX;
   
   rootParticle = new Particle(originX, originY);
 
-  springForce = new SpringForce(0.03, spacing);
+  springForce = new SpringForce(k, spacing);
   
   for (let p = 0; p < numParticles; p++) {
       particles.push(new Particle(originX, ((p+1) * spacing) + originY));
   }
 
-  background(204);
   
+  console.log("-------- DONE SETUP --------");
 }
 function draw() {
   if (runFlag) {
       //blendMode(HARD_LIGHT);
-      background(204, 30);
+      background(204, 5);
+      showRoot(rootParticle);
+
+      //these are backwards on purpose
+      // let s = cos(angle_x);
+      // let c = sin(angle_y);
+
+      // let y = r*s + originY;
+      // let x = r*c + originX;
+
+      // rootParticle.position = new Vector(x, y);
 
       //console.log("applying forces");
       for (let p = 0; p < numParticles; p++) {
+        particles[p].applyForce(gravity);
         if (p !== 0) {
             let effect = springForce.calculateBetween(particles[p], particles[p-1]);
           //console.log("effect",effect);
@@ -68,8 +99,8 @@ function draw() {
         }
       }
       
-      drawParticles(particles, rootParticle);
-      showRoot(rootParticle);
+      drawParticlesCurve(particles, rootParticle);
+      
       showSpringBetween(rootParticle, particles[0]);
 
       //console.log("updating");
@@ -86,8 +117,30 @@ function draw() {
         rootParticle.position = new Vector(mouseX, mouseY);
         rootParticle.velocity = Vector.zero2D();
       }
-      //counter += 1;
+
+      // angle_x += angle_xV;
+      // angle_y += angle_yV;
   }
+}
+
+
+function drawParticlesCurve(particles:Particle[], anchor:Particle) {
+
+  noFill();
+beginShape();
+curveVertex(anchor.position.x, anchor.position.y);
+
+
+
+  for (let p = 0; p < numParticles; p++) {
+    showParticle(particles[p]);
+    curveVertex(particles[p].position.x,particles[p].position.y);
+    
+  }
+
+  curveVertex(particles[numParticles-1].position.x,particles[numParticles-1].position.y)
+
+  endShape();
 }
 
 function drawParticles(particles:Particle[], anchor:Particle) {
@@ -108,6 +161,7 @@ function showSpringBetween(a:Particle, b:Particle) {
 }
 function showParticle(particle:Particle) {
   //strokeWeight(2);
+  push();
   noStroke();
   fill(204);
   circle(particle.position.x, particle.position.y, particleSize);
@@ -116,16 +170,17 @@ function showParticle(particle:Particle) {
   circle(particle.position.x, particle.position.y, particleSize);
   fill(0, 51, 102);
   circle(particle.position.x, particle.position.y, particleSize/2);
+  pop();
 }
 
 function showRoot(particle:Particle) {
   //strokeWeight(2);
   noStroke();
   fill(204);
-  circle(particle.position.x, particle.position.y, particleSize*2);
+  circle(particle.position.x, particle.position.y, particleSize*5);
   stroke(0, 0, 51);
-  fill(102, 153, 51, 200);
-  circle(particle.position.x, particle.position.y, particleSize * 2);
+  fill(153, 102, 51, 200);
+  circle(particle.position.x, particle.position.y, particleSize * 5);
   fill(0, 102, 51);
   circle(particle.position.x, particle.position.y, particleSize);
 }
