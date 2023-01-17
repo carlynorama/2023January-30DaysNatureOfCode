@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="daypage.css">
+  <title>carlynorama | 2023 January 17</title>
+</head>
+
+<body>
+  <main>
+    <p><a href="../">TOC</a></p>
+    <H1>Day 17: Basic Pendulums</H1>
+    <p><a href="https://github.com/carlynorama/2023January-30DaysNatureOfCode/tree/main/docs/17-springs">Repo for Day 17</a></p>
+
+    <p>Following along with <a href="https://www.youtube.com/watch?v=Rr-5HiXquhw&list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&index=31">Coding Challenge #160</a>(<a href="https://editor.p5js.org/codingtrain/sketches/dcd6-2mWa">starting code</a>)</p>
+
+    <p>Continuation of Note From Yesterday: He did not use recursion for the springs, which makes sense because he wrote his spring object as two particle objects and a force between them, not a thether with an origin point and an end object, like with the pendulum. By having a broken out particle object it is easier to sum the forces from the global frame of refences all at once (no cosine on the gravity). So easy I diverged from the original by the end and just made a spring force stand alone object without the particles.</p>
+
+
+    <!-- 
+   Link dump  
+// https://thecodingtrain.com/CodingChallenges/160-spring-forces.html
+// https://youtu.be/Rr-5HiXquhw
+// Simple Spring: https://editor.p5js.org/codingtrain/sketches/dcd6-2mWa
+// Spring Vector: https://editor.p5js.org/codingtrain/sketches/_A2pm_SSg
+// Spring OOP: https://editor.p5js.org/codingtrain/sketches/9BAoEn4Po
+// Soft Spring: https://editor.p5js.org/codingtrain/sketches/S5dY7qjxP
+//see also https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-oscillations/a/spring-forces
+/*
+   -->
+    
+    <p>Hover the mouse over a sketch to make it run. </p>
+    <ol>
+      <li><a href="01-simple-start-vector">01-simple-start-vector</a></li>
+      <li><a href="02-spring-start-objects">02-spring-start-objects</a></li>
+      <li><a href="03-chained-springs">03-chained-springs</a></li>
+      <li><a href="04-chained-springs-refined">04-chained-springs-refined</a></li>
+      </ol>
+      
+      <div class="grid-container">
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="01-simple-start-vector/embed.html"></iframe>
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="02-spring-start-objects/embed.html"></iframe>
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="03-chained-springs/embed.html"></iframe>
+        <iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="04-chained-springs-refined/embed.html"></iframe>
+      </div>
+
+  </main>
+</body>
+</html>
