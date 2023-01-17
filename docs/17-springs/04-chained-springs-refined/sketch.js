@@ -30,8 +30,8 @@ let gravity;
 const particleSize = 5;
 const spacing = 20;
 function setup() {
-    background(204);
     createControlledCanvas(400, 400);
+    background(204);
     originX = width / 2;
     originY = height / 2;
     gravity = new Vector(0, g);

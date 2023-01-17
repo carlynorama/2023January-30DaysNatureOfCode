@@ -27,6 +27,7 @@ let spring;
 // let threshold = 1000;
 function setup() {
     createControlledCanvas(400, 400);
+    background(204);
     bob = new Particle(50, 50);
     anchor = new Particle(350, 350);
     spring = new Spring(0.01, 300, bob, anchor);
