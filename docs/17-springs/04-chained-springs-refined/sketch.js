@@ -138,7 +138,8 @@ function showRoot(particle) {
     fill(204);
     circle(particle.position.x, particle.position.y, particleSize * 5);
     stroke(0, 0, 51);
-    fill(153, 102, 51, 200);
+    //fill(153, 102, 51, 200);
+    fill(102, 153, 51, 200);
     circle(particle.position.x, particle.position.y, particleSize * 5);
     fill(0, 102, 51);
     circle(particle.position.x, particle.position.y, particleSize);
