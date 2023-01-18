@@ -24,6 +24,8 @@ class Particle {
       this.dampening = 0.99;
     }
   
+    get heading()  { return this.velocity.angle }
+  
     applyForce(force:Vector) {
       let n = force.scaledBy(1/this.mass);
       this.acceleration = this.acceleration.added(n);
