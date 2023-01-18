@@ -15,7 +15,7 @@ def get_directory_names(directory):
     folder_names.sort()
     return folder_names
 
-def list(directory):
+def write_list_to_files(directory):
     folder_names = get_directory_names(directory)
     markdown_file_name = directory + '/' + 'directory_list.md'
     html_file_name = directory + '/' + 'directory-list.html'
@@ -37,4 +37,4 @@ if __name__ == "__main__":
         directory = sys.argv[1]
     else:
         directory = input ("Directory to Scan: ")
-    list(directory)
+    write_list_to_files(directory)
