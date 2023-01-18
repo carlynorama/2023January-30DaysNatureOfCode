@@ -8,8 +8,6 @@
 // The Coding Train / Daniel Shiffman
 // https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/4-particles/1-particle-system
 
-import { Vector } from "p5";
-
 class Particle {
   acceleration: Vector;
   velocity: Vector;
@@ -25,7 +23,7 @@ class Particle {
       this.startPosition = position;
       this.mass = 1;
       this.dampening = 0.80;
-      this.health = 255;
+      this.health = 1.0; //value between 0 and 1.
     }
 
     static createStillParticle(x:number, y:number) {
@@ -52,6 +50,7 @@ class Particle {
     get finished() { return this.health < 0; }
     get x() { return this.position.x; }
     get y() { return this.position.y; }
+    get heading() { return this.velocity.angle() } 
   
     applyForce(force:Vector) {
       let n = force.scaledBy(1/this.mass);

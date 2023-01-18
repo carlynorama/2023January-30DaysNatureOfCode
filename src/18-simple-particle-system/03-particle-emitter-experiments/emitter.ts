@@ -15,7 +15,7 @@ class Emitter {
     constructor(x:number, y:number) {
       this.origin = new Vector(x, y);
       this.particles = [];
-      console.log("new emitter", this.origin.x, this.origin.y, this.particles.length)
+      //console.log("new emitter", this.origin.x, this.origin.y, this.particles.length)
     }
   
     addParticle(qty: number) {
@@ -54,7 +54,7 @@ class Emitter {
     update() {
         this.particles.forEach(element => { element.update(); })
         this.particles = this.particles.filter(particle => !particle.finished)
-        console.log("update_emitter", this.origin.x, this.origin.y, this.particles.length);
+        //console.log("update_emitter", this.origin.x, this.origin.y, this.particles.length);
     }
   }
   

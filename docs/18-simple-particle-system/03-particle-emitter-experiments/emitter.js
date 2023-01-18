@@ -12,7 +12,7 @@ class Emitter {
     constructor(x, y) {
         this.origin = new Vector(x, y);
         this.particles = [];
-        //console.log("new emitter", this.origin.x, this.origin.y, this.particles.length);
+        //console.log("new emitter", this.origin.x, this.origin.y, this.particles.length)
     }
     addParticle(qty) {
         for (let i = 0; i < qty; i++) {

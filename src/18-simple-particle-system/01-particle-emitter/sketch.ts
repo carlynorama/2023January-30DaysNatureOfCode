@@ -24,8 +24,9 @@ let gravity:Vector;
 const particleSize = 5;
 
 function setup() {
-  background(204);
+  
   createControlledCanvas(400, 400);
+  background(204);
   pOrigin = new Vector(width/2, height/6);
 
   gravity = new Vector(0, g);
