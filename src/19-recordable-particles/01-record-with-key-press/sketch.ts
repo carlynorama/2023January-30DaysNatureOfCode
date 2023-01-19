@@ -37,13 +37,13 @@ let gravity:Vector;
 const particleSize = 5;
 const spacing = 10;
 
+let controller:ControlledCanvas;
+
 function setup() {
   background(204);
-  createControlledCanvas(400, 400);
+  controller = new ControlledCanvas(400, 400);
   originX = width/2;
   originY = height/2;
-
- 
 
   gravity = new Vector(0, g);
 
@@ -68,7 +68,7 @@ function setup() {
   console.log("-------- DONE SETUP --------");
 }
 function draw() {
-  if (runFlag) {
+  if (controller.runFlag) {
       //blendMode(HARD_LIGHT);
       background(204, 5);
       showRoot(rootParticle);
@@ -122,6 +122,11 @@ function draw() {
       // angle_y += angle_yV;
   }
 }
+
+function keyPressed() {
+  controller.keyPressed();
+}
+
 
 
 function drawParticlesCurve(particles:Particle[], anchor:Particle) {

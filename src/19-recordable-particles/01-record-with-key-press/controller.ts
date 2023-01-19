@@ -4,62 +4,68 @@
 //
 // controller.ts
 // written by calynorama 2023 Jan 13
-//
+// updated Jan 18
 
-var runFlag = true;
+//import { Renderer } from "p5";
 
 
-function createControlledCanvas(x:number, y:number) {
-  let canvas = createCanvas(x, y);
-  //let myParent = canvas.parent();
-  let selection = select('#embedded-p5js');
-  if (selection) {
-    console.log(selection);
-    runFlag = false;
-    canvas.mouseOver(run);
-    canvas.mouseOut(stop);
-  } else {
-    console.log("I am not embedded");
-    runFlag = true;
+class ControlledCanvas {
+  runFlag:boolean;
+  //canvas:Renderer;
+  embedded:boolean;
+
+  constructor(x:number, y:number) {
+    let canvas = createCanvas(x, y);
+    //let myParent = canvas.parent();
+    let selection = select('#embedded-p5js');
+    if (selection) {
+      console.log(selection);
+      this.runFlag = false;
+      canvas.mouseOver(this.run);
+      canvas.mouseOut(this.stop);
+      this.embedded = true;
+    } else {
+      console.log("I am not embedded");
+      this.runFlag = true;
+      this.embedded = false;
+    }
   }
-}
 
-function run() {
-  if (runFlag == false) {
-    console.log('running');
-    runFlag = true;
+  run = () => {
+    if (this.runFlag == false) {
+      console.log('running');
+      this.runFlag = true;
+    }
   }
-}
 
-function stop() {
-  if (runFlag == true) {
-    console.log('stopping');
-    runFlag = false;
+  stop = () => {
+    if (this.runFlag == true) {
+      console.log('stopping');
+      this.runFlag = false;
+    }
   }
-}
 
 
-function keyPressed() {
-  if (keyCode === UP_ARROW) {
-    if (runFlag) {runFlag = false} else {runFlag = true};
-  } 
-}
+  keyPressed = () => {
+    if (keyCode === UP_ARROW) {
+      if (this.runFlag) {this.runFlag = false} else {this.runFlag = true};
+    } 
+  }
 
-
-//--------------------------------------------- RECORDING
+  //--------------------------------------------- RECORDING
 
 
 
-// MUST decrease frame rate in order to use without skipping frames. 
-function recordFrames(x: number, min:number, max:number, nameRoot = 'output_gif-'):string {
+  // MUST decrease frame rate in order to use without skipping frames. 
+  recordFrames = (x: number, min:number, max:number, nameRoot = 'output_gif-'):string => {
     if (x > max) { return "widow is past" }
     else if (x < min) { return "not yet" }
     else 
     { save(nameRoot + nf(x, 3) + '.png');
       return "saved frame" } 
-}
+  }
 
-function recordWindow(x: number, min:number, max:number, sampleRate:number = 1, nameRoot = 'output_gif-'):string {
+  recordWindow = (x: number, min:number, max:number, sampleRate:number = 1, nameRoot = 'output_gif-'):string => {
   if (x > max) { return "window is past" }
   else if (x < min) { return "not yet" }
   else 
@@ -70,7 +76,13 @@ function recordWindow(x: number, min:number, max:number, sampleRate:number = 1, 
       return "saved frame"
     }
     return "skipped frame" } 
+  }
+
 }
+
+
+
+
 
 
 // MUST decrease frame rate in order to use without skipping frames. 
