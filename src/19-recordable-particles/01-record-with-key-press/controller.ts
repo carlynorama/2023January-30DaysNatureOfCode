@@ -4,22 +4,31 @@
 //
 // controller.ts
 // written by calynorama 2023 Jan 13
-// updated Jan 18
+// updated Jan 19
 
 //import { Renderer } from "p5";
+//THIS WHOLE THING REQUIRES p5js
 
 
 class ControlledCanvas {
   runFlag:boolean;
   //canvas:Renderer;
   embedded:boolean;
-  
+
   //right now using alphabet keys only.
   trackedKeys:Map<string, ()=>void>;
 
+  recordingOn?:boolean
+  burstFrameCount?:number
+  recordedFramesCount?:number
+  frameRateWhileRecording?:number
+  savedFileName?:string
+
+
   constructor(x:number, y:number) {
     let canvas = createCanvas(x, y);
-    //let myParent = canvas.parent();
+    //This id has to be somewhere in the HTML hosting the
+    //embedded sketch.
     let selection = select('#embedded-p5js');
     if (selection) {
       console.log(selection);
@@ -35,8 +44,10 @@ class ControlledCanvas {
 
     this.trackedKeys = new Map<string, ()=>void>();
     this.trackedKeys.set("l", this.toggleRunState );
+    
   }
 
+  //Have to use the this preserving function declarations.
   run = () => {
     if (this.runFlag == false) {
       //console.log('running');
@@ -56,24 +67,65 @@ class ControlledCanvas {
     else { this.runFlag = true } 
   }
 
-
+  //outside the controller this function would be
+  //caught by p5js. Since it uses p5js functions
+  //my first reflex is to just call it from the sketch.
   keyPressed = () => {
     // if (keyCode === UP_ARROW) {
     //   if (this.runFlag) {this.runFlag = false} else {this.runFlag = true};
     // } 
     console.log(key);
     if (this.trackedKeys.has(key)) {
-      console.log("had key");
       let toDo = this.trackedKeys.get(key)!
       toDo();
     }
   }
 
-  //--------------------------------------------- RECORDING
+  disableGalleryMode = () => {
+    //save is a p5js function
+    this.trackedKeys.set("s", save );
+    this.trackedKeys.set("m",() => { console.log("test message");});
+    this.trackedKeys.set("f",() => { console.log(frameCount);});
+  }
 
+  //--------------------------------------------- RECORDING - could potentially be its own module.
 
+  enableRecording = (burstLength = 5, frameRate = 5, saveName = "sketch_out") => {
+    this.burstFrameCount = burstLength
+    this.recordingOn = false;
+    this.trackedKeys.set("r", this.recordStartBurst );
+    this.frameRateWhileRecording = frameRate;
+    this.savedFileName = saveName;
+  }
+
+  recordStartBurst = () => {
+    this.recordingOn = true
+    this.recordedFramesCount = 0;
+    //pixelDensity(1);
+    frameRate(this.frameRateWhileRecording!);
+  }
+
+  recordEndBurst = () => {
+    this.recordingOn = false
+    this.recordedFramesCount = undefined;
+    //pixelDensity(1);
+    frameRate(60); //<--  TODO:// Default?
+  }
+
+  recordingWatcher = () => {
+    if (this.recordingOn) {
+      let result = this.recordFrames(this.recordedFramesCount!, 0, this.burstFrameCount!, this.savedFileName)
+      if (result == "widow is past") {
+        this.recordEndBurst();  
+      } 
+      else if (result == "saved frame") {
+        this.recordedFramesCount = this.recordedFramesCount! + 1;
+      }
+    }
+  }
 
   // MUST decrease frame rate in order to use without skipping frames. 
+  //TODO: Are enums a thing in JavaScript/TypeScript?
   recordFrames = (x: number, min:number, max:number, nameRoot = 'output_gif-'):string => {
     if (x > max) { return "widow is past" }
     else if (x < min) { return "not yet" }
@@ -82,12 +134,12 @@ class ControlledCanvas {
       return "saved frame" } 
   }
 
-  recordWindow = (x: number, min:number, max:number, sampleRate:number = 1, nameRoot = 'output_gif-'):string => {
+  recordInterval = (x: number, min:number, max:number, sampleRate:number = 1, nameRoot = 'output_gif-'):string => {
   if (x > max) { return "window is past" }
   else if (x < min) { return "not yet" }
   else 
   { 
-    frameRate(3);
+    //frameRate(this.frameRateWhileRecording!);
     if (frameCount % sampleRate == 0) {
       save(nameRoot + nf(frameCount, 3) + '.png');
       return "saved frame"

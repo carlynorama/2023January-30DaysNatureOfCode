@@ -31,17 +31,13 @@ const particleSize = 5;
 const spacing = 10;
 let controller;
 function setup() {
-    background(204);
     controller = new ControlledCanvas(400, 400);
+    background(204);
+    controller.disableGalleryMode();
+    controller.enableRecording();
     originX = width / 2;
     originY = height / 2;
     gravity = new Vector(0, g);
-    // angle_xV = radians(0.3);
-    // angle_yV = radians(0.2);
-    // let s = cos(angle_x);
-    // let c = sin(angle_y);
-    // let y = r*s + originY;
-    // let x = r*c + originX;
     rootParticle = new Particle(originX, originY);
     springForce = new SpringForce(k, spacing);
     for (let p = 0; p < numParticles; p++) {
@@ -51,16 +47,8 @@ function setup() {
 }
 function draw() {
     if (controller.runFlag) {
-        //blendMode(HARD_LIGHT);
         background(204, 5);
         showRoot(rootParticle);
-        //these are backwards on purpose
-        // let s = cos(angle_x);
-        // let c = sin(angle_y);
-        // let y = r*s + originY;
-        // let x = r*c + originX;
-        // rootParticle.position = new Vector(x, y);
-        //console.log("applying forces");
         for (let p = 0; p < numParticles; p++) {
             particles[p].applyForce(gravity);
             if (p !== 0) {
@@ -81,16 +69,11 @@ function draw() {
         for (let p = 0; p < numParticles; p++) {
             particles[p].update();
         }
-        // if (mouseIsPressed) {
-        //   particles[numParticles-1].position = new Vector(mouseX, mouseY);
-        //   particles[numParticles-1].velocity = Vector.zero2D();
-        // }
         if (mouseIsPressed) {
             rootParticle.position = new Vector(mouseX, mouseY);
             rootParticle.velocity = Vector.zero2D();
         }
-        // angle_x += angle_xV;
-        // angle_y += angle_yV;
+        controller.recordingWatcher();
     }
 }
 function keyPressed() {
