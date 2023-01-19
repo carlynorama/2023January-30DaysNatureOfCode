@@ -11,25 +11,33 @@ class ControlledCanvas {
     constructor(x, y) {
         this.run = () => {
             if (this.runFlag == false) {
-                console.log('running');
+                //console.log('running');
                 this.runFlag = true;
             }
         };
         this.stop = () => {
             if (this.runFlag == true) {
-                console.log('stopping');
+                //console.log('stopping');
                 this.runFlag = false;
             }
         };
+        this.toggleRunState = () => {
+            if (this.runFlag) {
+                this.runFlag = false;
+            }
+            else {
+                this.runFlag = true;
+            }
+        };
         this.keyPressed = () => {
-            if (keyCode === UP_ARROW) {
-                if (this.runFlag) {
-                    this.runFlag = false;
-                }
-                else {
-                    this.runFlag = true;
-                }
-                ;
+            // if (keyCode === UP_ARROW) {
+            //   if (this.runFlag) {this.runFlag = false} else {this.runFlag = true};
+            // } 
+            console.log(key);
+            if (this.trackedKeys.has(key)) {
+                console.log("had key");
+                let toDo = this.trackedKeys.get(key);
+                toDo();
             }
         };
         //--------------------------------------------- RECORDING
@@ -77,6 +85,8 @@ class ControlledCanvas {
             this.runFlag = true;
             this.embedded = false;
         }
+        this.trackedKeys = new Map();
+        this.trackedKeys.set("l", this.toggleRunState);
     }
 }
 // MUST decrease frame rate in order to use without skipping frames. 

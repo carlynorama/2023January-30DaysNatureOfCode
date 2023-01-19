@@ -13,6 +13,9 @@ class ControlledCanvas {
   runFlag:boolean;
   //canvas:Renderer;
   embedded:boolean;
+  
+  //right now using alphabet keys only.
+  trackedKeys:Map<string, ()=>void>;
 
   constructor(x:number, y:number) {
     let canvas = createCanvas(x, y);
@@ -29,27 +32,41 @@ class ControlledCanvas {
       this.runFlag = true;
       this.embedded = false;
     }
+
+    this.trackedKeys = new Map<string, ()=>void>();
+    this.trackedKeys.set("l", this.toggleRunState );
   }
 
   run = () => {
     if (this.runFlag == false) {
-      console.log('running');
+      //console.log('running');
       this.runFlag = true;
     }
   }
 
   stop = () => {
     if (this.runFlag == true) {
-      console.log('stopping');
+      //console.log('stopping');
       this.runFlag = false;
     }
   }
 
+  toggleRunState = ():void => {
+    if (this.runFlag) { this.runFlag = false}
+    else { this.runFlag = true } 
+  }
+
 
   keyPressed = () => {
-    if (keyCode === UP_ARROW) {
-      if (this.runFlag) {this.runFlag = false} else {this.runFlag = true};
-    } 
+    // if (keyCode === UP_ARROW) {
+    //   if (this.runFlag) {this.runFlag = false} else {this.runFlag = true};
+    // } 
+    console.log(key);
+    if (this.trackedKeys.has(key)) {
+      console.log("had key");
+      let toDo = this.trackedKeys.get(key)!
+      toDo();
+    }
   }
 
   //--------------------------------------------- RECORDING
