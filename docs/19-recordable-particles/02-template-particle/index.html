@@ -15,7 +15,22 @@
 
 <body>
   <main>
-    <p>no note</p>
+    <p>Refactors particle system from yesterday:</p>
+<ul>
+<li>makes an <code>abstract class BasicParticle</code> in TypeScript that turns into a normal class in JavaScript. </li>
+<li>make type definitions <code>DrawableParticle</code> &amp; <code>Fading</code> types that are combined into <code>DrawableFader</code> fader type that is passed to the <code>showParticle</code> function. In the JavaScript it is erased to <code>any</code>.</li>
+</ul>
+<h3>Video Info</h3>
+<p>coding train link: <a href="https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/4-particles/3-particle-inheritance">https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/4-particles/3-particle-inheritance</a>
+video in playlist: <a href="https://www.youtube.com/watch?v=44RSr49m6LU&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=36">https://www.youtube.com/watch?v=44RSr49m6LU&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=36</a>
+code: <a href="https://editor.p5js.org/codingtrain/sketches/QRzgzQLnQ">https://editor.p5js.org/codingtrain/sketches/QRzgzQLnQ</a></p>
+<h3>Instructions</h3>
+<p>Click to make a new particle emitter at the mouse location. </p>
+<ul>
+<li>"l" to start or stop the the running sketch</li>
+<li>"s" to save a single frame</li>
+<li>"r" to record a burst of frames.  </li>
+</ul>
   </main>
 </body>
 
