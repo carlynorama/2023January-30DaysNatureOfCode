@@ -5,3 +5,18 @@ mogrify -trim /dir/trim_me/*
 convert -bordercolor white -border 5 input.jpg output.jpg
 convert -border 2x2 old.jpg new.jpg
 
+//Imagemagick make gif commands
+https://imagemagick.org/Usage/video/
+see also https://github.com/ImageMagick/ImageMagick/discussions/5485
+
+compare:
+    magick in.gif -layers coalesce out.mp4
+    magick in.gif out.mp4
+    
+
+
+//Extract only 1 frame per second (-r 1)
+ffmpeg -i input.mp4 -r 1 out%04d.png
+
+//Scaling SVGs
+inkscape -w 1024 -h 1024 input.svg -o output.png
