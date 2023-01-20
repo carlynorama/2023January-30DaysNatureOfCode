@@ -83,15 +83,13 @@ class SimpleVehicle extends BasicParticle {
         this._acceleration = acceleration.added(acceleration).limited(this.maxPush);
     }
     checkForArrival(target) {
-        this.arrived = this._position.distanceTo(target) < this.dockingDistance;
+        return this._position.distanceTo(target) < this.dockingDistance;
     }
     //Have to redeclare to add dampening. 
     update() {
-        if (!this.arrived) {
-            this._velocity = this.velocity.added(this.acceleration);
-            this._velocity.limited(this.maxSpeed);
-            this._position = this._position.added(this.velocity);
-            this._acceleration = new Vector(0, 0);
-        }
+        this._velocity = this.velocity.added(this.acceleration);
+        this._velocity.limited(this.maxSpeed);
+        this._position = this._position.added(this.velocity);
+        this._acceleration = new Vector(0, 0);
     }
 }

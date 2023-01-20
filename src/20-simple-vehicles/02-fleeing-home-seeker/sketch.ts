@@ -47,13 +47,13 @@ function draw() {
       //linear flee. 
       let fearComponent = vehicle.flee(fear); // skirt(fear, safety);
       
-      let desireComponent = vehicle.tackle(home);
+      let desireComponent = vehicle.tackle(home).scaledBy(5);
 
       //console.log(fearComponent.x, fearComponent.y);
 
       let steering = desireComponent.added(fearComponent);
       vehicle.applyInternalPower(steering);
-      if (!vehicle.checkForArrival(home)) {
+      if (!vehicle.checkForArrival(home) || vehicle.checkForArrival(fear)) {
         vehicle.update();
       }
       
