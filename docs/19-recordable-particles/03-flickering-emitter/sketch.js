@@ -36,7 +36,7 @@ function setup() {
 function draw() {
     clear();
     background(backgroundColor);
-    //blendMode(ADD);
+    blendMode(ADD);
     let dir = map(mouseX, 0, width, -0.05, 0.05);
     let wind = new Vector(dir, 0);
     emitters.forEach(emitter => {
@@ -70,9 +70,9 @@ function showParticle(particle) {
         img = imgB;
     }
     image(img, particle.x, particle.y, particleSize, particleSize);
-    blendMode(OVERLAY);
-    //blendMode(REMOVE);
-    fill(0, particle.health * 200);
+    //blendMode(OVERLAY)
+    blendMode(REMOVE);
+    fill(0, 1, 1, particle.health * 200);
     circle(particle.x, particle.y, particleSize);
     pop();
 }
