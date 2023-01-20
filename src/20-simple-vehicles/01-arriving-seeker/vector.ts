@@ -198,6 +198,10 @@ class Vector {
     return this.normalized().scaledBy(newLength)
   }
 
+  limited(newMagnitude:number) {
+    return this.normalized().scaledBy(Math.min(newMagnitude, this.magnitude()))
+  }
+
   equalTo({ components } : { components: number[] }) {
     return components.every((component, index) => Vector.floatsAreEqual(component, this.components[index]))
   }
