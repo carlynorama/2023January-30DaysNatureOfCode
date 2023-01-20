@@ -1,17 +1,14 @@
 Refactors particle system from yesterday:
 
-- makes an `abstract class BasicParticle` in TypeScript that turns into a normal class in JavaScript. 
-- make type definitions `DrawableParticle` & `Fading` types that are combined into `DrawableFader` fader type that is passed to the `showParticle` function. In the JavaScript it is erased to `any`.
+- uses `abstract class BasicParticle` to create `SimpleVehicle`. 
+- make type definitions `DrawableVehicle`that is passed to the `showVehicle` function.
 
 ### Video Info
-coding train link: <https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/4-particles/3-particle-inheritance>
-video in playlist: <https://www.youtube.com/watch?v=44RSr49m6LU&list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&index=36>
-code: <https://editor.p5js.org/codingtrain/sketches/QRzgzQLnQ>
+coding train link: <https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/2-seeking-a-target>
+video in playlist: <https://www.youtube.com/watch?v=p1Ws1ZhG36g&list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&index=39>
+code: <https://editor.p5js.org/codingtrain/sketches/AxuChwlgb>
 
 ### Instructions
-
-Click to make a new particle emitter at the mouse location. 
+Move the mouse to have the vehicle seek the target. Once the vehicle has arrived move the mouse quickly to shake it off.  
 
 - "l" to start or stop the the running sketch
-- "s" to save a single frame
-- "r" to record a burst of frames.  
