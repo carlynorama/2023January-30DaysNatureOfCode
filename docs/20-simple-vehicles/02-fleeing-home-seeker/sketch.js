@@ -18,7 +18,7 @@ function setup() {
     controller = new ControlledCanvas(400, 400);
     controller.disableGalleryMode();
     controller.enableRecording();
-    vehicle = SimpleVehicle.createStillVehicle(20, 20);
+    vehicle = SimpleVehicle.createStillVehicle(50, 50);
     fear = new Vector(width / 2, height / 2);
     home = new Vector(width / 2, height / 2);
     background(0, 0, 80);
@@ -28,20 +28,16 @@ function setup() {
 }
 function draw() {
     background(0, 0, 80, 10);
-    fear = new Vector(mouseX, mouseY);
-    //linear flee. 
-    let fearComponent = vehicle.flee(fear); // skirt(fear, safety);
-    let desireComponent = vehicle.tackle(home).scaledBy(5);
-    //console.log(fearComponent.x, fearComponent.y);
-    let steering = desireComponent.added(fearComponent);
+    home = new Vector(mouseX, mouseY);
+    let steering = vehicle.maintainDistance(home, safety); //.scaledBy(5);
     vehicle.applyInternalPower(steering);
-    if (!vehicle.checkForArrival(home) || vehicle.checkForArrival(fear)) {
-        vehicle.update();
-    }
+    //if (!vehicle.checkForArrival(home) || vehicle.checkForArrival(fear)) {
+    vehicle.update();
+    ///}
     let distance = vehicle.position.distanceTo(fear);
-    showFear(fear, distance);
+    //showFear(fear, distance);
     showVehicle(vehicle, distance);
-    //showSafety(fear);
+    showSafety(home);
     showHome(home);
     controller.recordingWatcher();
 }

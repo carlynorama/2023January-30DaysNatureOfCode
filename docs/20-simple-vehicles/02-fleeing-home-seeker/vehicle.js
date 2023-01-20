@@ -71,8 +71,15 @@ class SimpleVehicle extends BasicParticle {
         let v_difference = Vector.subtracted(p_difference, this.velocity);
         return v_difference;
     }
-    // if seek set the magnitude of the speed to the max speed then
-    // just taking the inverse would be fine. 
+    maintainDistance(target, safety) {
+        let p_difference = Vector.subtracted(this.position, target);
+        let desiredNewLocation = p_difference.normalized().scaledBy(safety).added(target);
+        console.log(p_difference.x, p_difference.y, desiredNewLocation.x, desiredNewLocation.y);
+        // let distanceToMove = p_difference.magnitude()-safety;
+        // let desiredNewLocation = Vector.createAngleVector(p_difference.angle(), distanceToMove);
+        // console.log(p_difference.x, p_difference.y, distanceToMove, desiredNewLocation.x, desiredNewLocation.y);
+        return this.approach(desiredNewLocation);
+    }
     skirt(target, safety) {
         let p_difference = Vector.subtracted(target, this.position);
         let distanceToMove = Math.max(safety - p_difference.magnitude(), 0);

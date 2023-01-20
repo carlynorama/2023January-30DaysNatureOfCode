@@ -104,8 +104,16 @@ class SimpleVehicle extends BasicParticle implements DrawableVehicle {
       return v_difference;
     }
 
-    // if seek set the magnitude of the speed to the max speed then
-    // just taking the inverse would be fine. 
+    maintainDistance(target:Vector, safety:number) {
+      let p_difference:Vector = Vector.subtracted(this.position, target);
+      let desiredNewLocation:Vector = p_difference.normalized().scaledBy(safety).added(target);
+      console.log(p_difference.x, p_difference.y, desiredNewLocation.x, desiredNewLocation.y);
+      // let distanceToMove = p_difference.magnitude()-safety;
+      // let desiredNewLocation = Vector.createAngleVector(p_difference.angle(), distanceToMove);
+      // console.log(p_difference.x, p_difference.y, distanceToMove, desiredNewLocation.x, desiredNewLocation.y);
+      return this.approach(desiredNewLocation);
+    }
+
     skirt(target:Vector, safety:number) {
       let p_difference:Vector = Vector.subtracted(target,this.position)
       let distanceToMove = Math.max(safety-p_difference.magnitude(), 0);
