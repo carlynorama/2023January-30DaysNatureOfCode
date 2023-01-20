@@ -46,7 +46,7 @@ function setup() {
 function draw() {
   clear();
   background(backgroundColor);
-  blendMode(ADD);
+  //blendMode(ADD);
 
   let dir = map(mouseX, 0, width, -0.05, 0.05);
   let wind = new Vector(dir, 0);
@@ -83,8 +83,8 @@ function showParticle(particle:DrawableFader) {
   let img =  imgA; 
   if (particle.health < 0.02) { img = imgB }
   image(img, particle.x, particle.y, particleSize, particleSize);
-  //blendMode(OVERLAY)
-  blendMode(REMOVE);
+  blendMode(OVERLAY)
+  //blendMode(REMOVE);
   fill(0, particle.health * 200);
   circle(particle.x, particle.y, particleSize);
   pop()
