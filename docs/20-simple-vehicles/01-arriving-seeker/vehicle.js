@@ -3,11 +3,9 @@
 // 2023 January Creative Coding Journal
 // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
 //
-// particle.ts
-// adapted by calynorama 2023 Jan 1p
-// from Particle Systems
-// The Coding Train / Daniel Shiffman
-// https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/4-particles/1-particle-system
+// vehicle.ts
+// written by calynorama 2023 Jan 20
+// following 
 class BasicParticle {
     get position() { return this._position; }
     get velocity() { return this._velocity; }
@@ -26,6 +24,9 @@ class BasicParticle {
         let n = force.scaledBy(1 / this._mass);
         this._acceleration = this.acceleration.added(n);
     }
+    applyAcceleration(acceleration) {
+        this._acceleration = this.acceleration.added(acceleration);
+    }
     update() {
         this._velocity = this.velocity.added(this.acceleration);
         this._velocity; //.scaledBy(this.dampening);
@@ -34,45 +35,40 @@ class BasicParticle {
         this._acceleration = new Vector(0, 0);
     }
 }
-class FadingParticle extends BasicParticle {
-    constructor(position, velocity, acceleration) {
+class SimpleVehicle extends BasicParticle {
+    constructor(position, velocity, acceleration, maxSpeed = 2, maxForce = 2.0, dockingDistance = 20) {
         super(position, velocity, acceleration);
-        this.startPosition = position;
-        //this._mass = 6; could override. 
-        this.dampening = 0.80;
-        this.health = 1.0; //value between 0 and 1.
+        this.maxSpeed = maxSpeed;
+        this.maxPush = maxForce;
+        this.dockingDistance = dockingDistance;
     }
-    static createStillParticle(x, y) {
+    static createStillVehicle(x, y) {
         let acceleration = new Vector(0, 0);
         let velocity = new Vector(0, 0);
         let position = new Vector(x, y);
-        return new FadingParticle(position, velocity, acceleration);
+        return new SimpleVehicle(position, velocity, acceleration);
     }
-    static createRandomVelocityParticle(x, y) {
-        let acceleration = new Vector(0, 0);
-        let velocity = Vector.random2D();
-        let position = new Vector(x, y);
-        return new FadingParticle(position, velocity, acceleration);
-    }
-    static createParticle(x, y, vx, vy) {
+    static createVehicle(x, y, vx, vy) {
         let acceleration = new Vector(0, 0);
         let velocity = new Vector(vx, vy);
         let position = new Vector(x, y);
-        return new FadingParticle(position, velocity, acceleration);
+        return new SimpleVehicle(position, velocity, acceleration);
     }
-    get finished() { return this.health < 0; }
-    weakenByAmount(amount) {
-        this.health -= amount;
+    seek(target) {
+        let p_difference = Vector.subtracted(target, this.position);
+        let v_difference = Vector.subtracted(p_difference, this.velocity);
+        this.applyInternalPower(v_difference);
     }
-    scaleHealth(scaleBy) {
-        this.health *= scaleBy;
+    applyInternalPower(acceleration) {
+        this._acceleration = this.acceleration.added(acceleration).limited(this.maxPush);
     }
     //Have to redeclare to add dampening. 
     update() {
-        this._velocity = this.velocity.added(this.acceleration);
-        this._velocity.scaledBy(this.dampening);
-        this._position = this._position.added(this.velocity);
-        //console.log(this.position.x, this.position.y);
-        this._acceleration = new Vector(0, 0);
+        if (this._position.distanceTo(target) > this.dockingDistance) {
+            this._velocity = this.velocity.added(this.acceleration);
+            this._velocity.limited(this.maxSpeed);
+            this._position = this._position.added(this.velocity);
+            this._acceleration = new Vector(0, 0);
+        }
     }
 }

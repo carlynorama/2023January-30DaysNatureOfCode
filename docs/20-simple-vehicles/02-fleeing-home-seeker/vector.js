@@ -81,6 +81,9 @@ class Vector {
         let newAngle = lhs.angle() + angle;
         return Vector.createAngleVector(newAngle, l);
     }
+    inverted() {
+        return this.scaledBy(-1);
+    }
     //Only set up for 2D vectors
     angle() { return Math.atan2(this.y, this.x); }
     flippedVAngle() { return Math.atan2(-this.y, this.x); }
@@ -97,6 +100,10 @@ class Vector {
     distanceTo(other) {
         // || other - this ||
         return Vector.subtracted(other, this).magnitude();
+    }
+    magSquaredTo(other) {
+        // || other - this ||
+        return Vector.subtracted(other, this).magnitudeSquared();
     }
     // SAME! 
     // distanceTo(other:Vector):number {

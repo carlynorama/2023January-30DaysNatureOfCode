@@ -4,32 +4,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>carlynorama | 2023 Jan 19 - 02-template-particle</title>
+  <title>carlynorama | 2023 Jan 20 - 01-arriving-seeker</title>
   <script src="../../p5.min.js"></script>
 		<script src="controller.js"></script>
-		<script src="emitter.js"></script>
-		<script src="particle.js"></script>
 		<script src="sketch.js"></script>
 		<script src="vector.js"></script>
+		<script src="vehicle.js"></script>
 </head>
 
 <body>
   <main>
     <p>Refactors particle system from yesterday:</p>
 <ul>
-<li>makes an <code>abstract class BasicParticle</code> in TypeScript that turns into a normal class in JavaScript. </li>
-<li>make type definitions <code>DrawableParticle</code> &amp; <code>Fading</code> types that are combined into <code>DrawableFader</code> fader type that is passed to the <code>showParticle</code> function. In the JavaScript it is erased to <code>any</code>.</li>
+<li>uses <code>abstract class BasicParticle</code> to create <code>SimpleVehicle</code>. </li>
+<li>make type definitions <code>DrawableVehicle</code>that is passed to the <code>showVehicle</code> function.</li>
+<li>I stripped out some of the steps in the original code and it arrives fine. I think the vehicle would get there faster if it could slow down?</li>
 </ul>
 <h3>Video Info</h3>
-<p>coding train link: <a href="https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/4-particles/3-particle-inheritance">https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/4-particles/3-particle-inheritance</a>
-video in playlist: <a href="https://www.youtube.com/watch?v=44RSr49m6LU&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=36">https://www.youtube.com/watch?v=44RSr49m6LU&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=36</a>
-code: <a href="https://editor.p5js.org/codingtrain/sketches/QRzgzQLnQ">https://editor.p5js.org/codingtrain/sketches/QRzgzQLnQ</a></p>
+<p>coding train link: <a href="https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/2-seeking-a-target">https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/2-seeking-a-target</a>
+video in playlist: <a href="https://www.youtube.com/watch?v=p1Ws1ZhG36g&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=39">https://www.youtube.com/watch?v=p1Ws1ZhG36g&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=39</a>
+code: <a href="https://editor.p5js.org/codingtrain/sketches/AxuChwlgb">https://editor.p5js.org/codingtrain/sketches/AxuChwlgb</a></p>
 <h3>Instructions</h3>
-<p>Click to make a new particle emitter at the mouse location. </p>
+<p>Move the mouse to have the vehicle seek the target. Once the vehicle has arrived move the mouse quickly to shake it off.  </p>
 <ul>
 <li>"l" to start or stop the the running sketch</li>
-<li>"s" to save a single frame</li>
-<li>"r" to record a burst of frames.  </li>
 </ul>
   </main>
 </body>

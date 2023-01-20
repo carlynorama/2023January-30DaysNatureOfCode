@@ -44,7 +44,7 @@ abstract class BasicParticle implements DrawableVehicle {
   }
 
   applyAcceleration(acceleration:Vector) {
-    this._acceleration = this.acceleration;
+    this._acceleration = this.acceleration.added(acceleration);
   }
 
   update() {
@@ -60,21 +60,23 @@ abstract class BasicParticle implements DrawableVehicle {
 class SimpleVehicle extends BasicParticle implements DrawableVehicle {
     maxSpeed: number;
     maxPush: number;
+    dockingDistance:number;
 
-    constructor(position:Vector, velocity:Vector, acceleration:Vector, maxSpeed = 4, maxForce = 0.25) {
+    constructor(position:Vector, velocity:Vector, acceleration:Vector, maxSpeed = 2, maxForce = 2.0, dockingDistance = 20) {
       super(position, velocity, acceleration)
       this.maxSpeed = maxSpeed;
       this.maxPush = maxForce;
+      this.dockingDistance = dockingDistance;
     }
 
-    static createStillParticle(x:number, y:number) {
+    static createStillVehicle(x:number, y:number) {
       let acceleration = new Vector(0, 0);
       let velocity = new Vector(0, 0);
       let position = new Vector(x, y);
       return new SimpleVehicle(position, velocity, acceleration)
     }
   
-    static createParticle(x:number, y:number, vx:number, vy:number) {
+    static createVehicle(x:number, y:number, vx:number, vy:number) {
       let acceleration = new Vector(0, 0);
       let velocity = new Vector(vx, vy);
       let position = new Vector(x, y);
@@ -82,32 +84,29 @@ class SimpleVehicle extends BasicParticle implements DrawableVehicle {
     }
 
     seek(target:Vector) {
-      let p_difference:Vector = Vector.subtracted(target, this.position);
-      //Or maybe always?
-      if (p_difference.magnitude() > this.maxSpeed) {
-        p_difference = Vector.createAngleVector(p_difference.angle(), this.maxSpeed);
-      }
-      let v_change = p_difference.subtracted(this.velocity).limited(this.maxPush);
-      
-      this.applyAcceleration(v_change);
+      let p_difference:Vector = Vector.subtracted(target,this.position);
+      let v_difference:Vector = Vector.subtracted(p_difference, this.velocity);
+      this.applyInternalPower(v_difference);
+    }
+
+    applyInternalPower(acceleration:Vector) {
+      this._acceleration = this.acceleration.added(acceleration).limited(this.maxPush);
     }
     
     //Have to redeclare to add dampening. 
     update() {
-      
-      this._velocity = this.velocity.added(this.acceleration);
 
-      if (this._velocity.magnitude() > this.maxSpeed) {
-        this._velocity = Vector.createAngleVector(this._velocity.angle(), this.maxSpeed);
+      if (this._position.distanceTo(target) > this.dockingDistance) {
+        this._velocity = this.velocity.added(this.acceleration);
+        this._velocity.limited(this.maxSpeed);
+        
+        this._position = this._position.added(this.velocity);
+  
+        this._acceleration = new Vector(0,0);
       }
       
-      this._position = this._position.added(this.velocity);
-      //console.log(this.position.x, this.position.y);
-      this._acceleration = new Vector(0,0);
+
     }
-  dampening(dampening: any) {
-    throw new Error("Method not implemented.");
-  }
   
   }
   

@@ -10,13 +10,17 @@ let controller;
 //NOTE Particles have a dissipation factor to chill out the world.
 const vehicleSize = 20; //same as docking distance
 let vehicle;
-let target;
+let fear;
+let home;
+//let fearRange = 320000;
+let safety = 100; //hypot of half canvas
 function setup() {
     controller = new ControlledCanvas(400, 400);
     controller.disableGalleryMode();
     controller.enableRecording();
     vehicle = SimpleVehicle.createStillVehicle(20, 20);
-    target = new Vector(width / 2, height / 2);
+    fear = new Vector(width / 2, height / 2);
+    home = new Vector(width / 2, height / 2);
     background(0, 0, 80);
     ellipseMode(CENTER);
     colorMode(HSB);
@@ -24,12 +28,21 @@ function setup() {
 }
 function draw() {
     background(0, 0, 80, 10);
-    target = new Vector(mouseX, mouseY);
-    vehicle.seek(target);
-    vehicle.update();
-    let distance = vehicle.position.distanceTo(target);
-    showTarget(target, distance);
+    fear = new Vector(mouseX, mouseY);
+    //linear flee. 
+    let fearComponent = vehicle.flee(fear); // skirt(fear, safety);
+    let desireComponent = vehicle.tackle(home);
+    //console.log(fearComponent.x, fearComponent.y);
+    let steering = desireComponent.added(fearComponent);
+    vehicle.applyInternalPower(steering);
+    if (!vehicle.checkForArrival(home)) {
+        vehicle.update();
+    }
+    let distance = vehicle.position.distanceTo(fear);
+    showFear(fear, distance);
     showVehicle(vehicle, distance);
+    //showSafety(fear);
+    showHome(home);
     controller.recordingWatcher();
 }
 function keyPressed() {
@@ -51,11 +64,29 @@ function showVehicle(vehicle, distance) {
     pop();
     pop();
 }
-function showTarget(target, distance) {
+function showFear(target, distance) {
     push();
     translate(target.x, target.y);
     let hue = map(distance, 0, width, 420, 240);
     fill(hue, 60, 60);
+    circle(0, 0, vehicleSize);
+    pop();
+}
+function showSafety(target) {
+    push();
+    translate(target.x, target.y);
+    //let hue = map(distance, 0, width, 420, 240);
+    //fill(hue, 60, 60);
+    noFill();
+    circle(0, 0, safety * 2);
+    pop();
+}
+function showHome(target) {
+    push();
+    translate(target.x, target.y);
+    //let hue = map(distance, 0, width, 420, 240);
+    //fill(hue, 60, 60);
+    noFill();
     circle(0, 0, vehicleSize * 2);
     pop();
 }
