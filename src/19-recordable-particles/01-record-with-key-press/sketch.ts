@@ -64,7 +64,7 @@ function setup() {
   console.log("-------- DONE SETUP --------");
 }
 function draw() {
-  if (controller.runFlag) {
+ // if (controller.runFlag) {
       
       background(204, 5);
       showRoot(rootParticle);
@@ -100,14 +100,12 @@ function draw() {
       }
 
       controller.recordingWatcher();
-  }
+  //}
 }
 
 function keyPressed() {
   controller.keyPressed();
 }
-
-
 
 function drawParticlesCurve(particles:Particle[], anchor:Particle) {
 

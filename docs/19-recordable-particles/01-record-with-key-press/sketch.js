@@ -46,35 +46,35 @@ function setup() {
     console.log("-------- DONE SETUP --------");
 }
 function draw() {
-    if (controller.runFlag) {
-        background(204, 5);
-        showRoot(rootParticle);
-        for (let p = 0; p < numParticles; p++) {
-            particles[p].applyForce(gravity);
-            if (p !== 0) {
-                let effect = springForce.calculateBetween(particles[p], particles[p - 1]);
-                //console.log("effect",effect);
-                particles[p - 1].applyForce(effect);
-                particles[p].applyForce(effect.scaledBy(-1));
-            }
-            else {
-                let effect = springForce.calculateBetween(particles[p], rootParticle);
-                //console.log("effect",effect);
-                particles[p].applyForce(effect.scaledBy(-1));
-            }
+    // if (controller.runFlag) {
+    background(204, 5);
+    showRoot(rootParticle);
+    for (let p = 0; p < numParticles; p++) {
+        particles[p].applyForce(gravity);
+        if (p !== 0) {
+            let effect = springForce.calculateBetween(particles[p], particles[p - 1]);
+            //console.log("effect",effect);
+            particles[p - 1].applyForce(effect);
+            particles[p].applyForce(effect.scaledBy(-1));
         }
-        drawParticlesCurve(particles, rootParticle);
-        showSpringBetween(rootParticle, particles[0]);
-        //console.log("updating");
-        for (let p = 0; p < numParticles; p++) {
-            particles[p].update();
+        else {
+            let effect = springForce.calculateBetween(particles[p], rootParticle);
+            //console.log("effect",effect);
+            particles[p].applyForce(effect.scaledBy(-1));
         }
-        if (mouseIsPressed) {
-            rootParticle.position = new Vector(mouseX, mouseY);
-            rootParticle.velocity = Vector.zero2D();
-        }
-        controller.recordingWatcher();
     }
+    drawParticlesCurve(particles, rootParticle);
+    showSpringBetween(rootParticle, particles[0]);
+    //console.log("updating");
+    for (let p = 0; p < numParticles; p++) {
+        particles[p].update();
+    }
+    if (mouseIsPressed) {
+        rootParticle.position = new Vector(mouseX, mouseY);
+        rootParticle.velocity = Vector.zero2D();
+    }
+    controller.recordingWatcher();
+    //}
 }
 function keyPressed() {
     controller.keyPressed();

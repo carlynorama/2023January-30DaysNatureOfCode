@@ -11,7 +11,7 @@
 
 
 class ControlledCanvas {
-  runFlag:boolean;
+  //runFlag:boolean;
   //canvas:Renderer;
   embedded:boolean;
 
@@ -32,13 +32,14 @@ class ControlledCanvas {
     let selection = select('#embedded-p5js');
     if (selection) {
       console.log(selection);
-      this.runFlag = false;
+      //this.runFlag = false;
+      noLoop();
       canvas.mouseOver(this.run);
       canvas.mouseOut(this.stop);
       this.embedded = true;
     } else {
       console.log("I am not embedded");
-      this.runFlag = true;
+      //this.runFlag = true;
       this.embedded = false;
     }
 
@@ -49,23 +50,34 @@ class ControlledCanvas {
 
   //Have to use the this preserving function declarations.
   run = () => {
-    if (this.runFlag == false) {
-      //console.log('running');
-      this.runFlag = true;
+    if (!isLooping()) {
+      loop()
     }
+    // if (this.runFlag == false) {
+    //   //console.log('running');
+    //   this.runFlag = true;
+    // }
   }
 
   stop = () => {
-    if (this.runFlag == true) {
-      //console.log('stopping');
-      this.runFlag = false;
+    if (isLooping()) {
+      noLoop()
     }
+    // if (this.runFlag == true) {
+    //   //console.log('stopping');
+    //   this.runFlag = false;
+    // }
   }
 
   toggleRunState = ():void => {
-    if (this.runFlag) { this.runFlag = false}
-    else { this.runFlag = true } 
+    if (isLooping()) { noLoop() }
+    else { loop() } 
   }
+
+  // toggleRunState = ():void => {
+  //   if (this.runFlag) { this.runFlag = false}
+  //   else { this.runFlag = true } 
+  // }
 
   //outside the controller this function would be
   //caught by p5js. Since it uses p5js functions
@@ -74,7 +86,7 @@ class ControlledCanvas {
     // if (keyCode === UP_ARROW) {
     //   if (this.runFlag) {this.runFlag = false} else {this.runFlag = true};
     // } 
-    console.log(key);
+    console.log("new controller in town");
     if (this.trackedKeys.has(key)) {
       let toDo = this.trackedKeys.get(key)!
       toDo();
