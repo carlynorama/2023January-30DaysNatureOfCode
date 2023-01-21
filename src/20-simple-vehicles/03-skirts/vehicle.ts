@@ -58,86 +58,118 @@ abstract class BasicParticle implements DrawableVehicle {
 }
 
 class SimpleVehicle extends BasicParticle implements DrawableVehicle {
-    maxSpeed: number;
-    maxPush: number;
-    dockingDistance:number;
-    arrived: boolean;
+  maxSpeed: number;
+  maxPush: number;
+  dockingDistance:number;
+  arrived: boolean;
+  drag:number;
+  startLocation: Vector;
 
-    constructor(position:Vector, velocity:Vector, acceleration:Vector, maxSpeed = 2, maxForce = 0.5, dockingDistance = 20) {
-      super(position, velocity, acceleration)
-      this.maxSpeed = maxSpeed;
-      this.maxPush = maxForce;
-      this.arrived = false;
-      this.dockingDistance = dockingDistance;
-    }
+  constructor(position:Vector, velocity:Vector, acceleration:Vector, maxSpeed = 2, maxForce = 0.5, dockingDistance = 20) {
+    super(position, velocity, acceleration);
+    this.startLocation = position;
+    this.maxSpeed = maxSpeed;
+    this.maxPush = maxForce;
+    this.arrived = false;
+    this.dockingDistance = dockingDistance;
+    this.drag = 0.90;
+  }
 
-    static createStillVehicle(x:number, y:number) {
-      let acceleration = new Vector(0, 0);
-      let velocity = new Vector(0, 0);
-      let position = new Vector(x, y);
-      return new SimpleVehicle(position, velocity, acceleration)
-    }
-  
-    static createVehicle(x:number, y:number, vx:number, vy:number) {
-      let acceleration = new Vector(0, 0);
-      let velocity = new Vector(vx, vy);
-      let position = new Vector(x, y);
-      return new SimpleVehicle(position, velocity, acceleration)
-    }
+  static createStillVehicle(x:number, y:number) {
+    let acceleration = new Vector(0, 0);
+    let velocity = new Vector(0, 0);
+    let position = new Vector(x, y);
+    return new SimpleVehicle(position, velocity, acceleration)
+  }
 
-    //classic seek
-    tackle(target:Vector):Vector {
-      let p_difference:Vector = Vector.subtracted(target,this.position);
-      let v_difference:Vector = Vector.subtracted(p_difference, this.velocity);
-      return v_difference.normalized().scaledBy(this.maxSpeed);
-    }
+  static createVehicle(x:number, y:number, vx:number, vy:number) {
+    let acceleration = new Vector(0, 0);
+    let velocity = new Vector(vx, vy);
+    let position = new Vector(x, y);
+    return new SimpleVehicle(position, velocity, acceleration)
+  }
 
-    //classic flee 
-    flee(target:Vector):Vector {
-      return this.tackle(target).scaledBy(-1);
-    }
-
-    //slows down as gets nearer
-    approach(target:Vector) {
-      let p_difference:Vector = Vector.subtracted(target,this.position);
-      let v_difference:Vector = Vector.subtracted(p_difference, this.velocity);
-      return v_difference;
-    }
-
-    maintainDistance(target:Vector, safety:number) {
-      let p_difference:Vector = Vector.subtracted(this.position, target);
-      let desiredNewLocation:Vector = p_difference.normalized().scaledBy(safety).added(target);
-      console.log(p_difference.x, p_difference.y, desiredNewLocation.x, desiredNewLocation.y);
-      // let distanceToMove = p_difference.magnitude()-safety;
-      // let desiredNewLocation = Vector.createAngleVector(p_difference.angle(), distanceToMove);
-      // console.log(p_difference.x, p_difference.y, distanceToMove, desiredNewLocation.x, desiredNewLocation.y);
-      return this.approach(desiredNewLocation);
-    }
-
-    skirt(target:Vector, safety:number) {
-      let p_difference:Vector = Vector.subtracted(target,this.position)
-      let distanceToMove = Math.max(safety-p_difference.magnitude(), 0);
-      let desiredNewLocation = Vector.createAngleVector(p_difference.inverseAngle(), distanceToMove);
-      return this.approach(desiredNewLocation);
-    }
-
-    applyInternalPower(acceleration:Vector) {
-      this._acceleration = acceleration.added(acceleration).limited(this.maxPush);
-    }
+  //classic seek
+  tackle(target:Vector):Vector {
+    let p_difference:Vector = Vector.subtracted(target,this.position);
     
-    checkForArrival(target:Vector) {
-      return this._position.distanceTo(target) < this.dockingDistance
-    }
+    let v_difference:Vector = Vector.subtracted(p_difference, this.velocity);
+    if (v_difference.magnitude() === 0) { return Vector.zero2D() }
+    //@ts-expect-error
+    return v_difference.normalized().scaledBy(this.maxSpeed);
+  }
 
-    //Have to redeclare to add dampening. 
-    update() {
-        this._velocity = this.velocity.added(this.acceleration);
-        this._velocity.limited(this.maxSpeed);
-        
-        this._position = this._position.added(this.velocity);
+  //classic flee 
+  flee(target:Vector):Vector {
+    return this.tackle(target).scaledBy(-1);
+  }
+
+  //slows down as gets nearer
+  approach(target:Vector) {
+    let p_difference:Vector = Vector.subtracted(target,this.position);
+    let v_difference:Vector = Vector.subtracted(p_difference, this.velocity);
+    return v_difference;
+  }
+
+  //Wants to be the circumference away
+  maintainDistance(target:Vector, safety:number):Vector {
+    let p_difference:Vector = Vector.subtracted(this.position, target);
+
+    if (p_difference.magnitude() === 0) { return Vector.zero2D() }
+    //@ts-expect-error
+    let desiredNewLocation:Vector = p_difference.normalized().scaledBy(safety).added(target);
+
+    //console.log(p_difference.x, p_difference.y, desiredNewLocation.x, desiredNewLocation.y);
+    return this.approach(desiredNewLocation);
+  }
+
+  //Moves away when the repulsion is less than a circumference away
+  skirt(target:Vector, safety:number):Vector {
+    let p_difference:Vector = Vector.subtracted(this.position,target);
+
+    let distanceToMove = Math.max(safety-p_difference.magnitude(), 0);
+    
+    if (distanceToMove === 0) { return Vector.zero2D() }
+    //@ts-expect-error
+    let deltaV = p_difference.normalized().scaledBy(distanceToMove);
+    //console.log(deltaV.x, deltaV.y, p_difference.magnitude(), safety-p_difference.magnitude());
+
+    return deltaV;
+  }
+
+  //Moves away when the repulsion is less than a circumference away at a right angle. 
+  tangentSkirt(target:Vector, safety:number):Vector {
+    let p_difference:Vector = Vector.subtracted(this.position,target);
+
+    let distanceToMove = Math.max(safety-p_difference.magnitude(), 0);
+    
+    if (distanceToMove === 0) { return Vector.zero2D() }
+    let deltaV = Vector.createAngleVector(p_difference.perpendicularAngle(),distanceToMove);
+    //console.log(deltaV.x, deltaV.y, p_difference.magnitude(), safety-p_difference.magnitude());
+
+    return deltaV;
+  }
+
+  applyInternalPower(acceleration:Vector) {
+    //console.log("start", this.acceleration.x, this.acceleration.y);
+    let newA = this._acceleration.added(acceleration)//.limited(this.maxPush);
+    //console.log("newA", newA.x, newA.y);
+    this._acceleration = acceleration.added(acceleration).limited(this.maxPush);
+    //console.log("after", this.acceleration.x, this.acceleration.y);
+  }
   
-        this._acceleration = new Vector(0,0);
-    }
+  checkForArrival(target:Vector) {
+    return this._position.distanceTo(target) < this.dockingDistance
+  }
+
+  //Have to redeclare to add dampening. 
+  update() {
+      this._velocity = this.velocity.added(this.acceleration).scaledBy(this.drag);
+      this._velocity.limited(this.maxSpeed);
+      this._position = this._position.added(this.velocity);
+
+      this._acceleration = new Vector(0,0);
+  }
   
   }
   

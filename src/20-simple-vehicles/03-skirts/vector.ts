@@ -106,9 +106,9 @@ class Vector {
           )
     }
     
-
-    normalized() { return this.scaledBy(1 / this.length()) }
-    negated() { return this.scaledBy(-1) }
+    
+    normalized():Vector | undefined {  return this.scaledBy(1 / this.length())}
+    negated():Vector { return this.scaledBy(-1) }
 
     length() { return Math.hypot(...this.components) }
     magnitude() { return Math.hypot(...this.components) }
@@ -133,6 +133,8 @@ class Vector {
       return this.scaledBy(-1);
     }
 
+
+
     //Only set up for 2D vectors
     angle() { return Math.atan2(this.y, this.x); }
     flippedVAngle() { return Math.atan2(-this.y, this.x); }
@@ -140,6 +142,7 @@ class Vector {
     perpendicularAngle() { return Math.atan2(this.x, -this.y); } //compare to angle + PI/2
     deflectedIn() { return Math.atan2(this.x/2, -this.y); } //45?
     inverseAngle() { return Math.atan2(-this.x, -this.y); }   //compare to angle + PI
+    tangent() { Vector.createAngleVector(this.perpendicularAngle(), this.magnitude()) }
 
   
   //The dot product between two vectors is the sum of the products of corresponding components.
@@ -170,17 +173,23 @@ class Vector {
     //If we take the dot product of two normalized vectors and the result is equal to one it means that they have the same direction. 
     //To compare two float numbers, we will use the areEqual function.
     //citation: https://radzion.com/blog/linear-algebra/vectors
-    hasSameDirectionWith(other:Vector) {
+    hasSameDirectionWith(other:Vector):boolean | undefined {
+        if (this.isZeroVector() || other.isZeroVector()) { throw new Error("zero vector")}
+        //@ts-expect-error
         const dotProduct = this.normalized().dotProduct(other.normalized())
         return Vector.floatsAreEqual(dotProduct, 1)
     }
 
-    hasOppositeDirectionTo(other:Vector) {
+    hasOppositeDirectionTo(other:Vector):boolean | undefined {
+      if (this.isZeroVector() || other.isZeroVector()) { throw new Error("zero vector")}
+      //@ts-expect-error
         const dotProduct = this.normalized().dotProduct(other.normalized())
         return Vector.floatsAreEqual(dotProduct, -1)
     }
 
-    isPerpendicularTo(other:Vector) {
+    isPerpendicularTo(other:Vector):boolean | undefined {
+      if (this.isZeroVector() || other.isZeroVector()) { throw new Error("zero vector")}
+      //@ts-expect-error
         const dotProduct = this.normalized().dotProduct(other.normalized())
         return Vector.floatsAreEqual(dotProduct, 0)
     }
@@ -199,22 +208,28 @@ class Vector {
   }
 
   projectOn(other:Vector) {
+    if (this.isZeroVector() || other.isZeroVector()) { throw new Error("zero vector")}
     const normalized = other.normalized()
+    //@ts-expect-error
     return normalized.scaledBy(this.dotProduct(normalized))
   }
 
   withLength(newLength:number) {
+    if (this.isZeroVector()) { throw new Error("zero vector")}
+    //@ts-expect-error
     return this.normalized().scaledBy(newLength)
   }
 
   limited(newMagnitude:number) {
-    return this.normalized().scaledBy(Math.min(newMagnitude, this.magnitude()))
+    if (this.isZeroVector()) { return this }
+    //@ts-expect-error
+    return this.normalized().scaledBy(Math.min(newMagnitude, this.magnitude()));
   }
 
   equalTo({ components } : { components: number[] }) {
     return components.every((component, index) => Vector.floatsAreEqual(component, this.components[index]))
   }
 
-
+  isZeroVector():boolean { return this.components.every(item => item === 0);}
 
   }

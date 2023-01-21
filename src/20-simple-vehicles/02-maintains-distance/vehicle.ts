@@ -115,9 +115,11 @@ class SimpleVehicle extends BasicParticle implements DrawableVehicle {
     }
 
     skirt(target:Vector, safety:number) {
-      let p_difference:Vector = Vector.subtracted(target,this.position)
+      let p_difference:Vector = Vector.subtracted(target,this.position);
+
       let distanceToMove = Math.max(safety-p_difference.magnitude(), 0);
-      let desiredNewLocation = Vector.createAngleVector(p_difference.inverseAngle(), distanceToMove);
+      let desiredNewLocation:Vector = p_difference.normalized().scaledBy(distanceToMove).added(target);
+
       return this.approach(desiredNewLocation);
     }
 

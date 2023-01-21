@@ -100,5 +100,5 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["global","src/20-simple-vehicles/02-fleeing-home-seeker"]
+  "include": ["global","src/20-simple-vehicles/03-skirts"]
 }

@@ -17,49 +17,58 @@ let vehicle:SimpleVehicle;
 let fear:Vector;
 let home:Vector;
 
+let vehicles:SimpleVehicle[] =[];
 //let fearRange = 320000;
 
-let safety = 100; //hypot of half canvas
+let safety = 50; //hypot of half canvas
 
 function setup() {
-  
   controller = new ControlledCanvas(400, 400);
-  controller.disableGalleryMode()
-  controller.enableRecording()
 
-  vehicle = SimpleVehicle.createStillVehicle(50,50);
-  fear = new Vector(width/2, height/2);
-  home = new Vector(width/2, height/2);
+  for (let i = 0; i < 200 ; i++) {
+    let newV:SimpleVehicle = SimpleVehicle.createStillVehicle(random(0,width),random(0,height));
+    vehicles.push(newV);
+  }
+
+  fear = new Vector(300, 300);
 
   background(0, 0, 80);
-
-  
 
   ellipseMode(CENTER);
   colorMode(HSB);
   console.log("-------- DONE SETUP --------");
 }
+//let counter = 270;
 function draw() {
       background(0, 0, 80, 10);
 
-      home = new Vector(mouseX, mouseY);
+      fear = new Vector(mouseX, mouseY);
+      //counter -= 0.1
 
+      vehicles.forEach(vehicle => {
 
-      let steering = vehicle.maintainDistance(home, safety);//.scaledBy(5);
-      vehicle.applyInternalPower(steering);
+        let steering = Vector.zero2D();
+        //if here should provide some energy saving
+        if (Math.abs(vehicle.x - fear.x) < safety && Math.abs(vehicle.y - fear.y) < safety) {
 
-      //if (!vehicle.checkForArrival(home) || vehicle.checkForArrival(fear)) {
-        vehicle.update();
-      ///}
+          steering = vehicle.skirt(fear, safety).scaledBy(5);
+        }
+  
+        if (!vehicle.checkForArrival(vehicle.startLocation)) {
+          steering = steering.added(vehicle.approach(vehicle.startLocation));
+        } 
+
+          vehicle.applyInternalPower(steering);
+          vehicle.update();
+        
+        let distance = vehicle.position.distanceTo(fear);
+        showVehicle(vehicle, distance);
+      });
+
       
-
-      let distance = vehicle.position.distanceTo(fear);
       
-      //showFear(fear, distance);
-      showVehicle(vehicle, distance);
-      showSafety(home);
-      showHome(home);
-
+      showFear(fear);
+    
       controller.recordingWatcher();
 }
 
@@ -86,32 +95,18 @@ function showVehicle(vehicle:DrawableVehicle, distance:number) {
 
 }
 
-function showFear(target:Vector, distance:number) {
+function showFear(target:Vector) {
   push();
   translate(target.x, target.y);
-  let hue = map(distance, 0, width, 420, 240);
-  fill(hue, 60, 60);
   circle(0,0, vehicleSize);
   pop();
 }
 
-function showSafety(target:Vector) {
+function showSafetyRing(target:Vector) {
   push();
   translate(target.x, target.y);
-  //let hue = map(distance, 0, width, 420, 240);
-  //fill(hue, 60, 60);
   noFill();
   circle(0,0, safety*2);
-  pop();
-}
-
-function showHome(target:Vector) {
-  push();
-  translate(target.x, target.y);
-  //let hue = map(distance, 0, width, 420, 240);
-  //fill(hue, 60, 60);
-  noFill();
-  circle(0,0, vehicleSize*2);
   pop();
 }
 
