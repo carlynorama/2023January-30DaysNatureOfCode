@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>carlynorama | 2023 Jan 20 - 02-maintains-distance</title>
+  <script src="../../p5.min.js"></script>
+		<script src="controller.js"></script>
+		<script src="sketch.js"></script>
+		<script src="vector.js"></script>
+		<script src="vehicle.js"></script>
+</head>
+
+<body>
+  <main>
+    <p>Builds on previous sketch. I had done seek differently without locking it to maxSpeed, which meant that flee then made no sense. Vehicle was fleeing less if the scary object was closer. </p>
+<ul>
+<li><code>tackle</code> - the classic seek</li>
+<li><code>flee</code> - classic persue</li>
+<li><code>approach</code> - my seek that eases out</li>
+<li><code>maintainDistance</code> - moves towards if too far away, away if to close</li>
+<li><code>checkForArrival</code> - takes any vector and compares it against it's location + dockingDistance (i.e. radius);</li>
+</ul>
+<h3>Video Info</h3>
+<ul>
+  <li>coding train link: <a href="https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/3-pursue-and-evade">https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/3-pursue-and-evade</a></li>
+  <li>video in playlist: <a href="https://www.youtube.com/watch?v=Q4MU7pkDYmQ&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=40">https://www.youtube.com/watch?v=Q4MU7pkDYmQ&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=40</a></li>
+  <li>code: <a href="https://editor.p5js.org/codingtrain/sketches/v-VoQtETO">https://editor.p5js.org/codingtrain/sketches/v-VoQtETO</a></li>
+  </ul>
+<p>Move the mouse to have the vehicle seek the target. Once the vehicle has arrived at a safe distance away it stops. If it's too close it moves away.  </p>
+<ul>
+<li>"l" to start or stop the the running sketch</li>
+</ul>
+  </main>
+</body>
+
+</html>
