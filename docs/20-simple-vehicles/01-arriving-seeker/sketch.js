@@ -14,7 +14,6 @@ let target;
 function setup() {
     controller = new ControlledCanvas(400, 400);
     controller.disableGalleryMode();
-    controller.enableRecording();
     vehicle = SimpleVehicle.createStillVehicle(20, 20);
     target = new Vector(width / 2, height / 2);
     background(0, 0, 80);
@@ -30,7 +29,6 @@ function draw() {
     let distance = vehicle.position.distanceTo(target);
     showTarget(target, distance);
     showVehicle(vehicle, distance);
-    controller.recordingWatcher();
 }
 function keyPressed() {
     controller.keyPressed();

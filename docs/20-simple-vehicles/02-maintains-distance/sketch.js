@@ -17,7 +17,6 @@ let safety = 100; //hypot of half canvas
 function setup() {
     controller = new ControlledCanvas(400, 400);
     controller.disableGalleryMode();
-    controller.enableRecording();
     vehicle = SimpleVehicle.createStillVehicle(50, 50);
     fear = new Vector(width / 2, height / 2);
     home = new Vector(width / 2, height / 2);
@@ -39,7 +38,6 @@ function draw() {
     showVehicle(vehicle, distance);
     showSafety(home);
     showHome(home);
-    controller.recordingWatcher();
 }
 function keyPressed() {
     controller.keyPressed();

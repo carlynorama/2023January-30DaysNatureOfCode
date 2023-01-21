@@ -9,19 +9,13 @@
 let controller;
 //NOTE Particles have a dissipation factor to chill out the world.
 const vehicleSize = 20; //same as docking distance
-let vehicle;
-let fear;
-let home;
-let vehicles = [];
-//let fearRange = 320000;
-let safety = 50; //hypot of half canvas
+let predator;
+let target;
+let target_inset = 40;
 function setup() {
     controller = new ControlledCanvas(400, 400);
-    for (let i = 0; i < 200; i++) {
-        let newV = SimpleVehicle.createStillVehicle(random(0, width), random(0, height));
-        vehicles.push(newV);
-    }
-    fear = new Vector(300, 300);
+    predator = Vehicle.createStillVehicle(random(0, width), random(0, height));
+    target = Vehicle.createStillVehicle(random(target_inset, width - target_inset), random(target_inset, height - target_inset));
     background(0, 0, 80);
     ellipseMode(CENTER);
     colorMode(HSB);
@@ -30,23 +24,21 @@ function setup() {
 //let counter = 270;
 function draw() {
     background(0, 0, 80, 10);
-    fear = new Vector(mouseX, mouseY);
-    //counter -= 0.1
-    vehicles.forEach(vehicle => {
-        let steering = Vector.zero2D();
-        //if here should provide some energy saving
-        if (Math.abs(vehicle.x - fear.x) < safety && Math.abs(vehicle.y - fear.y) < safety) {
-            steering = vehicle.skirt(fear, safety).scaledBy(5);
-        }
-        if (!vehicle.checkForArrival(vehicle.startLocation)) {
-            steering = steering.added(vehicle.approach(vehicle.startLocation));
-        }
-        vehicle.applyInternalPower(steering);
-        vehicle.update();
-        let distance = vehicle.position.distanceTo(fear);
-        showVehicle(vehicle, distance);
-    });
-    showFear(fear);
+    let p_steering = predator.pursue(target);
+    predator.applyInternalPower(p_steering);
+    //predator.applyAcceleration(predator.wallCheck(width, height, 0.8));
+    let t_steering = target.evade(predator);
+    target.applyInternalPower(t_steering);
+    target.applyAcceleration(target.wallCheck(width, height, target_inset, 1.0001));
+    predator.update();
+    target.update();
+    if (target.checkForArrival(predator.position)) {
+        target = Vehicle.createStillVehicle(random(target_inset, width - target_inset), random(target_inset, height - target_inset));
+        //predator = Vehicle.createStillVehicle();
+    }
+    let distance = predator.position.distanceTo(target.position);
+    showPredator(predator, distance);
+    showTarget(target.position);
 }
 function keyPressed() {
     controller.keyPressed();
@@ -54,7 +46,7 @@ function keyPressed() {
 function showDesireLineBetween(a, b) {
     line(a.x, a.y, b.x, b.y);
 }
-function showVehicle(vehicle, distance) {
+function showPredator(vehicle, distance) {
     //strokeWeight(2);
     push();
     translate(vehicle.x, vehicle.y);
@@ -67,16 +59,9 @@ function showVehicle(vehicle, distance) {
     pop();
     pop();
 }
-function showFear(target) {
+function showTarget(target) {
     push();
     translate(target.x, target.y);
     circle(0, 0, vehicleSize);
-    pop();
-}
-function showSafetyRing(target) {
-    push();
-    translate(target.x, target.y);
-    noFill();
-    circle(0, 0, safety * 2);
     pop();
 }
