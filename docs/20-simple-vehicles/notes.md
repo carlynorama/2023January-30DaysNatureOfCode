@@ -1,4 +1,3 @@
-Refactor of the Controller, and wrap up of Chapter 4 particle.
 Begin [Chapter 5](https://www.youtube.com/watch?v=P_xJMH8VvAE&list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&index=38).
 
 ### References
@@ -10,9 +9,10 @@ Begin [Chapter 5](https://www.youtube.com/watch?v=P_xJMH8VvAE&list=PLRqwX-V7Uu6Z
 
 Move the mouse over a sketch to make it run. 
 
-- Sketch 1: Click on the disk and drag it around to make the seeker look for it.
-- Sketch 2: Click on the disk and drag it around to make the seeker look for it.
+- Sketch 1: 
+- Sketch 2: 
 - Sketch 3: 
+- Sketch 4:
 
 #### Keys enabled
 

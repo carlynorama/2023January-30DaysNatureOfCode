@@ -80,12 +80,7 @@ class SimpleVehicle extends BasicParticle {
         // console.log(p_difference.x, p_difference.y, distanceToMove, desiredNewLocation.x, desiredNewLocation.y);
         return this.approach(desiredNewLocation);
     }
-    skirt(target, safety) {
-        let p_difference = Vector.subtracted(target, this.position);
-        let distanceToMove = Math.max(safety - p_difference.magnitude(), 0);
-        let desiredNewLocation = p_difference.normalized().scaledBy(distanceToMove).added(target);
-        return this.approach(desiredNewLocation);
-    }
+    
     applyInternalPower(acceleration) {
         this._acceleration = acceleration.added(acceleration).limited(this.maxPush);
     }

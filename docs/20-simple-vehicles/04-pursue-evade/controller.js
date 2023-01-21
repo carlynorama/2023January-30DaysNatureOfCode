@@ -6,6 +6,7 @@
 // controller.ts
 // written by calynorama 2023 Jan 13
 // updated Jan 20
+//import { Renderer } from "p5";
 //THIS WHOLE THING REQUIRES p5js
 class ControlledCanvas {
     constructor(x, y) {
