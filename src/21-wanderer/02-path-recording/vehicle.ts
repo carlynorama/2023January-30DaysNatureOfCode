@@ -90,6 +90,22 @@ abstract class BasicParticle implements DrawableVehicle {
       return new Vector(xComponent, yComponent);
   }
 
+  protected edgeWrapResult(x: number, y: number, bWidth: number, bHeight: number, tailSpace: number): { edgeCrossed:boolean, newPosition:Vector } {
+    let edgeCrossed = false;
+    let outsetX = x - tailSpace;
+    let outsetY = y - tailSpace;
+    let outsetWidth = bWidth + (2 * tailSpace);
+    let outsetHeight = bHeight + (2 * tailSpace);
+    let xComponent = this._position.x;
+    let yComponent = this._position.y;
+    if (xComponent > (outsetWidth + outsetX)) { xComponent = outsetX; edgeCrossed = true; }
+    else if (xComponent < outsetX) { xComponent = outsetWidth + outsetX; edgeCrossed = true; }
+    if (this.y > (outsetHeight + outsetY)){ yComponent = outsetY; edgeCrossed = true; }
+    else if (this.y < outsetY) { yComponent = outsetHeight + outsetY; edgeCrossed = true; }
+    let newPosition = new Vector(xComponent, yComponent);
+    return  { edgeCrossed, newPosition };
+}
+
 }
 
 class Vehicle extends BasicParticle implements DrawableVehicle {
@@ -232,8 +248,10 @@ class Vehicle extends BasicParticle implements DrawableVehicle {
     return this.worldEdgeBounce(0, 0, canvas_w, canvas_h, 20 + inset, rebound);
   }
 
-  wallWrap(canvas_w: number, canvas_h: number) {
-    this.teleport(this.worldEdgeWrap(0, 0, canvas_w, canvas_h, this.dockingDistance));
+  wallWrap(canvas_w: number, canvas_h: number):boolean {
+    let result = this.edgeWrapResult(0, 0, canvas_w, canvas_h, this.dockingDistance)
+    this.teleport(result.newPosition);
+    return result.edgeCrossed
   }
   
   }

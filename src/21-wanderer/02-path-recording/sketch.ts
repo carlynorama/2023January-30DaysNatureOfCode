@@ -26,7 +26,6 @@ function setup() {
   background(0, 0, 80);
 
   ellipseMode(CENTER);
-  noFill();
   colorMode(HSB);
   console.log("-------- DONE SETUP --------");
 }
@@ -37,8 +36,25 @@ function draw() {
   wanderer.wander();
   wanderer.update(400, 400);
 
+  push();
+  stroke(0, 0, 40);
+  fill(0, 0, 60);
   showWanderer(wanderer.vehicle);
-  showApparatus(wanderer);
+  pop();
+
+  //showApparatus(wanderer);
+
+  push();
+  stroke(0, 0, 100);
+  showPaths(wanderer);
+  pop();
+  
+  push();
+  let butterflyLoc = wanderer.wanderCanvasPoint()
+  fill(300, 80, 100);
+  stroke(0, 0, 20);
+  butterfly(butterflyLoc.x, butterflyLoc.y, wanderer.toWobblePoint.angle(), 15);
+  pop();
 
 }
 
@@ -46,32 +62,41 @@ function keyPressed() {
   controller.keyPressed();
 }
 
-function showDesireLineBetween(a:{x:number, y:number}, b:{x:number, y:number}) {
-  line(a.x, a.y, b.x, b.y);
+function showPaths(wanderer:Wanderer) {
+  for (let path of wanderer.paths) {
+    beginShape();
+    noFill();
+    for (let v of path) {
+      //vertex(v.x, v.y);
+      curveVertex(v.x, v.y);
+    }
+    endShape();
+  }
 }
 
-function showApparatus(wander:Wanderer) {
+
+function showApparatus(wanderer:Wanderer) {
   // let wanderPoint = wander.wanderCanvasPoint()
   // line(0, 0, wanderPoint.x, wanderPoint.y);
 
   push();
   stroke(51, 100);
-  translate(wander.vehicle.x, wander.vehicle.y);
-  line(0,0, wander.toLookAhead.x, wander.toLookAhead.y);
+  translate(wanderer.vehicle.x, wanderer.vehicle.y);
+  line(0,0, wanderer.toLookAhead.x, wanderer.toLookAhead.y);
 
-  translate(wander.toLookAhead.x, wander.toLookAhead.y);
-  circle(0, 0, wander.toWanderPoint.magnitude()*2);
-  line(0,0, wander.toWanderPoint.x, wander.toWanderPoint.y);
+  translate(wanderer.toLookAhead.x, wanderer.toLookAhead.y);
+  circle(0, 0, wanderer.toWanderPoint.magnitude()*2);
+  line(0,0, wanderer.toWanderPoint.x, wanderer.toWanderPoint.y);
 
   push();
-  translate(wander.toWanderPoint.x, wander.toWanderPoint.y);
-  circle(0, 0, wander.toWobblePoint.magnitude()*2);
-  line(0,0, wander.toWobblePoint.x, wander.toWobblePoint.y);
+  translate(wanderer.toWanderPoint.x, wanderer.toWanderPoint.y);
+  circle(0, 0, wanderer.toWobblePoint.magnitude()*2);
+  line(0,0, wanderer.toWobblePoint.x, wanderer.toWobblePoint.y);
   pop();
 
-  let newItems = wander.toWobbleFromLookAhead();
+  let newItems = wanderer.toWobbleFromLookAhead();
   //let newPoint = Vector.createAngleVector(newItems.angle(), wander.toWanderPoint.magnitude())
-  let newPoint = wander.calculateSeekPoint();
+  let newPoint = wanderer.calculateSeekPoint();
 
   push();
   //strokeWeight(3);
@@ -87,16 +112,21 @@ function showApparatus(wander:Wanderer) {
   pop();
 
   circle(0, 0, 3);
-  
 
-  
-  translate(wander.toWanderPoint.x, wander.toWanderPoint.y);
-  translate(wander.toWobblePoint.x, wander.toWobblePoint.y);
-  //let n = wander.toWobblePoint.x
-  
-  //line(0, 0, 0, -wander.toWobblePoint.y);
+  translate(wanderer.toWanderPoint.x, wanderer.toWanderPoint.y);
+  translate(wanderer.toWobblePoint.x, wanderer.toWobblePoint.y);
+
   circle(0, 0, 3);
 
+  pop();
+}
+
+function butterfly(x:number, y:number, angle:number, butterflySize:number = 10) {
+  push();
+  translate(x, y);
+  rotate(angle);
+  //triangle(-butterflySize/2, -butterflySize / 2, -butterflySize/2, butterflySize / 2, 0, 0);
+  triangle(butterflySize/2, butterflySize / 2, butterflySize/2, -butterflySize / 2, 0, 0);
   pop();
 }
 
@@ -109,7 +139,7 @@ function showWanderer(vehicle:DrawableVehicle) {
     //TRIANGLE
     push();
       rotate(vehicle.heading);
-      triangle(-vehicleSize, -vehicleSize / 2, -vehicleSize, vehicleSize / 2, vehicleSize, 0);
+      triangle(-vehicleSize, -vehicleSize/3, -vehicleSize, vehicleSize/3, 0, 0);
     pop();
   pop();
 

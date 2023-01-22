@@ -37,7 +37,7 @@ function showApparatus(wander) {
     // let wanderPoint = wander.wanderCanvasPoint()
     // line(0, 0, wanderPoint.x, wanderPoint.y);
     push();
-    stroke(51, 100);
+    stroke(60, 100);
     translate(wander.vehicle.x, wander.vehicle.y);
     line(0, 0, wander.toLookAhead.x, wander.toLookAhead.y);
     translate(wander.toLookAhead.x, wander.toLookAhead.y);
@@ -49,8 +49,8 @@ function showApparatus(wander) {
     line(0, 0, wander.toWobblePoint.x, wander.toWobblePoint.y);
     pop();
     let newItems = wander.toWobbleFromLookAhead();
-    //let newPoint = Vector.createAngleVector(newItems.angle(), wander.toWanderPoint.magnitude())
-    let newPoint = wander.calculateSeekPoint();
+    let newPoint = Vector.createAngleVector(newItems.angle(), wander.toWanderPoint.magnitude())
+    //let newPoint = wander.calculateSeekPoint();
     push();
     //strokeWeight(3);
     //stroke(260, 80, 100);
@@ -59,8 +59,8 @@ function showApparatus(wander) {
     push();
     translate(newPoint.x, newPoint.y);
     strokeWeight(1);
-    fill(300, 80, 100);
-    circle(0, 0, 3);
+    fill(200, 80, 100);
+    circle(0, 0, 5);
     pop();
     circle(0, 0, 3);
     translate(wander.toWanderPoint.x, wander.toWanderPoint.y);
