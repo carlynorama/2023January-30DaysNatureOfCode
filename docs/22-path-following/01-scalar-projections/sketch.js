@@ -24,23 +24,84 @@ let subtraction;
 //   const normalized = other.normalized()
 //   return normalized.scaledBy(this.dotProduct(normalized))
 // }
+let angle_inc = Math.PI / 180;
 function setup() {
     controller = new ControlledCanvas(400, 400);
-    base = new Vector(random(0, width / 3), random(0, height / 3));
-    secondV = new Vector(random(0, width / 3), random(0, height / 3));
+    base = new Vector(random(-width / 3, width / 3), random(-height / 3, height / 3));
+    secondV = new Vector(random(-width / 3, width / 3), random(-height / 3, height / 3));
     projection = secondV.projectOn(base);
-    subtraction = secondV.subtracted(projection);
+    subtraction = secondV.subtracting(projection);
+    //console.log(base.angle2D(), base.angleToAxis(0))
     colorMode(HSB);
     background(0, 0, 0);
     translate(width / 2, height / 2);
     //drawLightSource(base, subtraction);
     drawBackground(base, secondV);
-    drawVector(base, 5, 20);
-    drawVector(secondV, 3, 110);
-    drawVector(projection, 1, 200);
+    drawBoundsInterceptVectors(base, 1, 85);
+    push();
     translate(projection.x, projection.y);
-    drawVector(subtraction, 1, 290);
+    drawGrayVector(subtraction, 1, 40);
+    pop();
+    drawGrayVector(base, 2, 95);
+    drawGrayVector(secondV, 2, 20);
+    //drawVector(secondV, 1, 110);
+    drawVector(projection, 3, 200);
     console.log("-------- DONE SETUP --------");
+}
+function draw() {
+    secondV = Vector.create2DAngleVector(secondV.angle2D() + angle_inc, secondV.magnitude());
+    projection = secondV.projectOn(base);
+    subtraction = secondV.subtracting(projection);
+    translate(width / 2, height / 2);
+    //drawLightSource(base, subtraction);
+    drawBackground(base, secondV);
+    // drawGrayVector(Vector.makeAxisVector(base, 0).scaledBy(40), 10, 40);
+    // console.log(base.angle2D(), base.angleToAxis(0))
+    drawBoundsInterceptVectors(base, 1, 85);
+    push();
+    translate(projection.x, projection.y);
+    drawGrayVector(subtraction, 1, 40);
+    pop();
+    drawGrayVector(base, 2, 95);
+    drawGrayVector(secondV, 2, 20);
+    //drawVector(secondV, 1, 110);
+    drawVector(projection, 3, 200);
+}
+function keyPressed() {
+    controller.keyPressed();
+}
+function drawBoundsInterceptVectors(vector, weight, brightness) {
+    let drawThis = getBoundsIntercept(vector);
+    drawGrayVector(drawThis, weight, brightness);
+    drawGrayVector(drawThis.inverted(), weight, brightness);
+}
+function getBoundsIntercept(vector) {
+    //assumes vector origin is at center of bounds.
+    const halfWidth = width / 2;
+    const halfHeight = height / 2;
+    //console.log("vector", vector.x, vector.y);
+    const slope = vector.y / vector.x;
+    let testX = halfWidth;
+    if (vector.x < 0) {
+        testX *= -1;
+    }
+    const heightIntercept = slope * (testX);
+    //console.log(slope, testX, heightIntercept);
+    if (heightIntercept <= halfHeight && heightIntercept >= -halfHeight) {
+        //console.log("intercepts vertical at",heightIntercept);
+        return new Vector(testX, heightIntercept);
+    }
+    let testY = halfHeight;
+    if (vector.y < 0) {
+        testY *= -1;
+    }
+    const widthIntercept = testY / slope;
+    //console.log(testY, widthIntercept);
+    if (widthIntercept <= halfWidth && widthIntercept >= -halfWidth) {
+        //console.log("intercepts horizontal at", widthIntercept);
+        return new Vector(widthIntercept, testY);
+    }
+    return vector;
 }
 function drawVector(vector, weight, hue) {
     push();
@@ -48,7 +109,19 @@ function drawVector(vector, weight, hue) {
     stroke(hue, 60, 80);
     line(0, 0, vector.x, vector.y);
     translate(vector.x, vector.y);
-    rotate(vector.angle());
+    rotate(vector.angle2D());
+    const arrowTip = 8;
+    line(0, 0, -arrowTip, -arrowTip / 2);
+    line(0, 0, -arrowTip, arrowTip / 2);
+    pop();
+}
+function drawGrayVector(vector, weight, brightness) {
+    push();
+    strokeWeight(weight);
+    stroke(0, 0, brightness);
+    line(0, 0, vector.x, vector.y);
+    translate(vector.x, vector.y);
+    rotate(vector.angle2D());
     const arrowTip = 8;
     line(0, 0, -arrowTip, -arrowTip / 2);
     line(0, 0, -arrowTip, arrowTip / 2);
@@ -57,9 +130,9 @@ function drawVector(vector, weight, hue) {
 function drawLightSource(baseVector, second) {
     //assume translated to base of base vector
     push();
-    rotate(baseVector.angle());
+    rotate(baseVector.angle2D());
     let distance = 100;
-    if (second.angle() < baseVector.angle()) {
+    if (second.angle2D() < baseVector.angle2D()) {
         distance *= -1;
     }
     translate(baseVector.magnitude() / 2, distance);
@@ -73,13 +146,13 @@ function drawBackground(baseVector, second) {
     let horizonLength = width * Math.SQRT2; //works because canvas is square. 
     let horizonHeight = height / 2 * Math.SQRT2;
     push();
-    rotate(baseVector.angle());
+    rotate(baseVector.angle2D());
     //let distance = 100;
-    if (second.angle() < baseVector.angle()) {
+    if (second.angle2D() < baseVector.angle2D()) {
         horizonHeight *= -1;
     }
     noStroke();
-    fill(0, 0, 40);
+    fill(0, 0, 60);
     rect(-horizonLength / 2, -horizonHeight, horizonLength, horizonHeight);
     fill(0, 0, 70);
     rect(-horizonLength / 2, horizonHeight, horizonLength, -horizonHeight);

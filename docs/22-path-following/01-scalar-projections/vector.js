@@ -16,19 +16,6 @@ class Vector {
         };
         this.components = components;
     }
-    static createAngleVector(angle, magnitude = 1) {
-        if (magnitude < 0) {
-            return Vector.createEqualAndOpposite(angle, Math.abs(magnitude));
-        }
-        return new Vector(Math.cos(angle) * magnitude, Math.sin(angle) * magnitude);
-    }
-    static createEqualAndOpposite(angle, magnitude = 1) {
-        if (magnitude < 0) {
-            return Vector.createAngleVector(angle, Math.abs(magnitude));
-        }
-        let newAngle = angle + Math.PI;
-        return new Vector(Math.cos(newAngle) * magnitude, Math.sin(newAngle) * magnitude);
-    }
     get x() { return this.components[0]; } //i-hat
     get y() { return this.components[1]; } //j-hat
     get z() { return this.components[2]; } //k-hat
@@ -39,33 +26,24 @@ class Vector {
     addedValues(...values) {
         return new Vector(...values.map((component, index) => this.components[index] + component));
     }
-    added(other) {
+    addedTo(other) {
         return new Vector(...other.components.map((component, index) => this.components[index] + component));
     }
-    static added(lhs, rhs) {
+    static addedTo(lhs, rhs) {
         return new Vector(...rhs.components.map((component, index) => lhs.components[index] + component));
     }
-    // add(...otherValues: number[]) {
-    //     const oa = otherValues;
-    //     if (this.values.length === oa.length) {
-    //       let result: number[] = [];
-    //       for(let key in this.values) {
-    //         result[key] = this.values[key] + oa[key]
-    //       }
-    //       return new Vector(...result)
-    //     }
-    //   }
-    subtractedValues(...values) {
+    subtractingValues(...values) {
         return new Vector(...values.map((component, index) => this.components[index] - component));
     }
-    subtracted(other) {
+    subtracting(other) {
         return new Vector(...other.components.map((component, index) => this.components[index] - component));
     }
-    static subtracted(lhs, rhs) {
+    static subtracting(lhs, rhs) {
         return new Vector(...rhs.components.map((component, index) => lhs.components[index] - component));
     }
     normalized() { return this.scaledBy(1 / this.length()); }
     negated() { return this.scaledBy(-1); }
+    inverted() { return this.scaledBy(-1); }
     length() { return Math.hypot(...this.components); }
     magnitude() { return Math.hypot(...this.components); }
     //Same as dot*product with self.
@@ -73,25 +51,6 @@ class Vector {
     magnitudeSquared() {
         return this.components.reduce(function (sumSq, value) { return sumSq + (value ** 2); }, 0);
     }
-    rotated(angle) {
-        return Vector.rotated(this, angle);
-    }
-    static rotated(lhs, angle) {
-        let l = lhs.length();
-        let newAngle = lhs.angle() + angle;
-        return Vector.createAngleVector(newAngle, l);
-    }
-    inverted() {
-        return this.scaledBy(-1);
-    }
-    //Only set up for 2D vectors
-    angle() { return Math.atan2(this.y, this.x); }
-    flippedVAngle() { return Math.atan2(-this.y, this.x); }
-    flippedHAngle() { return Math.atan2(this.y, -this.x); }
-    perpendicularAngle() { return Math.atan2(this.x, -this.y); } //compare to angle + PI/2
-    deflectedIn() { return Math.atan2(this.x / 2, -this.y); } //45?
-    inverseAngle() { return Math.atan2(-this.x, -this.y); } //compare to angle + PI
-    tangent() { Vector.createAngleVector(this.perpendicularAngle(), this.magnitude()); }
     //The dot product between two vectors is the sum of the products of corresponding components.
     //citation: https://radzion.com/blog/linear-algebra/vectors
     dotProduct({ components }) {
@@ -100,11 +59,7 @@ class Vector {
     //magnitude is the sqrt of the dotProduct with itself.
     distanceTo(other) {
         // || other - this ||
-        return Vector.subtracted(other, this).magnitude();
-    }
-    magSquaredTo(other) {
-        // || other - this ||
-        return Vector.subtracted(other, this).magnitudeSquared();
+        return Vector.subtracting(other, this).magnitude();
     }
     // SAME! 
     // distanceTo(other:Vector):number {
@@ -114,6 +69,27 @@ class Vector {
     //    return Math.sqrt(next);
     //    //same as first.magnitude?
     // }
+    magSquaredTo(other) {
+        // || other - this ||
+        return Vector.subtracting(other, this).magnitudeSquared();
+    }
+    //Why does this come back in degrees? 
+    angleBetween(other) {
+        return (Math.acos(this.dotProduct(other) / (this.length() * other.length())));
+    }
+    angleToAxis(axis) {
+        if (this.isZeroVector()) {
+            throw new Error("zero vector");
+        }
+        //@ts-expect-error
+        return this.normalized().angleBetween(Vector.makeAxisVector(this, axis));
+    }
+    //x axis is 0
+    static makeAxisVector(base, axis) {
+        let components = Array(base.components.length).fill(0);
+        components[axis] = 1;
+        return new Vector(...components);
+    }
     //If we take the dot product of two normalized vectors and the result is equal to one it means that they have the same direction. 
     //To compare two float numbers, we will use the areEqual function.
     //citation: https://radzion.com/blog/linear-algebra/vectors
@@ -141,13 +117,6 @@ class Vector {
         const dotProduct = this.normalized().dotProduct(other.normalized());
         return Vector.floatsAreEqual(dotProduct, 0);
     }
-    // 3D vectors only
-    crossProduct({ components }) {
-        return new Vector(this.components[1] * components[2] - this.components[2] * components[1], this.components[2] * components[0] - this.components[0] * components[2], this.components[0] * components[1] - this.components[1] * components[0]);
-    }
-    angleBetween(other) {
-        return Vector.toDegrees(Math.acos(this.dotProduct(other) / (this.length() * other.length())));
-    }
     projectOn(other) {
         if (this.isZeroVector() || other.isZeroVector()) {
             throw new Error("zero vector");
@@ -174,6 +143,41 @@ class Vector {
         return components.every((component, index) => Vector.floatsAreEqual(component, this.components[index]));
     }
     isZeroVector() { return this.components.every(item => item === 0); }
+    static create2DAngleVector(angle, magnitude = 1) {
+        if (magnitude < 0) {
+            return Vector.create2DEqualAndOpposite(angle, Math.abs(magnitude));
+        }
+        return new Vector(Math.cos(angle) * magnitude, Math.sin(angle) * magnitude);
+    }
+    static create2DEqualAndOpposite(angle, magnitude = 1) {
+        if (magnitude < 0) {
+            return Vector.create2DAngleVector(angle, Math.abs(magnitude));
+        }
+        let newAngle = angle + Math.PI;
+        return new Vector(Math.cos(newAngle) * magnitude, Math.sin(newAngle) * magnitude);
+    }
+    rotated2D(angle) {
+        return Vector.rotated2D(this, angle);
+    }
+    static rotated2D(lhs, angle) {
+        let l = lhs.length();
+        let newAngle = lhs.angle2D() + angle;
+        return Vector.create2DAngleVector(newAngle, l);
+    }
+    //Only set up for 2D vectors
+    angle2D() { return Math.atan2(this.y, this.x); }
+    flippedVAngle2D() { return Math.atan2(-this.y, this.x); }
+    flippedHAngle2D() { return Math.atan2(this.y, -this.x); }
+    perpendicularAngle2D() { return Math.atan2(this.x, -this.y); } //compare to angle + PI/2
+    deflectedIn2D() { return Math.atan2(this.x / 2, -this.y); } //45?
+    inverseAngle2D() { return Math.atan2(-this.x, -this.y); } //compare to angle + PI
+    normal2D() { Vector.create2DAngleVector(this.perpendicularAngle2D(), this.magnitude()); }
+    // ------------------------------------------------------------------------------------
+    // 3D Only So Far
+    // ------------------------------------------------------------------------------------
+    crossProduct({ components }) {
+        return new Vector(this.components[1] * components[2] - this.components[2] * components[1], this.components[2] * components[0] - this.components[0] * components[2], this.components[0] * components[1] - this.components[1] * components[0]);
+    }
 }
 //MATH HELPERS
 //how small of a difference do we care about when doing comparisons. 
@@ -183,8 +187,11 @@ Vector.toDegrees = (radians) => (radians * 180) / Math.PI;
 Vector.toRadians = (degrees) => (degrees * Math.PI) / 180;
 Vector.randomF = (scalar = 1) => { return (Math.random() - 0.5) * 2 * scalar; };
 Vector.randomInRange = (min, max) => { return Math.random() * (max - min) + min; };
-Vector.zero2D = () => { return new Vector(0, 0); };
-Vector.random2D = (scalar = 1) => { return new Vector(Vector.randomF(scalar), Vector.randomF(scalar)); };
 Vector.scaledBy = (lhs, value) => {
     return new Vector(...lhs.components.map(component => component * value));
 };
+// ------------------------------------------------------------------------------------
+//2D Only So Far
+// ------------------------------------------------------------------------------------
+Vector.zero2D = () => { return new Vector(0, 0); };
+Vector.random2D = (scalar = 1) => { return new Vector(Vector.randomF(scalar), Vector.randomF(scalar)); };
