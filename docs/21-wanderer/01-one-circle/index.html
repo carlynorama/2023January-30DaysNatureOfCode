@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>carlynorama | 2023 Jan 21 - 01-one-circle</title>
+  <script src="../../p5.min.js"></script>
+		<script src="controller.js"></script>
+		<script src="sketch.js"></script>
+		<script src="vector.js"></script>
+		<script src="vehicle.js"></script>
+		<script src="wanderer.js"></script>
+</head>
+
+<body>
+  <main>
+    <p>Built the wanderer as class wrapping a vehicle instead of extending it. Not sure why, but that is what felt right to me. Perhaps is the way the vehicle code is sitting in an apparatus in the illustrations of the <a href="https://www.red3d.com/cwr/papers/1999/gdc99steer.pdf">original paper</a> by Craig Reynolds.</p>
+<p>Wanderer's point to seek is a location on a circle as described in the paper. The next seek point is selected by drawing a second dot on a second circle and using that location to find a new location on the arc contained by that circle. Press the "l" key while running to freeze the apparatus in place. I don't believe the blue dot is the actual next seek point, but it is where this seek point was relative to it's predecessor since the apparatus is being drawn after the update happens.   </p>
+<h3>Video Info</h3>
+<ul>
+<li>coding train link: <a href="https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/5-wander">https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/5-wander</a></li>
+<li>video in playlist: <a href="https://www.youtube.com/watch?v=ujsR2vcJlLk&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=42">https://www.youtube.com/watch?v=ujsR2vcJlLk&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=42</a></li>
+<li>code: <a href="https://editor.p5js.org/codingtrain/sketches/v-VoQtETO">https://editor.p5js.org/codingtrain/sketches/v-VoQtETO</a></li>
+</ul>
+<h3>Instructions</h3>
+<p>Nothing to do here but watch the wander.  </p>
+<ul>
+<li>"l" to start or stop the the running sketch</li>
+</ul>
+  </main>
+</body>
+
+</html>
