@@ -34,6 +34,7 @@ class BasicParticle {
         //console.log(this.position.x, this.position.y);
         this._acceleration = new Vector(0, 0);
     }
+    //------------------------------------------- BOUNDS CHECKING
     //returns Acceleration because world edges don't move. 
     worldEdgeBounce(x, y, bWidth, bHeight, padding, rebound) {
         let insetX = x + padding;
@@ -50,16 +51,38 @@ class BasicParticle {
         }
         return new Vector(xComponent, yComponent);
     }
+    //return the new position
+    worldEdgeWrap(x, y, bWidth, bHeight, tailSpace) {
+        let outsetX = x - tailSpace;
+        let outsetY = y - tailSpace;
+        let outsetWidth = bWidth + (2 * tailSpace);
+        let outsetHeight = bHeight + (2 * tailSpace);
+        let xComponent = this._position.x;
+        let yComponent = this._position.y;
+        if (xComponent > (outsetWidth + outsetX)) {
+            xComponent = outsetX;
+        }
+        else if (xComponent < outsetX) {
+            xComponent = outsetWidth + outsetX;
+        }
+        if (this.y > (outsetHeight + outsetY)) {
+            yComponent = outsetY;
+        }
+        else if (this.y < outsetY) {
+            yComponent = outsetHeight + outsetY;
+        }
+        return new Vector(xComponent, yComponent);
+    }
 }
 class Vehicle extends BasicParticle {
-    constructor(position, velocity, acceleration, maxSpeed = 1.2, maxForce = 0.5, dockingDistance = 20) {
+    constructor(position, velocity, acceleration, maxSpeed = 1, maxForce = 0.05, dockingDistance = 40) {
         super(position, velocity, acceleration);
         this.startLocation = position;
         this.maxSpeed = maxSpeed;
         this.maxPush = maxForce;
         this.arrived = false;
         this.dockingDistance = dockingDistance;
-        this.drag = 0.98;
+        this.drag = 1;
     }
     static createStillVehicle(x, y) {
         let acceleration = new Vector(0, 0);
@@ -72,6 +95,15 @@ class Vehicle extends BasicParticle {
         let velocity = new Vector(vx, vy);
         let position = new Vector(x, y);
         return new Vehicle(position, velocity, acceleration);
+    }
+    static createRandomVehicle(x, y, max) {
+        let acceleration = new Vector(0, 0);
+        let velocity = new Vector(Math.random() * max, Math.random() * max);
+        let position = new Vector(x, y);
+        return new Vehicle(position, velocity, acceleration);
+    }
+    teleport(newLocation) {
+        this._position = newLocation.copy();
     }
     //classic seek
     seek(target) {
@@ -149,11 +181,14 @@ class Vehicle extends BasicParticle {
     //Have to redeclare to add dampening. 
     update() {
         this._velocity = this.velocity.added(this.acceleration).scaledBy(this.drag);
-        this._velocity.limited(this.maxSpeed);
+        this._velocity = this._velocity.limited(this.maxSpeed);
         this._position = this._position.added(this.velocity);
         this._acceleration = new Vector(0, 0);
     }
-    wallCheck(canvas_w, canvas_h, inset, rebound) {
+    wallBounce(canvas_w, canvas_h, inset, rebound) {
         return this.worldEdgeBounce(0, 0, canvas_w, canvas_h, 20 + inset, rebound);
+    }
+    wallWrap(canvas_w, canvas_h) {
+        this.teleport(this.worldEdgeWrap(0, 0, canvas_w, canvas_h, this.dockingDistance));
     }
 }

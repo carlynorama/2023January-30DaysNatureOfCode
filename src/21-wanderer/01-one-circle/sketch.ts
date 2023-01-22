@@ -14,20 +14,19 @@ let controller:ControlledCanvas;
 
 const vehicleSize = 20; //same as docking distance
 
-let predator:Vehicle;
-let target:Vehicle;
-let target_inset = 40;
+let wanderer:Wanderer;
+
 
 
 function setup() {
   controller = new ControlledCanvas(400, 400);
  
-  predator = Vehicle.createStillVehicle(random(0,width),random(0,height));
-  target = Vehicle.createStillVehicle(random(target_inset,width-target_inset),random(target_inset,height-target_inset));
+  wanderer = new Wanderer(80, 40, Math.PI/3, 15);
 
   background(0, 0, 80);
 
   ellipseMode(CENTER);
+  noFill();
   colorMode(HSB);
   console.log("-------- DONE SETUP --------");
 }
@@ -35,26 +34,11 @@ function setup() {
 function draw() {
   background(0, 0, 80, 10);
 
-  let p_steering = predator.pursue(target);
-  predator.applyInternalPower(p_steering);
-  //predator.applyAcceleration(predator.wallCheck(width, height, 0.8));
+  wanderer.wander();
+  wanderer.update(400, 400);
 
-  let t_steering = target.evade(predator);
-  target.applyInternalPower(t_steering);
-  target.applyAcceleration(target.wallCheck(width, height, target_inset, 1.0001));
-
-  predator.update();
-  target.update();
-
-  if (target.checkForArrival(predator.position)) {
-    target = Vehicle.createStillVehicle(random(target_inset,width-target_inset),random(target_inset,height-target_inset));
-    //predator = Vehicle.createStillVehicle();
-  }
-
-  let distance = predator.position.distanceTo(target.position);
-  showPredator(predator, distance);
-
-  showTarget(target.position);
+  showWanderer(wanderer.vehicle);
+  showApparatus(wanderer);
 
 }
 
@@ -66,12 +50,62 @@ function showDesireLineBetween(a:{x:number, y:number}, b:{x:number, y:number}) {
   line(a.x, a.y, b.x, b.y);
 }
 
-function showPredator(vehicle:DrawableVehicle, distance:number) {
+function showApparatus(wander:Wanderer) {
+  // let wanderPoint = wander.wanderCanvasPoint()
+  // line(0, 0, wanderPoint.x, wanderPoint.y);
+
+  push();
+  stroke(51, 100);
+  translate(wander.vehicle.x, wander.vehicle.y);
+  line(0,0, wander.toLookAhead.x, wander.toLookAhead.y);
+
+  translate(wander.toLookAhead.x, wander.toLookAhead.y);
+  circle(0, 0, wander.toWanderPoint.magnitude()*2);
+  line(0,0, wander.toWanderPoint.x, wander.toWanderPoint.y);
+
+  push();
+  translate(wander.toWanderPoint.x, wander.toWanderPoint.y);
+  circle(0, 0, wander.toWobblePoint.magnitude()*2);
+  line(0,0, wander.toWobblePoint.x, wander.toWobblePoint.y);
+  pop();
+
+  let newItems = wander.toWobbleFromLookAhead();
+  //let newPoint = Vector.createAngleVector(newItems.angle(), wander.toWanderPoint.magnitude())
+  let newPoint = wander.calculateSeekPoint();
+
+  push();
+  //strokeWeight(3);
+  //stroke(260, 80, 100);
+  line(0,0, newItems.x, newItems.y);
+  pop();
+
+  push();
+  translate(newPoint.x, newPoint.y);
+  strokeWeight(1);
+  fill(300, 80, 100);
+  circle(0,0, 3);
+  pop();
+
+  circle(0, 0, 3);
+  
+
+  
+  translate(wander.toWanderPoint.x, wander.toWanderPoint.y);
+  translate(wander.toWobblePoint.x, wander.toWobblePoint.y);
+  //let n = wander.toWobblePoint.x
+  
+  //line(0, 0, 0, -wander.toWobblePoint.y);
+  circle(0, 0, 3);
+
+  pop();
+}
+
+function showWanderer(vehicle:DrawableVehicle) {
   //strokeWeight(2);
   push();
     translate(vehicle.x, vehicle.y);
-    let hue = map(distance, 0, width, 240, 420);
-    fill(hue, 60, 60);
+    // let hue = map(distance, 0, width, 240, 420);
+    // fill(hue, 60, 60);
     //TRIANGLE
     push();
       rotate(vehicle.heading);

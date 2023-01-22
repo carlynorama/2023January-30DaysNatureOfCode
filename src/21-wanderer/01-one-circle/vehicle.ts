@@ -53,6 +53,8 @@ abstract class BasicParticle implements DrawableVehicle {
     this._acceleration = new Vector(0,0);
   }
 
+  //------------------------------------------- BOUNDS CHECKING
+
   //returns Acceleration because world edges don't move. 
   protected worldEdgeBounce(x: number, y: number, bWidth: number, bHeight: number, padding: number, rebound:number):Vector {
     let insetX = x + padding;
@@ -74,16 +76,15 @@ abstract class BasicParticle implements DrawableVehicle {
 
 
     //return the new position
-    //use origin and width height so can use it with bounds in the future
-    worldEdgeWrap(x: number, y: number, bWidth: number, bHeight: number, padding: number):Vector {
-      let outsetX = x + padding;
-      let outsetY = y + padding;
-      let outsetWidth = bWidth - 2 * padding;
-      let outsetHeight = bHeight - 2 * padding;
-      let xComponent = 0;
-      let yComponent = 0;
-      if (this.x > (outsetWidth + outsetX)) { xComponent = outsetX; }
-      else if (this.x < outsetX) { xComponent = outsetWidth + outsetX; }
+    protected worldEdgeWrap(x: number, y: number, bWidth: number, bHeight: number, tailSpace: number):Vector {
+      let outsetX = x - tailSpace;
+      let outsetY = y - tailSpace;
+      let outsetWidth = bWidth + (2 * tailSpace);
+      let outsetHeight = bHeight + (2 * tailSpace);
+      let xComponent = this._position.x;
+      let yComponent = this._position.y;
+      if (xComponent > (outsetWidth + outsetX)) { xComponent = outsetX; }
+      else if (xComponent < outsetX) { xComponent = outsetWidth + outsetX; }
       if (this.y > (outsetHeight + outsetY)){ yComponent = outsetY }
       else if (this.y < outsetY) { yComponent = outsetHeight + outsetY; }
       return new Vector(xComponent, yComponent);
@@ -99,14 +100,14 @@ class Vehicle extends BasicParticle implements DrawableVehicle {
   drag:number;
   startLocation: Vector;
 
-  constructor(position:Vector, velocity:Vector, acceleration:Vector, maxSpeed = 1.2, maxForce = 0.5, dockingDistance = 20) {
+  constructor(position:Vector, velocity:Vector, acceleration:Vector, maxSpeed = 1, maxForce = 0.05, dockingDistance = 40) {
     super(position, velocity, acceleration);
     this.startLocation = position;
     this.maxSpeed = maxSpeed;
     this.maxPush = maxForce;
     this.arrived = false;
     this.dockingDistance = dockingDistance;
-    this.drag = 0.98;
+    this.drag = 1;
   }
 
   static createStillVehicle(x:number, y:number) {
@@ -121,6 +122,17 @@ class Vehicle extends BasicParticle implements DrawableVehicle {
     let velocity = new Vector(vx, vy);
     let position = new Vector(x, y);
     return new Vehicle(position, velocity, acceleration)
+  }
+
+  static createRandomVehicle(x:number, y:number, max:number) {
+    let acceleration = new Vector(0, 0);
+    let velocity = new Vector(Math.random() * max, Math.random() * max);
+    let position = new Vector(x, y);
+    return new Vehicle(position, velocity, acceleration)
+  }
+
+  private teleport(newLocation:Vector) {
+    this._position = newLocation.copy();
   }
 
   //classic seek
@@ -210,14 +222,18 @@ class Vehicle extends BasicParticle implements DrawableVehicle {
   //Have to redeclare to add dampening. 
   update() {
       this._velocity = this.velocity.added(this.acceleration).scaledBy(this.drag);
-      this._velocity.limited(this.maxSpeed);
+      this._velocity = this._velocity.limited(this.maxSpeed);
       this._position = this._position.added(this.velocity);
 
       this._acceleration = new Vector(0,0);
   }
 
-  wallCheck(canvas_w: number, canvas_h: number, inset:number, rebound: number):Vector {
+  wallBounce(canvas_w: number, canvas_h: number, inset:number, rebound: number):Vector {
     return this.worldEdgeBounce(0, 0, canvas_w, canvas_h, 20 + inset, rebound);
+  }
+
+  wallWrap(canvas_w: number, canvas_h: number) {
+    this.teleport(this.worldEdgeWrap(0, 0, canvas_w, canvas_h, this.dockingDistance));
   }
   
   }
