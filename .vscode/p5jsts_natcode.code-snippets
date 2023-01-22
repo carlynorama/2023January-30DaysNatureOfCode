@@ -23,8 +23,8 @@
 				"// 2023 January Creative Coding Journal",        
 				"// https://github.com/carlynorama/2023January-30DaysNatureOfCode/",
 				"//",
-				"// ${TM_FILENAME}",
-				"// written by calynorama ${CURRENT_YEAR} ${CURRENT_MONTH_NAME_SHORT} ${CURRENT_DATE}",
+				"// ${TM_DIRECTORY}/${TM_FILENAME}",
+				"// calynorama ${CURRENT_YEAR} ${CURRENT_MONTH_NAME_SHORT} ${CURRENT_DATE}",
 				"//",
 		 ]
 	},
