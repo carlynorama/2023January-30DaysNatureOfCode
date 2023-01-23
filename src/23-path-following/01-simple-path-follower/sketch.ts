@@ -22,8 +22,9 @@ let path:Path;
 function setup() {
   controller = new ControlledCanvas(400, 400);
  
-  pathFollower = new PathFollower(10);
-  path = Path.createLinearPath(50, 50, 300, 300);
+  pathFollower = new PathFollower(50, 200, 30);
+
+  path = Path.createLinearPath(20, random(0,400), 350, random(0,400));
 
 
   background(0, 0, 80);
@@ -43,7 +44,8 @@ function draw() {
 
   push();
   stroke(0, 0, 40);
-  fill(0, 0, 60);
+  //fill(0, 0, 60);
+  noFill();
   showFollower(pathFollower.vehicle);
   pop();
 
@@ -64,13 +66,8 @@ function keyPressed() {
 
 
 function drawPath(path:Path) {
-    beginShape();
-    noFill();
-    for (let v of path.locations) {
-      vertex(v.x, v.y);
-      //curveVertex(v.x, v.y);
-    }
-    endShape();
+  line(path.locations[0].x, path.locations[0].y, path.locations[1].x, path.locations[1].y)
+  //console.log(path.locations[0].x, path.locations[0].y, path.locations[1].x, path.locations[1].y)
 }
 
 function showFollower(vehicle:DrawableVehicle) {
@@ -104,7 +101,7 @@ function showTrails(wanderer:PathFollower) {
 function drawVector(vector:Vector, weight:number, hue:number) {
   push();
     strokeWeight(weight);
-    stroke(hue, 60, 80);
+    stroke(hue, 80, 60);
     line(0, 0, vector.x, vector.y);
     translate(vector.x, vector.y);
     rotate(vector.angle2D());
@@ -129,55 +126,48 @@ function drawGrayVector(vector:Vector, weight:number, brightness:number) {
 
 function showApparatus(pathFollower:PathFollower) {
   push();
+  noFill();
+  //DRAW lookAheadPoint info
+  push();
   stroke(0, 100, 50);
   let checkPoint = pathFollower.lookAheadCanvasPoint()
   line(0, 0, checkPoint.x, checkPoint.y);
-
-  stroke(90, 100, 50);
-  let checkPoint2 = pathFollower.findClosestPathPoint(path)
-  line(checkPoint.x, checkPoint.y, checkPoint2.x, checkPoint2.y)
   pop();
 
   push();
   stroke(0, 0, 20, 50);
-   translate(pathFollower.vehicle.x, pathFollower.vehicle.y);
-   rotate(pathFollower.vehicle.heading)
-   line(0,0, pathFollower.lookAheadDistance, 0);
-
+  translate(pathFollower.vehicle.x, pathFollower.vehicle.y);
+  rotate(pathFollower.vehicle.heading)
+  line(0,0, pathFollower.lookAheadDistance, 0);
   translate(pathFollower.lookAheadDistance, 0);
   circle(0, 0, 5);
-//   line(0,0, wanderer.toWanderPoint.x, wanderer.toWanderPoint.y);
+  pop();
 
-//   push();
-//   translate(wanderer.toWanderPoint.x, wanderer.toWanderPoint.y);
-//   circle(0, 0, wanderer.toWobblePoint.magnitude()*2);
-//   line(0,0, wanderer.toWobblePoint.x, wanderer.toWobblePoint.y);
-//   pop();
+  //path segment info
+  push();
+  stroke(90, 100, 50);
+  line(0, 0, path.locations[1].x, path.locations[1].y);
+  line(0, 0, path.locations[0].x, path.locations[0].y);
+  let newSegment = path.locations[1].subtracting(path.locations[0]);
+  translate(path.locations[0].x, path.locations[0].y)
+  drawVector(newSegment,1,90);
+  pop();
 
-//   let newItems = wanderer.toWobbleFromLookAhead();
-//   //let newPoint = Vector.createAngleVector(newItems.angle(), wander.toWanderPoint.magnitude())
-//   let newPoint = wanderer.calculateSeekPoint();
+  //vector to project
+  push();
+  let toProject = pathFollower.lookAheadCanvasPoint().subtracting(path.locations[0]);
+  translate(path.locations[0].x, path.locations[0].y)
+  drawVector(toProject,1,170);
+  pop();
 
-//   push();
-//   //strokeWeight(3);
-//   //stroke(260, 80, 100);
-//   line(0,0, newItems.x, newItems.y);
-//   pop();
-
-//   push();
-//   translate(newPoint.x, newPoint.y);
-//   strokeWeight(1);
-//   fill(300, 80, 100);
-//   circle(0,0, 3);
-//   pop();
-
-//   circle(0, 0, 3);
-
-//   translate(wanderer.toWanderPoint.x, wanderer.toWanderPoint.y);
-//   translate(wanderer.toWobblePoint.x, wanderer.toWobblePoint.y);
-
-//   circle(0, 0, 3);
-
+  push();
+  let projection = toProject.projectOn(newSegment);
+  let projectionCanvasPoint = projection.addedTo(path.locations[0]);
+  stroke(170, 100, 50);
+  circle(projectionCanvasPoint.x, projectionCanvasPoint.y, 10);
+  translate(path.locations[0].x, path.locations[0].y)
+  drawVector(projection,3,170);
+  pop();
   pop();
 }
 

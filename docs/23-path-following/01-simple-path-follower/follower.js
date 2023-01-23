@@ -7,16 +7,14 @@
 // written by calynorama 2023 Jan 22
 // building upon https://editor.p5js.org/codingtrain/sketches/EWHjy--Os
 class PathFollower {
-    constructor(lookAheadDistance) {
-        this.vehicle = Vehicle.createVehicle(200, 50, 1, 0);
+    constructor(x, y, lookAheadDistance) {
+        this.vehicle = Vehicle.createVehicle(x, y, 3, 0);
         this.lookAheadDistance = lookAheadDistance;
         this.currentPath = [];
         //JavaScript madness.
         this.paths = [this.currentPath];
     }
     follow(path) {
-        // this.toWobblePoint = Vector.create2DAngleVector(Math.random() * 2*Math.PI, this.toWobblePoint.magnitude())
-        // this.toWanderPoint = this.calculateSeekPoint();
         let pathPoint = this.findClosestPathPoint(path);
         let steering = this.vehicle.seek(pathPoint);
         this.vehicle.applyInternalPower(steering);
@@ -39,10 +37,10 @@ class PathFollower {
     }
     findClosestPathPoint(path) {
         let newSegment = path.locations[1].subtracting(path.locations[0]);
-        //TODO catch normalization problem.
-        //@ts-expect-error
-        let projection = this.vehicle.position.addedTo(this.vehicle.velocity.normalized().scaledBy(this.lookAheadDistance)).projectOn(newSegment);
-        return projection;
+        let toProject = pathFollower.lookAheadCanvasPoint().subtracting(path.locations[0]);
+        let projection = toProject.projectOn(newSegment);
+        let projectionCanvasPoint = projection.addedTo(path.locations[0]);
+        return projectionCanvasPoint;
     }
     managePathClearing(maxPoints = 200) {
         // Count positions
