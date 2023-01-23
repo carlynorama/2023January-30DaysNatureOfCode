@@ -8,7 +8,10 @@
         "yoff"
     ],
     "git.untrackedChanges": "mixed",
-    "eslint.enable": false,
     "jupyter.disableJupyterAutoStart": true,
     "editor.wordWrap": "off",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.validate": ["javascript"]
 }

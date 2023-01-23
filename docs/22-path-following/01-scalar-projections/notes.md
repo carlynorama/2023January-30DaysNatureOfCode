@@ -1,6 +1,8 @@
 Most of the heavy lifting on this was already done because had `projectOn` and `angleBetween` for vectors of size Rn, took this moment to do some `Vector` library reorganizing. 
 
-- TODO: `angleToAxis(0)` and `angle2D` sometimes, but not always, return the opposite signed answer from each other. 
+- Have now renamed `angle` to `angle2D` is now the name of the function that uses `atan`. Other functions that specifically work only in 2D space have that in the function name. 
+- Note: `angleToAxis(0)` and `angleBetween` don't preserve directionality b/c `acos`.
+    - Solution: `directionalAngleToAxis(angleAxis, directionAxis)` can now be used in Rn space.
 
 ### Video Info
 

@@ -6,9 +6,13 @@
 // vector.ts
 // adapted by calynorama 2023 Jan 12 from 
 // https://radzion.com/blog/linear-algebra/vectors
-//
-//https://www.robinwieruch.de/linear-algebra-matrix-javascript/
-////https://textbooks.math.gatech.edu/ila/dot-product.html
+// breaking changes 2023 Jan 22
+// Resources
+// - https://radzion.com/blog/linear-algebra/vectors
+// - https://www.robinwieruch.de/linear-algebra-matrix-javascript/
+// - https://textbooks.math.gatech.edu/ila/dot-product.html
+// - https://www.khanacademy.org/math/linear-algebra/matrix-transformations/lin-trans-examples/v/introduction-to-projections
+// -
 class Vector {
     constructor(...components) {
         this.scaledBy = (value) => {
@@ -51,10 +55,11 @@ class Vector {
     magnitudeSquared() {
         return this.components.reduce(function (sumSq, value) { return sumSq + (value ** 2); }, 0);
     }
+    //
     //The dot product between two vectors is the sum of the products of corresponding components.
     //citation: https://radzion.com/blog/linear-algebra/vectors
     dotProduct({ components }) {
-        return components.reduce((acc, component, index) => acc + component * this.components[index], 0);
+        return components.reduce((accumulator, component, index) => accumulator + component * this.components[index], 0);
     }
     //magnitude is the sqrt of the dotProduct with itself.
     distanceTo(other) {
@@ -64,10 +69,8 @@ class Vector {
     // SAME! 
     // distanceTo(other:Vector):number {
     //  // || other - this ||
-    //   let first = Vector.subtracted(other, this)
-    //    let next = first.dotProduct(first)
-    //    return Math.sqrt(next);
-    //    //same as first.magnitude?
+    //   let next = Vector.subtract(other, this).dotProduct(Vector.subtract(other, this))
+    //   return Math.sqrt(next);
     // }
     magSquaredTo(other) {
         // || other - this ||
@@ -82,7 +85,22 @@ class Vector {
             throw new Error("zero vector");
         }
         //@ts-expect-error
-        return this.normalized().angleBetween(Vector.makeAxisVector(this, axis));
+        return Vector.makeAxisVector(this, axis).angleBetween(this.normalized());
+        //return this.normalized().angleBetween(Vector.makeAxisVector(this, axis));
+    }
+    directionalAngleToAxis(angleAxis, directionAxis) {
+        if (this.isZeroVector()) {
+            throw new Error("zero vector");
+        }
+        const aAxisVector = Vector.makeAxisVector(this, angleAxis);
+        const dAxisVector = Vector.makeAxisVector(this, directionAxis);
+        //@ts-expect-error
+        let angle = aAxisVector.angleBetween(this.normalized());
+        const isNegative = (dAxisVector.dotProduct(this)) < 0;
+        if (isNegative) {
+            angle *= -1;
+        }
+        return angle;
     }
     //x axis is 0
     static makeAxisVector(base, axis) {
@@ -165,13 +183,14 @@ class Vector {
         return Vector.create2DAngleVector(newAngle, l);
     }
     //Only set up for 2D vectors
+    //The Math.atan2() static method returns the angle in the plane (in radians) between the positive x-axis and the ray from (0, 0) to the point (x, y), for Math.atan2(y, x).
     angle2D() { return Math.atan2(this.y, this.x); }
     flippedVAngle2D() { return Math.atan2(-this.y, this.x); }
     flippedHAngle2D() { return Math.atan2(this.y, -this.x); }
     perpendicularAngle2D() { return Math.atan2(this.x, -this.y); } //compare to angle + PI/2
     deflectedIn2D() { return Math.atan2(this.x / 2, -this.y); } //45?
     inverseAngle2D() { return Math.atan2(-this.x, -this.y); } //compare to angle + PI
-    normal2D() { Vector.create2DAngleVector(this.perpendicularAngle2D(), this.magnitude()); }
+    normal2D() { return Vector.create2DAngleVector(this.perpendicularAngle2D(), this.magnitude()); }
     // ------------------------------------------------------------------------------------
     // 3D Only So Far
     // ------------------------------------------------------------------------------------

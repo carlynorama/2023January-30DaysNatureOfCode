@@ -132,7 +132,7 @@ class Vector {
   angleToAxis(axis: number) {
     if (this.isZeroVector()) { throw new Error("zero vector") }
     //@ts-expect-error
-    return Vector.makeAxisVector(this, axis).angleBetween(this.normalized());
+    return Vector.makeAxisVector(this, axis).angleBetween2(this.normalized());
     //return this.normalized().angleBetween(Vector.makeAxisVector(this, axis));
   }
 
@@ -243,7 +243,7 @@ class Vector {
   perpendicularAngle2D() { return Math.atan2(this.x, -this.y); } //compare to angle + PI/2
   deflectedIn2D() { return Math.atan2(this.x / 2, -this.y); } //45?
   inverseAngle2D() { return Math.atan2(-this.x, -this.y); }   //compare to angle + PI
-  normal2D() { return Vector.create2DAngleVector(this.perpendicularAngle2D(), this.magnitude()) }
+  normal2D() { Vector.create2DAngleVector(this.perpendicularAngle2D(), this.magnitude()) }
 
 
   // ------------------------------------------------------------------------------------

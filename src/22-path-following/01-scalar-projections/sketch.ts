@@ -82,9 +82,6 @@ function draw() {
   //drawLightSource(base, subtraction);
   drawBackground(base, secondV);
 
-  // drawGrayVector(Vector.makeAxisVector(base, 0).scaledBy(40), 10, 40);
-  // console.log(base.angle2D(), base.angleToAxis(0))
-
   drawBoundsInterceptVectors(base, 1, 85);
   push();
   translate(projection.x, projection.y);
@@ -177,10 +174,11 @@ function drawBackground(baseVector:Vector, second:Vector) {
   //assume translated to base of base vector
   let horizonLength = width * Math.SQRT2 //works because canvas is square. 
   let horizonHeight = height/2 * Math.SQRT2
+  let normalVector:Vector  = baseVector.normal2D();
   push();
   rotate(baseVector.angle2D());
   //let distance = 100;
-  if (second.angle2D() < baseVector.angle2D()) { horizonHeight *= -1 }
+  if (second.dotProduct(normalVector) < 0) { horizonHeight *= -1 }
   
   noStroke()
   fill(0,0,60);
@@ -189,4 +187,21 @@ function drawBackground(baseVector:Vector, second:Vector) {
   rect(-horizonLength/2, horizonHeight, horizonLength, -horizonHeight);
   pop();
 
+}
+
+
+function testLibrary() {
+  let angleToX = base.angleToAxis(0);
+  let twoDAngle = base.angle2D()
+  let direcAngleToX = base.directionalAngleToAxis(0, 1);
+
+  let vectorAngle2D = Vector.create2DAngleVector(twoDAngle, 40);
+  let vectorAngleToAxis = Vector.create2DAngleVector(angleToX, 40);
+  let vectorDirecAngleToX = Vector.create2DAngleVector(direcAngleToX, 40);
+  console.log(base.x, base.y, Vector.toDegrees(twoDAngle), Vector.toDegrees(angleToX), Vector.toDegrees(direcAngleToX));
+  drawGrayVector(Vector.makeAxisVector(base, 0).scaledBy(40), 10, 40);
+  drawGrayVector(Vector.makeAxisVector(base, 1).scaledBy(40), 10, 40);
+  drawVector(vectorAngle2D, 2, 0);
+  drawVector(vectorAngleToAxis, 2, 180);
+  drawVector(vectorDirecAngleToX, 2, 270);
 }
