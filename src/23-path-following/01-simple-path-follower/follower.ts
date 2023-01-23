@@ -8,12 +8,12 @@
 
 class PathFollower {
     vehicle: Vehicle;
-    toLookAhead: Vector;
+    lookAheadDistance: number;
     currentPath: Vector[];
     paths: Vector[][];
     constructor(lookAheadDistance:number) {
-        this.vehicle = Vehicle.createStillVehicle(200,200);
-        this.toLookAhead = Vector.create2DAngleVector(0, lookAheadDistance)
+        this.vehicle = Vehicle.createVehicle(200,50, 1,0);
+        this.lookAheadDistance = lookAheadDistance;
 
         this.currentPath = [];
         //JavaScript madness.
@@ -45,14 +45,17 @@ class PathFollower {
 
 
     lookAheadCanvasPoint() {
-        let location = Vector.create2DAngleVector(this.vehicle.velocity.angle2D(), this.toLookAhead.magnitude())
+        let location = Vector.create2DAngleVector(this.vehicle.velocity.angle2D(), this.lookAheadDistance)
         return this.vehicle.position.addedTo(location);
         //this.vehicle.position.addedTo(this.toLookAhead);
     }
 
     findClosestPathPoint(path:Path):Vector {
-        let pathPoint  = path.locations[0]
-        return new Vector(pathPoint.x, pathPoint.y)
+        let newSegment = path.locations[1].subtracting(path.locations[0]);
+        //TODO catch normalization problem.
+        //@ts-expect-error
+        let projection = this.vehicle.position.addedTo(this.vehicle.velocity.normalized().scaledBy(this.lookAheadDistance)).projectOn(newSegment);
+        return projection
     }
 
     managePathClearing(maxPoints:number = 200) {

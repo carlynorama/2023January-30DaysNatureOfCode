@@ -225,6 +225,12 @@ class Vector {
     return new Vector(Math.cos(newAngle) * magnitude, Math.sin(newAngle) * magnitude);
   }
 
+  static create2DBetween(x1: number, y1: number, x2: number, y2: number) {
+    let vectorA = new Vector(x1, y1)
+    let vectorB = new Vector(x2, y2)
+    return vectorB.subtracting(vectorA);
+  }
+
   rotated2D(angle: number): Vector {
     return Vector.rotated2D(this, angle);
   }

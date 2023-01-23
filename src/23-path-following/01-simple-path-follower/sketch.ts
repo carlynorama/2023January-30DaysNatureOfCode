@@ -25,6 +25,7 @@ function setup() {
   pathFollower = new PathFollower(10);
   path = Path.createLinearPath(50, 50, 300, 300);
 
+
   background(0, 0, 80);
 
   ellipseMode(CENTER);
@@ -59,6 +60,7 @@ function draw() {
 function keyPressed() {
   controller.keyPressed();
 }
+
 
 
 function drawPath(path:Path) {
@@ -99,20 +101,50 @@ function showTrails(wanderer:PathFollower) {
   }
 }
 
+function drawVector(vector:Vector, weight:number, hue:number) {
+  push();
+    strokeWeight(weight);
+    stroke(hue, 60, 80);
+    line(0, 0, vector.x, vector.y);
+    translate(vector.x, vector.y);
+    rotate(vector.angle2D());
+    const arrowTip = 8;
+    line(0, 0, -arrowTip, -arrowTip/2);
+    line(0, 0, -arrowTip, arrowTip/2);
+  pop();
+}
+
+function drawGrayVector(vector:Vector, weight:number, brightness:number) {
+  push();
+    strokeWeight(weight);
+    stroke(0, 0, brightness);
+    line(0, 0, vector.x, vector.y);
+    translate(vector.x, vector.y);
+    rotate(vector.angle2D());
+    const arrowTip = 8;
+    line(0, 0, -arrowTip, -arrowTip/2);
+    line(0, 0, -arrowTip, arrowTip/2);
+  pop();
+}
+
 function showApparatus(pathFollower:PathFollower) {
   push();
   stroke(0, 100, 50);
   let checkPoint = pathFollower.lookAheadCanvasPoint()
   line(0, 0, checkPoint.x, checkPoint.y);
+
+  stroke(90, 100, 50);
+  let checkPoint2 = pathFollower.findClosestPathPoint(path)
+  line(checkPoint.x, checkPoint.y, checkPoint2.x, checkPoint2.y)
   pop();
 
   push();
   stroke(0, 0, 20, 50);
    translate(pathFollower.vehicle.x, pathFollower.vehicle.y);
    rotate(pathFollower.vehicle.heading)
-   line(0,0, pathFollower.toLookAhead.x, pathFollower.toLookAhead.y);
+   line(0,0, pathFollower.lookAheadDistance, 0);
 
-  translate(pathFollower.toLookAhead.x, pathFollower.toLookAhead.y);
+  translate(pathFollower.lookAheadDistance, 0);
   circle(0, 0, 5);
 //   line(0,0, wanderer.toWanderPoint.x, wanderer.toWanderPoint.y);
 
