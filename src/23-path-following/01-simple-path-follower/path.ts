@@ -1,10 +1,10 @@
 
 class Path {
     locations: Vector[];
-    radius:number
+    // radius:number
     constructor(...locations: Vector[]) {
       this.locations = locations
-      this.radius = 20
+    //   this.radius = 20
     }
 
     static createLinearPath(x1:number, y1:number, x2:number, y2:number) {

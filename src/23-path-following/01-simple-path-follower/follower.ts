@@ -42,7 +42,6 @@ class PathFollower {
     lookAheadCanvasPoint() {
         let location = Vector.create2DAngleVector(this.vehicle.velocity.angle2D(), this.lookAheadDistance)
         return this.vehicle.position.addedTo(location);
-        //this.vehicle.position.addedTo(this.toLookAhead);
     }
 
     findClosestPathPoint(path: Path): Vector {
