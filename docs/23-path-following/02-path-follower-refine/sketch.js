@@ -16,7 +16,8 @@ function setup() {
     pathFollower = new PathFollower(50, 200, 30);
     //path = Path.createLinearPath(20, random(0,400), 350, random(0,400));
     let start = { x: 350, y: random(0, 400) };
-    path = Path.createPath(start, { x: 20, y: random(0, 400) });
+    path = Path.createPath(start, { x: 300, y: random(0, 400) }, { x: 200, y: random(0, 400) }, { x: 100, y: random(0, 400) }, { x: 20, y: random(0, 400) });
+    console.log(path.locations);
     background(0, 0, 80);
     ellipseMode(CENTER);
     colorMode(HSB);
@@ -44,7 +45,9 @@ function keyPressed() {
     controller.keyPressed();
 }
 function drawPath(path) {
-    line(path.locations[0].x, path.locations[0].y, path.locations[1].x, path.locations[1].y);
+    for (let i = 0; i < path.locations.length - 1; i++) {
+        line(path.locations[i].x, path.locations[i].y, path.locations[i + 1].x, path.locations[i + 1].y);
+    }
     //console.log(path.locations[0].x, path.locations[0].y, path.locations[1].x, path.locations[1].y)
 }
 function showFollower(vehicle) {
