@@ -6,9 +6,9 @@ Most of the heavy lifting on this was already done because had `projectOn` and `
 
 ### Video Info
 
-- coding train link: <https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/6-scalar-projection>
-- video in playlist: <https://www.youtube.com/watch?v=DHPfoqiE4yQ&list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&index=43>
-- code: 2D Vector Projection <https://editor.p5js.org/codingtrain/sketches/c4jmHLFQI>
+- coding train link: <https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/7-path-following>
+- video in playlist: <https://www.youtube.com/watch?v=rlZYT-uvmGQ&list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&index=44>
+- code: <https://editor.p5js.org/codingtrain/sketches/dqM054vBV>
 
 ### Other Resources
 

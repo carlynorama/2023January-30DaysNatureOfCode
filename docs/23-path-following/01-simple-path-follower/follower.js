@@ -3,9 +3,9 @@
 // 2023 January Creative Coding Journal
 // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
 //
-// wanderer.ts
-// written by calynorama 2023 Jan 22
-// building upon https://editor.p5js.org/codingtrain/sketches/EWHjy--Os
+// /23-path-following/01-simple-path-follower/follower.js
+// calynorama 2023 Jan 23
+//
 class PathFollower {
     constructor(x, y, lookAheadDistance) {
         this.vehicle = Vehicle.createVehicle(x, y, 3, 0);
