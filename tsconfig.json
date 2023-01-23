@@ -100,5 +100,5 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["global","src/21-wanderer/02-path-recording"]
+  "include": ["global","src/22-scalar-projection/01-scalar-projection"]
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>carlynorama | 2023 Jan 22 - 01-scalar-projection</title>
+  <script src="../../p5.min.js"></script>
+		<script src="controller.js"></script>
+		<script src="sketch.js"></script>
+		<script src="vector.js"></script>
+</head>
+
+<body>
+  <main>
+    <p>Most of the heavy lifting on this was already done because had <code>projectOn</code> and <code>angleBetween</code> for vectors of size Rn, took this moment to do some <code>Vector</code> library reorganizing. </p>
+<ul>
+<li>Have now renamed <code>angle</code> to <code>angle2D</code> is now the name of the function that uses <code>atan</code>. Other functions that specifically work only in 2D space have that in the function name. </li>
+<li>Note: <code>angleToAxis(0)</code> and <code>angleBetween</code> don't preserve directionality b/c <code>acos</code>.<ul>
+<li>Solution: <code>directionalAngleToAxis(angleAxis, directionAxis)</code> can now be used in Rn space.</li>
+</ul>
+</li>
+</ul>
+<h3>Video Info</h3>
+<ul>
+<li>coding train link: <a href="https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/6-scalar-projection">https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/6-scalar-projection</a></li>
+<li>video in playlist: <a href="https://www.youtube.com/watch?v=DHPfoqiE4yQ&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=43">https://www.youtube.com/watch?v=DHPfoqiE4yQ&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=43</a></li>
+<li>code: 2D Vector Projection <a href="https://editor.p5js.org/codingtrain/sketches/c4jmHLFQI">https://editor.p5js.org/codingtrain/sketches/c4jmHLFQI</a></li>
+</ul>
+<h3>Other Resources</h3>
+<ul>
+<li><a href="https://radzion.com/blog/linear-algebra/vectors">https://radzion.com/blog/linear-algebra/vectors</a></li>
+<li><a href="https://www.khanacademy.org/math/linear-algebra/matrix-transformations/lin-trans-examples/v/introduction-to-projections">https://www.khanacademy.org/math/linear-algebra/matrix-transformations/lin-trans-examples/v/introduction-to-projections</a></li>
+</ul>
+<h3>Instructions</h3>
+<p>Nothing to do here but watch the butterflies.   </p>
+<ul>
+<li>"l" to start or stop the the running sketch</li>
+</ul>
+  </main>
+</body>
+
+</html>
