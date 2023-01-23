@@ -40,25 +40,25 @@ class Path {
     //     return false
     // }
 
-    segmentContains(startIndex: number, vector: Vector): boolean {
-        //the faster thing to do would be to make a vector rotation to check
-        //the rectangular bounds made by the line segment? If I had a matrix?
-        let i = startIndex;
-        let segmentBigBounds = Bounds.createBoundsFromPoints(
-            this.locations[i].x - this.radius,
-            this.locations[i].y - this.radius,
-            this.locations[i + 1].x + this.radius,
-            this.locations[i + 1].y + this.radius
-        )
-        if (segmentBigBounds.contains(vector.x, vector.y)) {
-            let segmentVector = this.locations[i + 1].subtracting(this.locations[i]);
-            let toProject = vector.subtracting(this.locations[i]);
-            let projection = toProject.projectOn(segmentVector);
-            if (toProject.subtracting(projection).magnitude() < this.radius) { return true }
-        }
+    // segmentContains(startIndex: number, vector: Vector): boolean {
+    //     //the faster thing to do would be to make a vector rotation to check
+    //     //the rectangular bounds made by the line segment? If I had a matrix?
+    //     let i = startIndex;
+    //     let segmentBigBounds = Bounds.createBoundsFromPoints(
+    //         this.locations[i].x - this.radius,
+    //         this.locations[i].y - this.radius,
+    //         this.locations[i + 1].x + this.radius,
+    //         this.locations[i + 1].y + this.radius
+    //     )
+    //     if (segmentBigBounds.contains(vector.x, vector.y)) {
+    //         let segmentVector = this.locations[i + 1].subtracting(this.locations[i]);
+    //         let toProject = vector.subtracting(this.locations[i]);
+    //         let projection = toProject.projectOn(segmentVector);
+    //         if (toProject.subtracting(projection).magnitude() < this.radius) { return true }
+    //     }
 
-        return false
-    }
+    //     return false
+    // }
 
     // addPoint(vector: Vector) {
     //     let pointToCheck = Point.pointFromVector(vector)
@@ -94,8 +94,16 @@ class Path {
     segmentClosestPointTo(startIndex: number, vector: Vector): Vector {
         let endIndex = startIndex + 1
         let newSegment = this.locations[endIndex].subtracting(this.locations[startIndex]);
+        let segmentLength = newSegment.magnitude();
         let toProject = vector.subtracting(this.locations[startIndex]);
         let projection = toProject.projectOn(newSegment);
+        if (projection.dotProduct(newSegment) < 0) {
+            return this.locations[startIndex]
+        }
+        else if (projection.magnitude() > segmentLength) {
+            return this.locations[endIndex]
+        }
+        
         let projectionCanvasPoint = projection.addedTo(this.locations[startIndex]);
         return projectionCanvasPoint
     }

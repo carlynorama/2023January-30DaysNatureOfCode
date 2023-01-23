@@ -27,14 +27,14 @@ function setup() {
 function draw() {
     background(0, 0, 80, 10);
     drawPath(path);
+    let locationInfo = pathFollower.findClosestPathPoint(path);
+    circle(locationInfo.point.x, locationInfo.point.y, 14);
     pathFollower.follow(path);
     pathFollower.update(400, 400);
-    push();
     stroke(0, 0, 40);
     //fill(0, 0, 60);
     noFill();
     showFollower(pathFollower.vehicle);
-    pop();
     showApparatus(pathFollower);
     // push();
     // stroke(0, 0, 100);
@@ -57,10 +57,8 @@ function showFollower(vehicle) {
     // let hue = map(distance, 0, width, 240, 420);
     // fill(hue, 60, 60);
     //TRIANGLE
-    push();
     rotate(vehicle.heading);
     triangle(-vehicleSize, -vehicleSize / 3, -vehicleSize, vehicleSize / 3, 0, 0);
-    pop();
     pop();
 }
 function showTrails(wanderer) {
@@ -100,14 +98,11 @@ function drawGrayVector(vector, weight, brightness) {
 }
 function showApparatus(pathFollower) {
     const marker_size = 8;
-    push();
     noFill();
     //DRAW lookAheadPoint info
-    push();
     // stroke(0, 80, 40);
     // let checkPoint = pathFollower.lookAheadCanvasPoint()
     // line(0, 0, checkPoint.x, checkPoint.y);
-    // pop();
     push();
     stroke(0, 80, 40);
     translate(pathFollower.vehicle.x, pathFollower.vehicle.y);
@@ -117,29 +112,30 @@ function showApparatus(pathFollower) {
     circle(0, 0, marker_size);
     pop();
     //path segment info
-    // push();
-    // stroke(90, 0, 65, 10);
-    // line(0, 0, path.locations[1].x, path.locations[1].y);
-    // line(0, 0, path.locations[0].x, path.locations[0].y);
-    let newSegment = path.locations[1].subtracting(path.locations[0]);
-    // translate(path.locations[0].x, path.locations[0].y)
-    // drawGrayVector(newSegment,1,30);
-    // pop();
-    //vector to project
-    push();
-    let toProject = pathFollower.lookAheadCanvasPoint().subtracting(path.locations[0]);
-    translate(path.locations[0].x, path.locations[0].y);
-    drawVector(toProject, 1, 180);
-    pop();
-    push();
-    let projection = toProject.projectOn(newSegment);
-    let projectionCanvasPoint = projection.addedTo(path.locations[0]);
-    stroke(180, 40, 60);
-    circle(projectionCanvasPoint.x, projectionCanvasPoint.y, marker_size);
-    translate(path.locations[0].x, path.locations[0].y);
-    drawVector(projection, 1, 180);
-    pop();
-    pop();
+    for (let i = 0; i < path.locations.length - 1; i++) {
+        push();
+        stroke(90, 0, 65, 10);
+        line(0, 0, path.locations[i + 1].x, path.locations[i + 1].y);
+        line(0, 0, path.locations[i].x, path.locations[i].y);
+        let newSegment = path.locations[i + 1].subtracting(path.locations[i]);
+        translate(path.locations[i].x, path.locations[i].y);
+        drawGrayVector(newSegment, 1, 30);
+        pop();
+        //vector to project
+        push();
+        let toProject = pathFollower.lookAheadCanvasPoint().subtracting(path.locations[i]);
+        translate(path.locations[i].x, path.locations[i].y);
+        drawVector(toProject, 1, 180);
+        pop();
+        push();
+        let projection = toProject.projectOn(newSegment);
+        let projectionCanvasPoint = projection.addedTo(path.locations[i]);
+        stroke(180, 40, 60);
+        circle(projectionCanvasPoint.x, projectionCanvasPoint.y, marker_size);
+        translate(path.locations[i].x, path.locations[i].y);
+        drawVector(projection, 1, 180);
+        pop();
+    }
 }
 // function butterfly(x:number, y:number, angle:number, butterflySize:number = 10) {
 //   push();
