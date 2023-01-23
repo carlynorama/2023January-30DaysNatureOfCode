@@ -1,0 +1,1 @@
+More details in the sketch description, but just spent the day making this visualization and cleaning up the vector library a little bit. 

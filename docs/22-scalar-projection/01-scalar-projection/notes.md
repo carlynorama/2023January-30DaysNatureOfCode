@@ -15,9 +15,7 @@ Most of the heavy lifting on this was already done because had `projectOn` and `
 - <https://radzion.com/blog/linear-algebra/vectors>
 - <https://www.khanacademy.org/math/linear-algebra/matrix-transformations/lin-trans-examples/v/introduction-to-projections>
 
-
-
 ### Instructions
-Nothing to do here but watch the butterflies.   
+Reload the page to get a new base vector to receive the projections.
 
 - "l" to start or stop the the running sketch

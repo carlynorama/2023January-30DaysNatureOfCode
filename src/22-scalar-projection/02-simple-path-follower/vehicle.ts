@@ -25,7 +25,7 @@ abstract class BasicParticle implements DrawableVehicle {
   get acceleration() { return this._acceleration;}
   get x() { return this.position.x; }
   get y() { return this.position.y; }
-  get heading() { return this.velocity.angle() } 
+  get heading() { return this.velocity.angle2D() } 
 
   get mass() { return this._mass;}
 
@@ -38,17 +38,17 @@ abstract class BasicParticle implements DrawableVehicle {
 
   applyForce(force:Vector) {
     let n = force.scaledBy(1/this._mass);
-    this._acceleration = this.acceleration.added(n);
+    this._acceleration = this.acceleration.addedTo(n);
   }
 
   applyAcceleration(acceleration:Vector) {
-    this._acceleration = this.acceleration.added(acceleration);
+    this._acceleration = this.acceleration.addedTo(acceleration);
   }
 
   update() {
-    this._velocity = this.velocity.added(this.acceleration);
+    this._velocity = this.velocity.addedTo(this.acceleration);
     this._velocity//.scaledBy(this.dampening);
-    this._position = this._position.added(this.velocity);
+    this._position = this._position.addedTo(this.velocity);
     //console.log(this.position.x, this.position.y);
     this._acceleration = new Vector(0,0);
   }
@@ -153,9 +153,9 @@ class Vehicle extends BasicParticle implements DrawableVehicle {
 
   //classic seek
   seek(target:Vector):Vector {
-    let p_difference:Vector = Vector.subtracted(target,this.position);
+    let p_difference:Vector = Vector.subtracting(target,this.position);
     
-    let v_difference:Vector = Vector.subtracted(p_difference, this.velocity);
+    let v_difference:Vector = Vector.subtracting(p_difference, this.velocity);
     if (v_difference.magnitude() === 0) { return Vector.zero2D() }
     //@ts-expect-error
     return v_difference.normalized().scaledBy(this.maxSpeed);
@@ -172,25 +172,25 @@ class Vehicle extends BasicParticle implements DrawableVehicle {
 
   pursue(vehicle:Vehicle, lead:number = 10) {
     let prediction = vehicle.velocity.scaledBy(lead);
-    let target = vehicle.position.added(prediction);
+    let target = vehicle.position.addedTo(prediction);
     return this.seek(target);
     //return this.approach(target);
   }
 
   //slows down as gets nearer
   approach(target:Vector) {
-    let p_difference:Vector = Vector.subtracted(target,this.position);
-    let v_difference:Vector = Vector.subtracted(p_difference, this.velocity);
+    let p_difference:Vector = Vector.subtracting(target,this.position);
+    let v_difference:Vector = Vector.subtracting(p_difference, this.velocity);
     return v_difference;
   }
 
   //Wants to be the circumference away
   maintainDistance(target:Vector, safety:number):Vector {
-    let p_difference:Vector = Vector.subtracted(this.position, target);
+    let p_difference:Vector = Vector.subtracting(this.position, target);
 
     if (p_difference.magnitude() === 0) { return Vector.zero2D() }
     //@ts-expect-error
-    let desiredNewLocation:Vector = p_difference.normalized().scaledBy(safety).added(target);
+    let desiredNewLocation:Vector = p_difference.normalized().scaledBy(safety).addedTo(target);
 
     //console.log(p_difference.x, p_difference.y, desiredNewLocation.x, desiredNewLocation.y);
     return this.approach(desiredNewLocation);
@@ -198,7 +198,7 @@ class Vehicle extends BasicParticle implements DrawableVehicle {
 
   //Moves away when the repulsion is less than a circumference away
   skirt(target:Vector, safety:number):Vector {
-    let p_difference:Vector = Vector.subtracted(this.position,target);
+    let p_difference:Vector = Vector.subtracting(this.position,target);
 
     let distanceToMove = Math.max(safety-p_difference.magnitude(), 0);
     
@@ -212,12 +212,12 @@ class Vehicle extends BasicParticle implements DrawableVehicle {
 
   //Moves away when the repulsion is less than a circumference away at a right angle. 
   tangentSkirt(target:Vector, safety:number):Vector {
-    let p_difference:Vector = Vector.subtracted(this.position,target);
+    let p_difference:Vector = Vector.subtracting(this.position,target);
 
     let distanceToMove = Math.max(safety-p_difference.magnitude(), 0);
     
     if (distanceToMove === 0) { return Vector.zero2D() }
-    let deltaV = Vector.createAngleVector(p_difference.perpendicularAngle(),distanceToMove);
+    let deltaV = Vector.create2DAngleVector(p_difference.perpendicularAngle2D(),distanceToMove);
     //console.log(deltaV.x, deltaV.y, p_difference.magnitude(), safety-p_difference.magnitude());
 
     return deltaV;
@@ -225,9 +225,9 @@ class Vehicle extends BasicParticle implements DrawableVehicle {
 
   applyInternalPower(acceleration:Vector) {
     //console.log("start", this.acceleration.x, this.acceleration.y);
-    let newA = this._acceleration.added(acceleration)//.limited(this.maxPush);
+    let newA = this._acceleration.addedTo(acceleration)//.limited(this.maxPush);
     //console.log("newA", newA.x, newA.y);
-    this._acceleration = acceleration.added(acceleration).limited(this.maxPush);
+    this._acceleration = acceleration.addedTo(acceleration).limited(this.maxPush);
     //console.log("after", this.acceleration.x, this.acceleration.y);
   }
   
@@ -237,9 +237,9 @@ class Vehicle extends BasicParticle implements DrawableVehicle {
 
   //Have to redeclare to add dampening. 
   update() {
-      this._velocity = this.velocity.added(this.acceleration).scaledBy(this.drag);
+      this._velocity = this.velocity.addedTo(this.acceleration).scaledBy(this.drag);
       this._velocity = this._velocity.limited(this.maxSpeed);
-      this._position = this._position.added(this.velocity);
+      this._position = this._position.addedTo(this.velocity);
 
       this._acceleration = new Vector(0,0);
   }
