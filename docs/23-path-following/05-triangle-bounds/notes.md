@@ -13,6 +13,8 @@ Thanks to <https://stackoverflow.com/a/9755252/5946596> for an efficient impleme
 
 ### The implementation
 
+Note, this code compares to zero. In floating point math on a computer it can better to specifically define (or call i.e. `Number.EPSILON`) a higher very small number as a "close enough" factor typically called "epsilon".
+
 Start the function. `a, b, c` implement `{x:number, y:number}` and are the vertices of the triangle A, B, C. `point` is P, the point being checked. 
  
     function triangleContains(point, a, b, c) {
