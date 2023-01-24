@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>carlynorama | 2023 Jan 23 - 02-path-follower-refine</title>
+  <script src="../../p5.min.js"></script>
+		<script src="controller.js"></script>
+		<script src="datatypes.js"></script>
+		<script src="follower.js"></script>
+		<script src="path.js"></script>
+		<script src="sketch.js"></script>
+		<script src="vector.js"></script>
+		<script src="vehicle.js"></script>
+</head>
+
+<body>
+  <main>
+    <p>One follower, multiple line segments. </p>
+<ul>
+<li>Renamed the point-memory array trail instead of path to avoid confusion.</li>
+<li>Moved a bunch of the logic from <code>PathFollower</code> into <code>Path</code>. The path when given a point returns its closest location. </li>
+<li>Implemented path radius check. </li>
+<li>Implemented a bunch of path bounds checking that I'm not going to use yet. </li>
+</ul>
+<h3>Video Info</h3>
+<ul>
+<li>coding train link: <a href="https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/7-path-following">https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/7-path-following</a></li>
+<li>video in playlist: <a href="https://www.youtube.com/watch?v=rlZYT-uvmGQ&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=44">https://www.youtube.com/watch?v=rlZYT-uvmGQ&amp;list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM&amp;index=44</a></li>
+<li>code: <a href="https://editor.p5js.org/codingtrain/sketches/dqM054vBV">https://editor.p5js.org/codingtrain/sketches/dqM054vBV</a></li>
+</ul>
+<h3>Instructions</h3>
+<ul>
+<li>"l" to start or stop the the running sketch</li>
+<li>"a" to toggle the rendering of "the apparatus"</li>
+</ul>
+  </main>
+</body>
+
+</html>

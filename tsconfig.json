@@ -100,5 +100,5 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["global","src/22-scalar-projection/01-scalar-projection"]
+  "include": ["global","src/23-path-following/03-triangle-bounds"]
 }
