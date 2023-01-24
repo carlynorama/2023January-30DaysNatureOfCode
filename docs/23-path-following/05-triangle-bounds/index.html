@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>carlynorama | 2023 Jan 23 - 05-triangle-bounds</title>
+  <script src="../../p5.min.js"></script>
+		<script src="controller.js"></script>
+		<script src="datatypes.js"></script>
+		<script src="follower.js"></script>
+		<script src="path.js"></script>
+		<script src="sketch.js"></script>
+		<script src="vector.js"></script>
+		<script src="vehicle.js"></script>
+</head>
+
+<body>
+  <main>
+    <p>Bounds detection on a triangle. </p>
+<h3>The classic algorithm</h3>
+<p>Discussed on <a href="https://math.stackexchange.com/questions/51326/determining-if-an-arbitrary-point-lies-inside-a-triangle-defined-by-three-points">stackexchange</a></p>
+<ul>
+<li>Let 𝑃 be a point and 𝐴,𝐵 and 𝐶 are the vertices of a triangle.</li>
+<li>Define the vectors 𝐴𝐵 (side AB), 𝐵𝐶 (side BC) and 𝐶𝐴 (side CA) and the vectors 𝐴𝑃, 𝐵𝑃 and 𝐶𝑃. (lines from the vertices to the point)</li>
+<li>𝑃 is inside the triangle formed by 𝐴,𝐵 and 𝐶 if and only if all of the cross products, 𝐴𝐵×𝐴𝑃, 𝐵𝐶×𝐵𝑃 and 𝐶𝐴×𝐶𝑃, point in the same direction relative to the plane. That is, either all of them point out of the plane, or all of them point into the plane. </li>
+<li>This can be determined by looking at the sign of last term of the cross product.</li>
+</ul>
+<p>Thanks to <a href="https://stackoverflow.com/a/9755252/5946596">https://stackoverflow.com/a/9755252/5946596</a> for an efficient implementation. I did not understand what it was doing when I first looked at it, but writing the code out to do full solution made it make sense. </p>
+<h3>The implementation</h3>
+<p>Start the function. <code>a, b, c</code> implement <code>{x:number, y:number}</code> and are the vertices of the triangle A, B, C. <code>point</code> is P, the point being checked. </p>
+<pre><code>function triangleContains(point, a, b, c) {
+</code></pre>
+<p>Get the vector between A and the point P.</p>
+<pre><code>const AP = {x:point.x - a.x, y:point.y - a.y}
+</code></pre>
+<p><code>(b.x - a.x), (b.y - a.y)</code> is side AB, and is "clockwise". We'll do just the third term of the crossproduct ABxAP, and then only keep its direction. </p>
+<pre><code>const AB = {x:(b.x - a.x), y:(b.y - a.y)}
+const thirdTermABxAPisPositve = AB.x  * AP.y - AB.y * AP.x &gt; 0;
+</code></pre>
+<p><code>(c.x - a.x), (c.y - a.y)</code> is side AC, and is "counter clockwise" from AB. Again we'll do just the third term of the crossproduct ACxAP, caring only about its direction. By using the "counter clockwise" AC instead of CA we have saved having to calculate CP.</p>
+<pre><code>const AC = {x:(c.x - a.x), y:(c.y - a.y)}
+const thirdTermACxAPisPositve = AC.x * AP.y - AC.y * AP.x &gt; 0
+</code></pre>
+<p>This result should NOT match the direction of what we kept before because AC and AB are in different directions. We can go ahead and exit the function returning false. </p>
+<pre><code>if (thirdTermACxAPisPositve == thirdTermABxAPisPositve) return false;
+</code></pre>
+<p><code>(c.x - b.x), (c.y - b.y)</code> is sideBC and like the first side is "clockwise". <code>(point.x - b.x),(point.y - b.y)</code> is the vector BP.One last time, we only care about the third term of the crossproduct BCxBP, and really just its direction. </p>
+<pre><code>const BC = {x:(c.x - b.x), y:(c.y - b.y)}
+const BP = {x:(point.x - b.x), y:(point.y - b.y)}
+const thirdTermBCxBPisPositive = BC.x * BP.y - BC.y * BP.x &gt; 0
+</code></pre>
+<p>This value should match the direction of <code>thirdTermABxAPisPositve</code> because BC is the same direction as AB. If it doesn't again we can go ahead and leave the function, returning false.</p>
+<pre><code>if (thirdTermBCxBPisPositive != thirdTermABxAPisPositve) return false;
+</code></pre>
+<p>If we made it this far, then we're inside because all the booleans have the same value. It does not matter if they are all true or all false, they just have to be all the same.</p>
+<pre><code>return true; }
+</code></pre>
+<p>All together</p>
+<p>```</p>
+<p>function triangleContainsE(point, a, b, c) {</p>
+<pre><code>const AP = {x:point.x - a.x, y:point.y - a.y}
+
+const AB = {x:(b.x - a.x), y:(b.y - a.y)}
+const thirdTermABxAPisPositve = AB.x  * AP.y - AB.y * AP.x &gt; 0;
+
+const AC = {x:(c.x - a.x), y:(c.y - a.y)}
+const thirdTermACxAPisPositve = AC.x * AP.y - AC.y * AP.x &gt; 0
+
+if (thirdTermACxAPisPositve == thirdTermABxAPisPositve) return false;
+
+const BC = {x:(c.x - b.x), y:(c.y - b.y)}
+const BP = {x:(point.x - b.x), y:(point.y - b.y)}
+const thirdTermBCxBPisPositive = BC.x * BP.y - BC.y * BP.x &gt; 0
+
+if (thirdTermBCxBPisPositive != thirdTermABxAPisPositve) return false;
+
+return true;
+</code></pre>
+<p>}
+```</p>
+<h3>Instructions</h3>
+<ul>
+<li>Move the mouse to do bounds detection on the triangles. </li>
+</ul>
+  </main>
+</body>
+
+</html>

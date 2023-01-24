@@ -27,13 +27,16 @@ function setup() {
 
   //path = Path.createLinearPath(20, random(0,400), 350, random(0,400));
 
-  let start = { x: 350, y: random(0, 400) }
+  let start = { x: 380, y: random(300, 380) }
   path = Path.createPath(start,
-    { x: 300, y: random(0, 400) },
-    { x: 200, y: random(0, 400) },
-    { x: 100, y: random(0, 400) },
-    { x: 20, y: random(0, 400) },
-    //start
+    { x: 280, y: random(300, 380) },
+    { x: 200, y: random(280, 340) },
+    { x: 100, y: random(200, 300) },
+    { x: 20, y: random(20, 100) },
+    { x: 150, y: random(20, 90) },
+    { x: 290, y: random(20, 150) },
+    { x: 350, y: random(200, 300) },
+    start
   );
 
   console.log(path.locations)
@@ -54,6 +57,18 @@ function draw() {
 
   pathFollower.follow(path);
   pathFollower.update(400, 400);
+
+  let testPoint = pathFollower.vehicle.position
+
+  let boundsTest = triangleContainsA(testPoint.x, testPoint.y,path.locations[0].x, path.locations[0].y,
+    path.locations[1].x, path.locations[1].y,
+    path.locations[2].x, path.locations[2].y)
+
+  fill(boundsTest? 0:180, 100, 100);  
+
+  triangle(path.locations[0].x, path.locations[0].y,
+    path.locations[1].x, path.locations[1].y,
+    path.locations[2].x, path.locations[2].y)
 
 
   stroke(0, 0, 40);

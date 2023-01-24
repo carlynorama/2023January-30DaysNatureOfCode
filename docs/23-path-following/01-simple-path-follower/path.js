@@ -1,4 +1,12 @@
 "use strict";
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// /23-path-following/01-simple-path-follower/path.js
+// calynorama 2023 Jan 23
+//
+
 class Path {
     // radius:number
     constructor(...locations) {

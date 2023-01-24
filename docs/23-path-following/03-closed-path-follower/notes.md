@@ -1,4 +1,4 @@
-One follower, one line segment. Again like `Wanderer` I put the vehicle inside a `PathFollower`. 
+Just closed up the path... and then I got distracted by triangles.... 
 
 ### Video Info
 
@@ -10,3 +10,4 @@ One follower, one line segment. Again like `Wanderer` I put the vehicle inside a
 ### Instructions   
 
 - "l" to start or stop the the running sketch
+- "a" to toggle the rendering of "the apparatus"

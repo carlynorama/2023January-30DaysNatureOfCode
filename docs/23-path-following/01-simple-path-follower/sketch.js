@@ -3,9 +3,9 @@
 // 2023 January Creative Coding Journal
 // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
 //
-// 19-recordable-particles/02-particle-interfaces.ts
-// written by calynorama 2023 Jan 18
-// following: https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/4-particles/2-particle-emitters
+// 23-path-following/01-simple-path-follower/sketch.js
+// calynorama 2023 Jan 23
+//
 let controller;
 //NOTE Particles have a dissipation factor to chill out the world.
 const vehicleSize = 20; //same as docking distance
