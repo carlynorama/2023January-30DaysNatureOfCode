@@ -1,0 +1,1 @@
+Moved the creation of stable forms into a functions and make a whole mess of them at the start to seed the field. Inject a few more every minute-ish.

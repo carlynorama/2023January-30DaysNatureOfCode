@@ -1,0 +1,1 @@
+Puts a glider and some other stable forms into the start array.
