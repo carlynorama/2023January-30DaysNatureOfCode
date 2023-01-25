@@ -10,26 +10,65 @@
 // - https://blog.logrocket.com/using-trampolines-to-manage-large-recursive-loops-in-javascript-d8c9db095ae3/
 // - https://dev.to/oreychandan/recursion-in-typescript-1p0n
 let controller;
-let mykline;
+let sideAB;
+let sideBC;
+let sideCA;
 function setup() {
     controller = new ControlledCanvas(400, 400);
-    console.log(factorial(8));
-    mykline = new KochLine(new Vector(0, height / 2), new Vector(width, height / 2));
+    colorMode(HSB);
+    background(0, 0, 80);
     stroke(0);
     noFill();
-    colorMode(HSB);
+    console.log(factorial(8));
+    const sqrt3 = 1.732050807568877;
+    const side = width * 0.7;
+    const midPointX = width / 2;
+    const midPointY = height / 2 - (side / 6);
+    const A = new Vector(midPointX - side / 2, midPointY + (sqrt3 * side / 4));
+    const B = new Vector(midPointX + side / 2, midPointY + (sqrt3 * side / 4));
+    const C = new Vector(midPointX, midPointY - (sqrt3 * side / 4));
+    //circle(B.x, B.y, 5)
+    sideAB = new KochLine(B, A);
+    sideBC = new KochLine(C, B);
+    sideCA = new KochLine(A, C);
+    sideAB.bumpLevel();
+    sideBC.bumpLevel();
+    sideCA.bumpLevel();
+    //mykline.bumpLevel();
+    // mykline.bumpLevel();
+    console.log("------------ END SETUP! -------------");
+    noLoop();
 }
 function draw() {
-    background(0, 0, 80);
-    renderKochLine(mykline);
+    //background(0, 0, 80);
+    //stroke(50, 50);
+    renderKochLine(sideAB);
+    renderKochLine(sideBC);
+    renderKochLine(sideCA);
 }
 function keyPressed() {
     controller.keyPressed();
+    if (key == "k") {
+        background(0, 0, 80);
+        sideAB.bumpLevel();
+        renderKochLine(sideAB);
+        sideBC.bumpLevel();
+        renderKochLine(sideBC);
+        sideCA.bumpLevel();
+        renderKochLine(sideCA);
+    }
 }
 //----------------------------------------------------------------
 //-----------------------------------------------  Rendering
 function renderKochLine(kline) {
-    line(kline.start.x, kline.start.y, kline.end.x, kline.end.y);
+    if (kline.segments.length > 0) {
+        push();
+        kline.segments.forEach((segment) => { renderKochLine(segment); });
+        pop();
+    }
+    else {
+        line(kline.start.x, kline.start.y, kline.end.x, kline.end.y);
+    }
 }
 //----------------------------------------------------------------
 //------------------------------------------------ Generating
