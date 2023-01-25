@@ -1,0 +1,1 @@
+Elementary cellular automata example. Which rule set is updatable by setting a variable to an integer. A bit mask is used to extract the setting at the needed index. 
