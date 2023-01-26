@@ -1,0 +1,79 @@
+"use strict";
+class Branch {
+    constructor(a, b) {
+        this.growBranches = (depth = 1) => {
+            Branch.growBranches(this, 0);
+        };
+        this.start = a;
+        this.end = b;
+        this.branches = [];
+        this.shrinkage = 0.77;
+        this.angleForChildren = Math.PI / 9;
+        this.shrinkageWiggle = 0.2;
+        this.angleWiggle = 0.15;
+        this.maxChildren = 5;
+        this.isMaxDepth = b.distanceTo(a) < 5;
+    }
+    makeSubBranches() {
+        if (!this.isMaxDepth) {
+            this.branches = Branch.makeSubBranches(this, this.start, this.end);
+        }
+    }
+    //This doesn't look great without other forces / expanding child angle into available space, etc.
+    static makeRandomNumberOfBranches(parent, start, end) {
+        const length = end.distanceTo(start);
+        const SE = end.subtracting(start);
+        const baseAngle = SE.angle2D();
+        const numberOfBranches = floor(Branch.random(0, parent.maxChildren + 1));
+        let newChildren = [];
+        const maxAngle = parent.angleForChildren + parent.angleWiggle;
+        const angleWedge = 2 * maxAngle / numberOfBranches;
+        for (let i = 0; i < numberOfBranches; i++) {
+            let angleMin = i * angleWedge + -maxAngle;
+            let angleMax = angleMin + angleWedge;
+            const c_Shrinkage = parent.shrinkage + random(-parent.shrinkageWiggle, 0);
+            const SC = Vector.create2DAngleVector(baseAngle + Branch.random(angleMin, angleMax), length * c_Shrinkage);
+            newChildren.push(new Branch(end, end.addedTo(SC)));
+        }
+        return newChildren;
+    }
+    static makeSubBranches(parent, start, end) {
+        const length = end.distanceTo(start);
+        const SE = end.subtracting(start);
+        const baseAngle = SE.angle2D();
+        const c1_Shrinkage = parent.shrinkage + random(-parent.shrinkageWiggle, 0);
+        const SC1 = Vector.create2DAngleVector(baseAngle + parent.angleForChildren + Branch.random(-parent.angleWiggle, parent.angleWiggle), length * c1_Shrinkage);
+        const C1 = end.addedTo(SC1);
+        const c2_Shrinkage = parent.shrinkage + random(-parent.shrinkageWiggle, 0);
+        const SC2 = Vector.create2DAngleVector(baseAngle - parent.angleForChildren + Branch.random(-parent.angleWiggle, parent.angleWiggle), length * c2_Shrinkage);
+        const C2 = end.addedTo(SC2);
+        return [new Branch(end, C1), new Branch(end, C2)];
+    }
+    static makeEvenSubBranches(parent, start, end) {
+        const length = end.distanceTo(start);
+        const newSegmentLengths = length * parent.shrinkage;
+        const SE = end.subtracting(start);
+        const baseAngle = SE.angle2D();
+        const SC1 = Vector.create2DAngleVector(baseAngle + parent.angleForChildren, newSegmentLengths);
+        const C1 = end.addedTo(SC1);
+        const SC2 = Vector.create2DAngleVector(baseAngle - parent.angleForChildren, newSegmentLengths);
+        const C2 = end.addedTo(SC2);
+        return [new Branch(end, C1), new Branch(end, C2)];
+    }
+    static growBranches(parent, level) {
+        let thisLevel = level;
+        let nextLevel = level + 1;
+        if (parent.branches.length > 0) {
+            //console.log("I have subsegments", thisLevel, parent.branches.length); //<- points length should be 0.
+            for (let subtree of parent.branches) {
+                Branch.growBranches(subtree, nextLevel);
+            }
+        }
+        else {
+            //console.log("I need subsegments", thisLevel);
+            parent.makeSubBranches();
+            //console.log("madeSegments", thisLevel, parent.branches.length);
+        }
+    }
+}
+Branch.random = (min, max) => { return Math.random() * (max - min) + min; };
