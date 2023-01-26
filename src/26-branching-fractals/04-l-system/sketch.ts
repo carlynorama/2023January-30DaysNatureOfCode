@@ -8,11 +8,13 @@
 
 //https://natureofcode.com/book/chapter-8-fractals/#chapter08_section6
 //Coding Challenge: https://thecodingtrain.com/challenges/16-l-system-fractal-trees
+//Code from Challenge: https://editor.p5js.org/codingtrain/sketches/QmTx-Y_UP
+//https://en.wikipedia.org/wiki/L-system
+//https://en.wikipedia.org/wiki/Przemys%C5%82aw_Prusinkiewicz
+//http://algorithmicbotany.org/
 
 
 let controller:ControlledCanvas;
-
-
 
 const axiom = "F";
 let sentence = axiom;
@@ -26,13 +28,11 @@ let tree_rules: Record<string, string> = {
   "F":"FF+[+F-F-F]-[-F+F+F]",
 }; 
 
-
 function applyRules(input:string, rules:Record<string, string>):string {
   let result = rules[input]
   if (result != undefined) { return result} 
   else { return input }
 }
-
 
 function parseInput(input_string:string, rules:Record<string, string>) {
   //is for loop still faster than map or foreach? 
