@@ -14,51 +14,61 @@ let controller:ControlledCanvas;
 
 
 
-const axiom = "ACB";
+const axiom = "F";
 let sentence = axiom;
 
-//why not a dictionary? 
-const rule1 = {  input:"A", output:"AB" }
-const rule2 = {  input:"B", output:"A"  } 
-
-let rules: Record<string, string> = { 
+let simple_rules: Record<string, string> = { 
   "A":"AB",
   "B":"A"
-  }; 
+};
 
-function applyRules(input:string):string {
+let tree_rules: Record<string, string> = { 
+  "F":"FF+[+F-F-F]-[-F+F+F]",
+}; 
+
+
+function applyRules(input:string, rules:Record<string, string>):string {
   let result = rules[input]
   if (result != undefined) { return result} 
   else { return input }
 }
 
 
-function parseInput(input_string:string) {
+function parseInput(input_string:string, rules:Record<string, string>) {
   //is for loop still faster than map or foreach? 
   let newString = ""
   for(let character of input_string)  {
-    newString += applyRules(character)
+    newString += applyRules(character, rules)
   }
   console.log(newString)
   return newString
 }
 
 function generate() {
-  sentence = parseInput(sentence);
+  segment_length *= 0.50;
+  sentence = parseInput(sentence, tree_rules);
   createP(sentence);
+  turtle(sentence);
 }
+
+// let testPush;
+// let testPop;
 
 function setup() {
   
-  noCanvas();
+  // testPush = () => {push();}
+  // testPop = () => {pop();}
+  
   createP(sentence)
   let button = createButton("generate");
   button.mousePressed(generate)
-  //controller = new ControlledCanvas(400, 400);
+  controller = new ControlledCanvas(400, 400);
   colorMode(HSB);
   background(0, 0, 80);
   stroke(0);
   noFill();
+  turtle(sentence);
+ 
 
   console.log("------------ END SETUP! -------------");
   //noLoop();
@@ -66,7 +76,7 @@ function setup() {
 
 
 function draw() {
-    background(0, 0, 80);
+    //background(0, 0, 80);
 
 }
 function keyPressed() {
@@ -78,34 +88,124 @@ function keyPressed() {
 //----------------------------------------------------------------
 //-----------------------------------------------  Rendering
 
-function drawBranch(length:number, angle:number, shrinkage:number) {
-   line(0,0,0,-length)
-   translate(0, -length);
-  //rotate(angle);
-  if (length > 4) {  
-    push();
-    rotate(angle);
-    drawBranch(length*shrinkage, angle, shrinkage) 
-    pop();
-    push();
-    rotate(-angle);
-    drawBranch(length*shrinkage, angle, shrinkage) 
-    pop();
-  }
-  
+function turtle(instructions:string) {
+  resetMatrix();
+  background(0, 0, 80);
+  translate(width / 2, height);
+  stroke(50,50,50,0.5);
+  //let testString = "[F+F-F][F-F+F]"
 
+  for (let character of instructions) {
+    lookUpInstruction(character);
+  //for (let i = 0; i < testString.length; i++ ) {
+    //console.log(testString[i]);
+    // console.log(character);
+    // if (character == "[") {
+    //   push();
+    //   continue;
+    // } else if (character == "]") {
+    //   lookUpInstruction("]");
+    //   // pop();
+    //   // continue;
+    // } else {
+    //   lookUpInstruction(character);
+    //   //line(0,0,0,-segment_length); translate(0, -segment_length);
+    // }
+  }
+
+
+  // for (let character of instructions) {
+  //   console.log(character);
+  //   lookUpInstruction(character)
+  // }
+
+  // let doThis = lexicon["["]
+  // doThis();
+  // line(0,0,0,-segment_length); translate(0, -segment_length)
+  // doThis = lexicon["+"]
+  // doThis();
+  // line(0,0,0,-segment_length); translate(0, -segment_length);
+  // doThis = lexicon["-"];
+  // doThis();
+  // line(0,0,0,-segment_length); translate(0, -segment_length);
+  // doThis = lexicon["]"]
+  // doThis = lexicon["["]
+  // doThis();
+  // line(0,0,0,-segment_length); translate(0, -segment_length)
+  // doThis = lexicon["-"]
+  // doThis();
+  // line(0,0,0,-segment_length); translate(0, -segment_length);
+  // doThis = lexicon["+"];
+  // doThis();
+  // line(0,0,0,-segment_length); translate(0, -segment_length);
+  // doThis = lexicon["]"]
+
+  
+  
+  // doInstruction("[");
+  // doInstruction("F");
+  // doInstruction("+");
+  // doInstruction("F");
+  // doInstruction("-");
+  // doInstruction("F");
+  // doInstruction("]");
+
+  // doInstruction("[");
+  // doInstruction("F");
+  // doInstruction("-");
+  // doInstruction("F");
+  // doInstruction("+");
+  // doInstruction("F");
+  // doInstruction("]");
 }
 
-// function renderFTree(kline:FTree) {
-//    if (kline.segments.length > 0) {
-//     push();
-//       kline.segments.forEach((segment) => {  renderFTree(segment) });
-//     pop();
-//    } 
-//    else {
-//     line(kline.start.x, kline.start.y, kline.end.x, kline.end.y);
-//    }
-// }
+let angle = 0.43633231;
+let segment_length = 100;
+
+let lexicon: Record<string, ()=>void> = { 
+  "F": () => {line(0,0,0,-segment_length); translate(0, -segment_length)},
+  "+": () => rotate(angle),
+  "-": () => rotate(-angle),
+  "[": () => push(),
+  "]": () => pop(),
+}; 
+
+function doInstruction(s:string) {
+  console.log(s);
+  switch(s) {
+    case "F":
+      console.log("line");
+      line(0,0,0,-segment_length); translate(0, -segment_length);
+      break;
+    case "+":
+      console.log("cw");
+      rotate(angle);
+      break;
+    case "-":
+      console.log("ccw");
+      rotate(-angle);
+      break;
+    case "[":
+      console.log("push");
+      push();
+      break;
+    case "[":
+      console.log("pop");
+      pop();
+      break;
+    default:
+      print("undefined command");
+  }
+}
+
+function lookUpInstruction(s:string) {
+  let result = lexicon[s]
+  if (result != undefined) { 
+    result();
+  } 
+}
+  
+
 
 //----------------------------------------------------------------
 //------------------------------------------------ Generating
