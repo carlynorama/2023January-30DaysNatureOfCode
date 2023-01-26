@@ -19,4 +19,4 @@
 
 These are noLoop sketches, or update only on an event. 
 
-- Click on a Koch Line and press "k" to make it wrinkle.
+- Click on a `KochLine` and press "k" to make it wrinkle.
