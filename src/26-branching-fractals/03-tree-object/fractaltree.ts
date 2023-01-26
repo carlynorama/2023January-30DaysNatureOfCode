@@ -34,6 +34,7 @@ class Branch {
     }
 
     //This doesn't look great without other forces / expanding child angle into available space, etc.
+    //Oh look: https://thecodingtrain.com/challenges/17-fractal-trees-space-colonization
     protected static makeRandomNumberOfBranches(parent: Branch, start: Vector, end: Vector): Branch[] {
         const length = end.distanceTo(start);
         const SE = end.subtracting(start);
@@ -108,20 +109,6 @@ class Branch {
             //console.log("madeSegments", thisLevel, parent.branches.length);
         }
     }
-
-    //     static walkTree(parent:KochLine, level:number) {
-    //         let thisLevel = level;
-    //         console.log(thisLevel);
-    //         let nextLevel = level + 1;
-    //         if (parent.segments.length > 0) {
-    //           console.log("I am a NOT a leaf!", parent.segments.length); //<- points length should be 0.
-    //           for (let subtree of parent.segments) {
-    //             KochLine.walkTree(subtree, nextLevel);
-    //           }
-    //         } else {
-    //           console.log("I am a leaf!", parent.segments.length);
-    //         }
-    //}
 
 
 }
