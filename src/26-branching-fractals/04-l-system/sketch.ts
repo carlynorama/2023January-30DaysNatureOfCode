@@ -51,14 +51,7 @@ function generate() {
   turtle(sentence);
 }
 
-// let testPush;
-// let testPop;
-
 function setup() {
-  
-  // testPush = () => {push();}
-  // testPop = () => {pop();}
-  
   createP(sentence)
   let button = createButton("generate");
   button.mousePressed(generate)
@@ -97,66 +90,8 @@ function turtle(instructions:string) {
 
   for (let character of instructions) {
     lookUpInstruction(character);
-  //for (let i = 0; i < testString.length; i++ ) {
-    //console.log(testString[i]);
-    // console.log(character);
-    // if (character == "[") {
-    //   push();
-    //   continue;
-    // } else if (character == "]") {
-    //   lookUpInstruction("]");
-    //   // pop();
-    //   // continue;
-    // } else {
-    //   lookUpInstruction(character);
-    //   //line(0,0,0,-segment_length); translate(0, -segment_length);
-    // }
   }
 
-
-  // for (let character of instructions) {
-  //   console.log(character);
-  //   lookUpInstruction(character)
-  // }
-
-  // let doThis = lexicon["["]
-  // doThis();
-  // line(0,0,0,-segment_length); translate(0, -segment_length)
-  // doThis = lexicon["+"]
-  // doThis();
-  // line(0,0,0,-segment_length); translate(0, -segment_length);
-  // doThis = lexicon["-"];
-  // doThis();
-  // line(0,0,0,-segment_length); translate(0, -segment_length);
-  // doThis = lexicon["]"]
-  // doThis = lexicon["["]
-  // doThis();
-  // line(0,0,0,-segment_length); translate(0, -segment_length)
-  // doThis = lexicon["-"]
-  // doThis();
-  // line(0,0,0,-segment_length); translate(0, -segment_length);
-  // doThis = lexicon["+"];
-  // doThis();
-  // line(0,0,0,-segment_length); translate(0, -segment_length);
-  // doThis = lexicon["]"]
-
-  
-  
-  // doInstruction("[");
-  // doInstruction("F");
-  // doInstruction("+");
-  // doInstruction("F");
-  // doInstruction("-");
-  // doInstruction("F");
-  // doInstruction("]");
-
-  // doInstruction("[");
-  // doInstruction("F");
-  // doInstruction("-");
-  // doInstruction("F");
-  // doInstruction("+");
-  // doInstruction("F");
-  // doInstruction("]");
 }
 
 let angle = 0.43633231;
@@ -170,62 +105,37 @@ let lexicon: Record<string, ()=>void> = {
   "]": () => pop(),
 }; 
 
-function doInstruction(s:string) {
-  console.log(s);
-  switch(s) {
-    case "F":
-      console.log("line");
-      line(0,0,0,-segment_length); translate(0, -segment_length);
-      break;
-    case "+":
-      console.log("cw");
-      rotate(angle);
-      break;
-    case "-":
-      console.log("ccw");
-      rotate(-angle);
-      break;
-    case "[":
-      console.log("push");
-      push();
-      break;
-    case "[":
-      console.log("pop");
-      pop();
-      break;
-    default:
-      print("undefined command");
-  }
-}
-
 function lookUpInstruction(s:string) {
   let result = lexicon[s]
   if (result != undefined) { 
     result();
   } 
 }
-  
 
-
-//----------------------------------------------------------------
-//------------------------------------------------ Generating
-
-function factorial(n:number):number {
-  if (n == 1) { return 1; } 
-  else { return n * factorial(n-1); }
-}
-
-//assuming integer values, 𝝨 (i=1,number,i)
-const sumBelow = (number:number, sum = 0):number => (
-  number === 0 ? sum : sumBelow(number - 1, sum + number)
-  //sames as
-  //if (number === 0) { return sum } 
-  //else { return sumBelow(number - 1, sum + number) }
-)
-
-//Note:the trampoline is slower than an iterative loop
-const trampoline = (fn: (...args:any[]) => any) => (...args:any[]):any => {
-  let result:any = fn(...args)
-  while (typeof result === 'function') {  result = result() }
-  return result
-}
+// function doInstruction(s:string) {
+//   console.log(s);
+//   switch(s) {
+//     case "F":
+//       console.log("line");
+//       line(0,0,0,-segment_length); translate(0, -segment_length);
+//       break;
+//     case "+":
+//       console.log("cw");
+//       rotate(angle);
+//       break;
+//     case "-":
+//       console.log("ccw");
+//       rotate(-angle);
+//       break;
+//     case "[":
+//       console.log("push");
+//       push();
+//       break;
+//     case "[":
+//       console.log("pop");
+//       pop();
+//       break;
+//     default:
+//       print("undefined command");
+//   }
+// }

@@ -42,11 +42,7 @@ function generate() {
     createP(sentence);
     turtle(sentence);
 }
-// let testPush;
-// let testPop;
 function setup() {
-    // testPush = () => {push();}
-    // testPop = () => {pop();}
     createP(sentence);
     let button = createButton("generate");
     button.mousePressed(generate);
@@ -77,59 +73,7 @@ function turtle(instructions) {
     //let testString = "[F+F-F][F-F+F]"
     for (let character of instructions) {
         lookUpInstruction(character);
-        //for (let i = 0; i < testString.length; i++ ) {
-        //console.log(testString[i]);
-        // console.log(character);
-        // if (character == "[") {
-        //   push();
-        //   continue;
-        // } else if (character == "]") {
-        //   lookUpInstruction("]");
-        //   // pop();
-        //   // continue;
-        // } else {
-        //   lookUpInstruction(character);
-        //   //line(0,0,0,-segment_length); translate(0, -segment_length);
-        // }
     }
-    // for (let character of instructions) {
-    //   console.log(character);
-    //   lookUpInstruction(character)
-    // }
-    // let doThis = lexicon["["]
-    // doThis();
-    // line(0,0,0,-segment_length); translate(0, -segment_length)
-    // doThis = lexicon["+"]
-    // doThis();
-    // line(0,0,0,-segment_length); translate(0, -segment_length);
-    // doThis = lexicon["-"];
-    // doThis();
-    // line(0,0,0,-segment_length); translate(0, -segment_length);
-    // doThis = lexicon["]"]
-    // doThis = lexicon["["]
-    // doThis();
-    // line(0,0,0,-segment_length); translate(0, -segment_length)
-    // doThis = lexicon["-"]
-    // doThis();
-    // line(0,0,0,-segment_length); translate(0, -segment_length);
-    // doThis = lexicon["+"];
-    // doThis();
-    // line(0,0,0,-segment_length); translate(0, -segment_length);
-    // doThis = lexicon["]"]
-    // doInstruction("[");
-    // doInstruction("F");
-    // doInstruction("+");
-    // doInstruction("F");
-    // doInstruction("-");
-    // doInstruction("F");
-    // doInstruction("]");
-    // doInstruction("[");
-    // doInstruction("F");
-    // doInstruction("-");
-    // doInstruction("F");
-    // doInstruction("+");
-    // doInstruction("F");
-    // doInstruction("]");
 }
 let angle = 0.43633231;
 let segment_length = 100;
@@ -140,40 +84,39 @@ let lexicon = {
     "[": () => push(),
     "]": () => pop(),
 };
-function doInstruction(s) {
-    console.log(s);
-    switch (s) {
-        case "F":
-            console.log("line");
-            line(0, 0, 0, -segment_length);
-            translate(0, -segment_length);
-            break;
-        case "+":
-            console.log("cw");
-            rotate(angle);
-            break;
-        case "-":
-            console.log("ccw");
-            rotate(-angle);
-            break;
-        case "[":
-            console.log("push");
-            push();
-            break;
-        case "[":
-            console.log("pop");
-            pop();
-            break;
-        default:
-            print("undefined command");
-    }
-}
 function lookUpInstruction(s) {
     let result = lexicon[s];
     if (result != undefined) {
         result();
     }
 }
+// function doInstruction(s:string) {
+//   console.log(s);
+//   switch(s) {
+//     case "F":
+//       console.log("line");
+//       line(0,0,0,-segment_length); translate(0, -segment_length);
+//       break;
+//     case "+":
+//       console.log("cw");
+//       rotate(angle);
+//       break;
+//     case "-":
+//       console.log("ccw");
+//       rotate(-angle);
+//       break;
+//     case "[":
+//       console.log("push");
+//       push();
+//       break;
+//     case "[":
+//       console.log("pop");
+//       pop();
+//       break;
+//     default:
+//       print("undefined command");
+//   }
+// }
 //----------------------------------------------------------------
 //------------------------------------------------ Generating
 function factorial(n) {
