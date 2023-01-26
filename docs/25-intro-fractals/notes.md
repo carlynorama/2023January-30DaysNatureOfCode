@@ -13,3 +13,10 @@
     - <https://www.pbs.org/wgbh/nova/fractals/>
     - Mandelbrot's 1975 Book <https://en.wikipedia.org/wiki/The_Fractal_Geometry_of_Nature>
     - Mandelbrot's article <https://en.wikipedia.org/wiki/- How_Long_Is_the_Coast_of_Britain%3F_Statistical_Self-Similarity_and_Fractional_Dimension>
+
+
+### Instructions
+
+These are noLoop sketches, or update only on an event. 
+
+- Click on a Koch Line and press "k" to make it wrinkle.
