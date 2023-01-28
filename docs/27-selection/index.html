@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="daypage.css">
+  <title>carlynorama | 2023 Jan 27</title>
+</head>
+
+<body>
+  <main>
+    <p><a href="../">TOC</a></p>
+    <H1>Day 27: Rejection Sampling</H1>
+    <p><a href="https://github.com/carlynorama/2023January-30DaysNatureOfCode/tree/main/docs/27-selection">Repo for Day 27</a></p>
+
+    <p>Getting a selection from a set that is weighted proportionally is central to doing genetic algorithms. One solution is to create an array that contains proportional numbers of the values, but that may mean creating and destroying an large array several times.  </p>
+<p>Both in <a href="https://www.youtube.com/watch?v=9zfeTw-uFCw&amp;list=PLRqwX-V7Uu6bJM3VgzjNV5YxVxUwzALHV">Shiffman's videos</a> and in a couple of other places the "<a href="https://en.wikipedia.org/wiki/Rejection_sampling">Rejection Sampling</a>" algorithm is mentioned. I wanted to make sure I understood it. </p>
+<p>This non-looping sketch creates 10k shapes, based on weights determined at the beginning at each run. </p>
+<h3>Nice video on the topic:</h3>
+<ul>
+<li>"Rejection Sampling - VISUALLY EXPLAINED with EXAMPLES!" Kapil Sachdeva https://www.youtube.com/watch?v=si76S7QqxTU   </li>
+<li>"Accept-Reject Sampling : Data Science Concepts" ritvikmath
+ https://www.youtube.com/watch?v=OXDqjdVVePY </li>
+</ul>
+<h3>Compare to Inverse Transform Sampling</h3>
+<p>(smrinoff, inverse cumulative distribution function)
+Videos from same channels as above
+- https://www.youtube.com/watch?v=d_KiCqW3DTs
+- https://www.youtube.com/watch?v=9ixzzPQWuAY</p>
+
+    <p>Hover the mouse over a sketch to make it run.</p>
+
+    <ol>
+<li><a href="01-rejection-sampling">01-rejection-sampling</a></li>
+</ol>
+
+<div class="grid-container">
+	<iframe style="visibility:hidden;" onload="this.style.visibility='visible';" src="01-rejection-sampling/embed.html"></iframe>
+</div>
+
+
+  </main>
+</body>
+</html>
