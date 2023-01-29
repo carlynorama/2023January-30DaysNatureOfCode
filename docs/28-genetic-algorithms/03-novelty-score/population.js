@@ -16,19 +16,47 @@ class Population {
             return total / this.strands.length;
         };
         this.noveltyScores = () => {
+            //console.log("hello?");
             let baseline = new Vector(...averagedPerIndex(this.strands.map((element) => element.bases)));
-            //let currentMax = 0;
+            let currentMax = 0;
+            let currentMin = +Infinity;
             let totalDistances = 0;
             const rawDistances = this.strands.map((element) => {
                 const strand = new Vector(...element.bases);
                 const distance = strand.magSquaredTo(baseline);
-                //if (distance > currentMax) { currentMax = distance }
+                if (distance > currentMax) {
+                    currentMax = distance;
+                }
+                if (distance < currentMin) {
+                    currentMin = distance;
+                }
                 totalDistances += distance;
+                //console.log("indiv distance", distance)
                 return distance;
             });
             const fullNormalized = rawDistances.map((element) => element / totalDistances);
-            console.log(sum(fullNormalized));
-            return (fullNormalized);
+            //console.log("novelty",sum(fullNormalized), currentMin, currentMin/totalDistances, currentMax, currentMax/totalDistances);
+            return fullNormalized;
+        };
+        this.mostNovel = () => {
+            let maxNovelty = 0.0;
+            let worldRecordIndex;
+            const novelties = this.noveltyScores();
+            for (let i = 0; i < novelties.length; i++) {
+                if (novelties[i] > maxNovelty) {
+                    maxNovelty = novelties[i];
+                    worldRecordIndex = i;
+                }
+            }
+            if (maxNovelty != undefined) {
+                const novelStrand = this.strands[worldRecordIndex];
+                //const test = novelStrand.bases.every((v,i)=> v === this.DNARules.targetStrand[i])
+                //console.log("best", DNA.toPhrase(this.strands[worldRecordIndex!].bases), maxNovelty)
+                return { mostNovel: novelStrand, maxNovelty };
+            }
+            else {
+                return { mostNovel: new DNAStrand([]), maxNovelty: 0 };
+            }
         };
         this.bestMember = () => {
             let worldRecord = 0.0;
@@ -43,7 +71,7 @@ class Population {
             if (worldRecord != undefined) {
                 const fitStrand = this.strands[worldRecordIndex];
                 const test = fitStrand.bases.every((v, i) => v === this.DNARules.targetStrand[i]);
-                //console.log(DNA.toPhrase(this.strands[worldRecordIndex!].bases))
+                //console.log("best", DNA.toPhrase(this.strands[worldRecordIndex!].bases), worldRecord)
                 return { bestFit: fitStrand, worldRecord, isTarget: test };
             }
             else {
@@ -54,6 +82,7 @@ class Population {
         this.DNARules = rules;
         this.strands = strands;
         this.generation = generation;
+        this.noveltyPreference = 10;
     }
     static randomStrands(count, rules) {
         let newStrands = [];
@@ -67,16 +96,14 @@ class Population {
         let strands = this.randomStrands(count, rules);
         return new Population(rules, strands, 0);
     }
-    //Select sample will not work correctly because fitnesses do not sum to 1
-    //Shuffling the array to avoid the problem? 
     static createChildPopulation(parentGen) {
         let newStrands = [];
-        const fitnesses = parentGen.fitnesses();
-        const normalizedFitnesses = normalized(fitnesses);
+        //const fitnesses = parentGen.fitnesses();
+        const normalizedScores = parentGen.fnScores(parentGen.noveltyPreference);
         //const maxFitness = Math.max(...fitnesses);
         for (let i = 0; i < parentGen.strands.length; i++) {
-            const strandA = Population.selectFromNormalized(normalizedFitnesses, parentGen.strands);
-            const strandB = Population.selectFromNormalized(normalizedFitnesses, parentGen.strands);
+            const strandA = Population.selectFromNormalized(normalizedScores, parentGen.strands);
+            const strandB = Population.selectFromNormalized(normalizedScores, parentGen.strands);
             //console.log(parentGen.DNARules.toPhenotype(strandA!), parentGen.DNARules.toPhenotype(strandB!))
             if (strandA == null || strandB == null) {
                 throw new Error("did not create 2 parents");
@@ -86,6 +113,13 @@ class Population {
             newStrands.push(new DNAStrand(child));
         }
         return new Population(parentGen.DNARules, newStrands, parentGen.generation + 1);
+    }
+    fnScores(noveltyScaleUp) {
+        const novelties = this.noveltyScores();
+        const fN = this.fitnesses().map((value, index) => value + novelties[index] * noveltyScaleUp);
+        const total = sum(fN);
+        const normalizedCollection = fN.map((value) => value / total);
+        return normalizedCollection;
     }
     static testWeights(weights, valuesLength) {
         let epsilon = 0.00001;

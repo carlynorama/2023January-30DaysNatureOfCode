@@ -3,8 +3,8 @@
 // 2023 January Creative Coding Journal
 // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
 //
-// 27-selection/01-rejection-sampling/sketch.ts
-// calynorama 2023 Jan 27
+// 28-genetic-algorithms/03-diversity-score/sketch.ts
+// calynorama 2023 Jan 28
 //
 // https://en.wikipedia.org/wiki/Rejection_sampling
 /*
@@ -26,13 +26,13 @@ let allPhrases;
 let stats;
 //Population 
 let population;
-let foundFlag = false;
+let foundFlag = true;
 function setup() {
     controller = new ControlledCanvas(400, 400);
     colorMode(HSB);
     // background(0, 0, 80);
-    testSuite();
-    population = Population.createInitialPopulation("To be or not to be.", 1000);
+    //testSuite();
+    population = Population.createInitialPopulation("To be or not to be.", 100);
     //@ts-expect-error
     bestPhrase = createP("Best phrase:");
     //bestPhrase.position(10,10);
@@ -64,6 +64,7 @@ function makeNewGeneration() {
     displayInfo(population);
     stroke(population.generation % 360, 50, 50);
     drawFitnesses(1.00, population.fitnesses());
+    //drawFitnesses(1.00, population.fnScores());
 }
 function keyPressed() {
     controller.keyPressed();
@@ -74,14 +75,17 @@ function keyPressed() {
 function displayInfo(population) {
     // Display current status of population
     let answer = population.bestMember();
+    let novel = population.mostNovel();
     foundFlag = answer.isTarget;
     //@ts-expect-error
     bestPhrase.html("Best phrase:<br>" + DNA.toPhrase(answer.bestFit.
-        bases));
+        bases) + "<br>Most novel:<br>" + DNA.toPhrase(novel.mostNovel.bases));
     let statstext = "total generations:     " + population.generation + "<br>";
     statstext +=
         "average fitness:       " + nf(population.averageFitness()) + "<br>";
     statstext += "total population:      " + population.strands.length + "<br>";
+    statstext +=
+        "novelty preference:       " + nf(population.noveltyPreference) + "<br>";
     statstext += "mutation rate:         " + floor(population.DNARules.mutationRate * 100) + "%";
     //@ts-expect-error
     stats.html(statstext);
@@ -175,11 +179,11 @@ function testSuite() {
     //   const recalced = recalcFitness(value.bases, dna_example.targetStrand)
     //   console.log("individual fitness checks", value, fitness, recalced)
     // }
-    stroke(0, 50, 50);
+    //stroke(0, 50, 50);
     const maxF = 1;
-    drawFitnesses(maxF, fitnesses);
-    stroke(0, 20, 70);
-    drawFitnesses(maxF, population.noveltyScores());
+    //drawFitnesses(maxF, fitnesses);
+    stroke(180, 20, 70);
+    drawFitnesses(maxF, testPopulation.noveltyScores());
     let oldPopulation = [...testPopulation.strands];
     testPopulation = Population.createChildPopulation(testPopulation);
     const fitnesses2 = testPopulation.fitnesses();
@@ -189,13 +193,13 @@ function testSuite() {
     const bestMember_asWritten2 = testPopulation.bestMember().bestFit;
     const bestMember_recheck2 = testPopulation.strands.find((value) => testPopulation.DNARules.fitness(value) == maxFitness2);
     console.log("best members", DNA.toPhrase(bestMember_asWritten2.bases), DNA.toPhrase(bestMember_recheck2.bases), bestMember_asWritten2.bases.every((v, i) => v === bestMember_recheck2.bases[i]));
-    stroke(180, 50, 50);
-    drawFitnesses(maxF, fitnesses2);
-    stroke(90, 50, 50);
-    testPopulation = Population.createChildPopulation(testPopulation);
-    drawFitnesses(maxF, testPopulation.fitnesses());
-    stroke(0, 20, 70);
-    drawFitnesses(maxF, population.noveltyScores());
+    //stroke(100, 50, 50);
+    //drawFitnesses(maxF, fitnesses2);
+    // stroke(90, 50, 50);
+    // testPopulation = Population.createChildPopulation(testPopulation);
+    // drawFitnesses(maxF, testPopulation.fitnesses());
+    stroke(230, 20, 70);
+    drawFitnesses(maxF, testPopulation.noveltyScores());
     // let round2 = testPopulation.bestMember();
     // console.log(round2);
     // for (let i=0; i < 100; i++) {

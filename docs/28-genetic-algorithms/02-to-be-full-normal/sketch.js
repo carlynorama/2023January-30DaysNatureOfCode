@@ -32,7 +32,7 @@ function setup() {
     colorMode(HSB);
     // background(0, 0, 80);
     //testSuite();
-    population = Population.createInitialPopulation("To be or not to be.", 1000);
+    population = Population.createInitialPopulation("To be or not to be.", 100);
     //@ts-expect-error
     bestPhrase = createP("Best phrase:");
     //bestPhrase.position(10,10);
