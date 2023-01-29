@@ -2,9 +2,11 @@
 // 2023 January Creative Coding Journal
 // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
 //
-// 28-genetic-algorithms/01-to-be-refactor/dna.ts
+// 28-genetic-algorithms/02-to-be-full-normal/dna.ts
 // calynorama 2023 Jan 28
 //
+
+
 
 class DNA {
     validBases:number[]
