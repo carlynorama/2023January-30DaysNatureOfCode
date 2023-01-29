@@ -1,4 +1,11 @@
 "use strict";
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// 28-genetic-algorithms/02-to-be-full-normal/population.ts
+// calynorama 2023 Jan 28
+//
 class Population {
     constructor(rules, strands, generation) {
         this.fitnesses = () => {
@@ -80,18 +87,10 @@ class Population {
         }
     }
     static selectFromNormalized(nWeights, values) {
-        // - Obtain a sample y from distribution Y and a sample u from Unif(0,1) (the uniform distribution over the unit interval).
-        // - Check whether or not u < f(y)/Mg(y)  //(f(y)/M *g(y)) is the normalized probability
-        //   - if this holds, accept y as a sample drawn from f
-        //   - if not, reject the value of y and return to the sampling step.
-        // The algorithm will take an average of M 
         let selectionNumber = Math.random();
-        //console.log(selectionNumber);
         for (let i = 0; i < nWeights.length; i++) {
             const weight = nWeights[i];
-            //console.log(weight, i);
             if (selectionNumber < weight) {
-                //console.log("found one", values[i], weight, selectionNumber);
                 return values[i];
             }
             else {
@@ -100,22 +99,14 @@ class Population {
         }
         return null; //shouldn't happen. 
     }
+    //For when you can't fully normalize for whatever reason. 
     static selectShuffledSample(weights, values, scale) {
-        // - Obtain a sample y from distribution Y and a sample u from Unif(0,1) (the uniform distribution over the unit interval).
-        // - Check whether or not u < f(y)/Mg(y)  //(f(y)/M *g(y)) is the normalized probability
-        //   - if this holds, accept y as a sample drawn from f
-        //   - if not, reject the value of y and return to the sampling step.
-        // The algorithm will take an average of M 
         let selectionNumber = Math.random() * scale;
-        //console.log(selectionNumber);
         let indexOrder = shuffle(arrayRange(0, weights.length - 1, 1));
-        //console.log(indexOrder);
         for (let i = 0; i < weights.length; i++) {
             let thisIndex = indexOrder[i];
             const weight = weights[thisIndex];
-            //console.log(weight, i);
             if (selectionNumber < weight) {
-                //console.log("found one", values[i], weight, selectionNumber);
                 return values[thisIndex];
             }
             else {
@@ -125,23 +116,12 @@ class Population {
         return null; //shouldn't happen. 
     }
     static normalizingSelect(weights, values) {
-        // - Obtain a sample y from distribution Y and a sample u from Unif(0,1) (the uniform distribution over the unit interval).
-        // - Check whether or not u < f(y)/Mg(y)  //(f(y)/M *g(y)) is the normalized probability
-        //   - if this holds, accept y as a sample drawn from f
-        //   - if not, reject the value of y and return to the sampling step.
-        // The algorithm will take an average of M 
         let selectionNumber = Math.random();
-        //console.log(selectionNumber);
-        //let indexOrder = shuffle(arrayRange(0, weights.length-1, 1));
-        //console.log(indexOrder);
         const nWeights = normalized(weights);
         for (let i = 0; i < weights.length; i++) {
-            //let thisIndex = indexOrder[i];
             let thisIndex = i;
             const weight = nWeights[thisIndex];
-            //console.log(weight, i);
             if (selectionNumber < weight) {
-                //console.log("found one", values[i], weight, selectionNumber);
                 return values[thisIndex];
             }
             else {

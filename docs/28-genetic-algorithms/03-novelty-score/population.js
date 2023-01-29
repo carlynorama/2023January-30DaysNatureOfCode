@@ -116,7 +116,10 @@ class Population {
     }
     fnScores(noveltyScaleUp) {
         const novelties = this.noveltyScores();
-        const fN = this.fitnesses().map((value, index) => value + novelties[index] * noveltyScaleUp);
+        const noveltyFactor = (1 - this.averageFitness()) * noveltyScaleUp;
+        const fN = this.fitnesses().map((value, index) => {
+            return value + novelties[index] * noveltyFactor;
+        });
         const total = sum(fN);
         const normalizedCollection = fN.map((value) => value / total);
         return normalizedCollection;

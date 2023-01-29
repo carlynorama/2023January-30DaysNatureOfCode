@@ -1,4 +1,11 @@
 "use strict";
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// 28-genetic-algorithms/01-to-be-refactor/dna.ts
+// calynorama 2023 Jan 28
+//
 class DNA {
     constructor(components, target, mutationRate = 0.01) {
         this.validBases = components;

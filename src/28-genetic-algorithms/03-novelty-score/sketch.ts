@@ -2,24 +2,12 @@
 // 2023 January Creative Coding Journal
 // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
 //
-// 28-genetic-algorithms/03-diversity-score/sketch.ts
+// 28-genetic-algorithms/03-novelty-score/sketch.ts
 // calynorama 2023 Jan 28
 //
 
-// https://en.wikipedia.org/wiki/Rejection_sampling
-/*
-The algorithm, which was used by John von Neumann[4] and dates back to Buffon and his needle,[5] obtains a sample from distribution X
-, with density f, using samples from distribution Y, with density g, as follows:
-
-- Obtain a sample y from distribution Y and a sample u from Unif(0,1) (the uniform distribution over the unit interval).
-- Check whether or not u < f(y)/Mg(y)  //(f(y)/M *g(y)) is the normalized probability
-  - if this holds, accept y as a sample drawn from f
-  - if not, reject the value of y and return to the sampling step.
-The algorithm will take an average of M
-*/
-
-// https://github.com/CodingTrain/Suggestion-Box/issues/119
-// https://github.com/CodingTrain/Suggestion-Box/issues/146
+//This sketch builds on previous sketch but tries to add a boost for members or the population that are distant from the average.
+//It appears to be most helpful as written in the early states if the population stages is small.
 
 
 let controller:ControlledCanvas;
@@ -49,7 +37,7 @@ function setup() {
   bestPhrase.class("best");
 
   //@ts-expect-error
-  allPhrases = createP("All phrases:");
+  allPhrases = createP("Phrases sample:");
   //@ts-expect-error
   allPhrases.position(600, 10);
   //@ts-expect-error
@@ -129,9 +117,10 @@ function strandsText(strands:DNAStrand[]):string {
   let everything = "";
 
   let displayLimit = min(strands.length, 50);
+  let shuffledStrands = shuffle(strands)
 
   for (let i = 0; i < displayLimit; i++) {
-    everything += DNA.toPhrase(strands[i].bases) + "<br>";
+    everything += DNA.toPhrase(shuffledStrands[i].bases) + "<br>";
   }
   return everything;
 }

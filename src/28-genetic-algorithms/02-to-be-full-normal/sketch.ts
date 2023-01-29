@@ -2,24 +2,11 @@
 // 2023 January Creative Coding Journal
 // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
 //
-// 27-selection/01-rejection-sampling/sketch.ts
-// calynorama 2023 Jan 27
+// 28-genetic-algorithms/02-to-be-full-normal/sketch.ts
+// calynorama 2023 Jan 28
 //
 
-// https://en.wikipedia.org/wiki/Rejection_sampling
-/*
-The algorithm, which was used by John von Neumann[4] and dates back to Buffon and his needle,[5] obtains a sample from distribution X
-, with density f, using samples from distribution Y, with density g, as follows:
-
-- Obtain a sample y from distribution Y and a sample u from Unif(0,1) (the uniform distribution over the unit interval).
-- Check whether or not u < f(y)/Mg(y)  //(f(y)/M *g(y)) is the normalized probability
-  - if this holds, accept y as a sample drawn from f
-  - if not, reject the value of y and return to the sampling step.
-The algorithm will take an average of M
-*/
-
-// https://github.com/CodingTrain/Suggestion-Box/issues/119
-// https://github.com/CodingTrain/Suggestion-Box/issues/146
+// Fixes shuffle-patch in previous code by making sure that the array of weights handed off to the selction function actually equals one. 
 
 
 let controller:ControlledCanvas;

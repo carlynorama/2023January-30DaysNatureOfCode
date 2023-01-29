@@ -1,4 +1,11 @@
 "use strict";
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// 28-genetic-algorithms/01-to-be-refactor/population.ts
+// calynorama 2023 Jan 28
+//
 class Population {
     constructor(rules, strands, generation) {
         this.fitnesses = () => {
