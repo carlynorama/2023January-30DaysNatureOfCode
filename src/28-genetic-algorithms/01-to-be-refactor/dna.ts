@@ -91,7 +91,6 @@ class DNA {
 
     //Assumes A & B are of same length
     static interleaf(strandA:DNAStrand, strandB:DNAStrand) {
-        let splitIndex = Math.floor(strandA.bases.length/2);
         let newStrandBases:number[] = [];
         for (let i =0; i < strandA.bases.length; i++) {
             if (i % 2 == 0) { newStrandBases.push(strandA.bases[i]) } 
