@@ -1,24 +1,25 @@
 "use strict";
-function arrayRange(start, stop, step) {
-    return Array.from({ length: (stop - start) / step + 1 }, (value, index) => start + index * step);
-}
 class DNA {
-    constructor(components, target, mutationRate = 0.1) {
+    constructor(components, target, mutationRate = 0.01) {
         this.validBases = components;
         this.targetStrand = target;
         this.combinationStrategy = DNA.swapHalves;
         this.mutationRate = mutationRate;
+        this.fitness_smudge = 0.01;
     }
     static convertPhraseToDNAStrand(phrase) {
         //this will be weird for unicode strings outside of ascii range because will only return first value from cluster.
         return [...phrase].map((element) => element.charCodeAt(0));
     }
+    //a-z, A-Z, . and space. 
     static createNewASCIISchema(targetPhrase) {
-        const minValue = 65;
-        const maxValue = 122;
-        let values = arrayRange(minValue, maxValue, 1);
-        values.push(32);
-        values.push(46);
+        // const minValue = 65
+        // const maxValue = 122
+        const upper = arrayRange(65, 90, 1);
+        const lower = arrayRange(97, 122, 1);
+        let values = upper.concat(lower);
+        values.push(32); //space
+        values.push(46); //.
         DNA.convertPhraseToDNAStrand(targetPhrase);
         return new DNA(values, DNA.convertPhraseToDNAStrand(targetPhrase));
     }
@@ -49,9 +50,11 @@ class DNA {
         //    let strand_vector = new Vector(...strand.bases);
         //    let phrase_vector = new Vector(...this.targetStrand);
         //    return 1/strand_vector.magSquaredTo(phrase_vector);
-        const score = strand.bases.filter((component, index) => (this.targetStrand[index] == component)).length;
-        //const targetLength = this.targetStrand.length
-        return score * score;
+        //    const score = strand.bases.filter((component, index) => (this.targetStrand[index] == component)).length / this.targetStrand.length
+        //    return score*score + this.fitness_smudge;
+        //return strand.bases.filter((component, index) => (this.targetStrand[index] == component)).length / this.targetStrand.length
+        const percentCorrect = strand.bases.filter((component, index) => (this.targetStrand[index] == component)).length / this.targetStrand.length;
+        return percentCorrect ** 2;
     }
     combineParents(strandA, strandB) {
         return this.combinationStrategy(strandA, strandB);
@@ -73,7 +76,6 @@ class DNA {
     }
     //Assumes A & B are of same length
     static interleaf(strandA, strandB) {
-        let splitIndex = Math.floor(strandA.bases.length / 2);
         let newStrandBases = [];
         for (let i = 0; i < strandA.bases.length; i++) {
             if (i % 2 == 0) {
@@ -89,7 +91,7 @@ class DNA {
         let newBases = [];
         for (let i = 0; i < strand.bases.length; i++) {
             if (Math.random() < this.mutationRate) {
-                newBases.push(this.newBase()); //This provides some diversity because it can be anything allowable. 
+                newBases.push(this.newBase()); //This provides some diversity because it can be anything allowable? 
             }
             else {
                 newBases.push(strand.bases[i]);
@@ -99,11 +101,7 @@ class DNA {
     }
 }
 class DNAStrand {
-    // fitness:number
-    // diversity:number
-    //dna_rules:DNA
     constructor(bases) {
-        //this.dna_rules = DNA_style
         this.bases = bases;
     }
 }

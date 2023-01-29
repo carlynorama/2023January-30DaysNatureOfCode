@@ -25,15 +25,19 @@ class Population {
         return new Population(rules, strands, 0);
     }
 
+    //Select sample will not work correctly because fitnesses do not sum to 1
+    //Shuffling the array to avoid the problem? 
     static createChildPopulation(parentGen: Population) {
         let newStrands: DNAStrand[] = []
         const fitnesses = parentGen.fitnesses();
         const maxFitness = Math.max(...fitnesses);
         for (let i = 0; i < parentGen.strands.length; i++) {
-            const strandA = Population.selectSample(fitnesses, parentGen.strands, maxFitness);
-            const strandB = Population.selectSample(fitnesses, parentGen.strands, maxFitness);
+            const strandA = Population.selectShuffledSample(fitnesses, parentGen.strands, maxFitness);
+            const strandB = Population.selectShuffledSample(fitnesses, parentGen.strands, maxFitness);
+            //console.log(parentGen.DNARules.toPhenotype(strandA!), parentGen.DNARules.toPhenotype(strandB!))
             if (strandA == null || strandB == null) { throw new Error("did not create 2 parents") }
             const child = parentGen.DNARules.mutatedBases(parentGen.DNARules.combineParents(strandA!, strandB!));
+            //console.log(parentGen.DNARules.toPhenotype(strandA!), parentGen.DNARules.toPhenotype(strandB!), DNA.toPhrase(child));
             newStrands.push(new DNAStrand(child));
         }
 
@@ -61,10 +65,12 @@ class Population {
         }
 
         if (worldRecord != undefined) {
+            const fitStrand = this.strands[worldRecordIndex!]
+            const test = fitStrand.bases.every((v,i)=> v === this.DNARules.targetStrand[i])
             //console.log(DNA.toPhrase(this.strands[worldRecordIndex!].bases))
-            return {bestFit:this.strands[worldRecordIndex!], worldRecord}
+            return {bestFit:fitStrand, worldRecord, isTarget:test}
         } else {
-            return { bestFit:new DNAStrand([]), worldRecord:0 }
+            return {bestFit:new DNAStrand([]), worldRecord:0, isTarget:false}
         }
     }
 
@@ -91,8 +97,31 @@ class Population {
             const weight = weights[i]
             //console.log(weight, i);
             if (selectionNumber < weight) {
-                //console.log("found one", values[i]);
+                //console.log("found one", values[i], weight, selectionNumber);
                 return values[i]
+            } else { selectionNumber -= weight }
+        }
+        return null //shouldn't happen. 
+    }
+
+    static selectShuffledSample<T>(weights: number[], values: T[], scale: number): T | null {
+        // - Obtain a sample y from distribution Y and a sample u from Unif(0,1) (the uniform distribution over the unit interval).
+        // - Check whether or not u < f(y)/Mg(y)  //(f(y)/M *g(y)) is the normalized probability
+        //   - if this holds, accept y as a sample drawn from f
+        //   - if not, reject the value of y and return to the sampling step.
+        // The algorithm will take an average of M 
+        let selectionNumber = Math.random() * scale;
+        //console.log(selectionNumber);
+        let indexOrder = shuffle(arrayRange(0, weights.length-1, 1));
+        //console.log(indexOrder);
+
+        for (let i = 0; i < weights.length; i++) {
+            let thisIndex = indexOrder[i];
+            const weight = weights[thisIndex]
+            //console.log(weight, i);
+            if (selectionNumber < weight) {
+                //console.log("found one", values[i], weight, selectionNumber);
+                return values[thisIndex]
             } else { selectionNumber -= weight }
         }
         return null //shouldn't happen. 

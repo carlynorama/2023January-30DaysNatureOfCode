@@ -1,20 +1,20 @@
 
 
-function arrayRange(start:number, stop:number, step:number):number[] {
-    return Array.from({ length: (stop - start) / step + 1 },(value, index) => start + index * step);
- }
+
 
 class DNA {
     validBases:number[]
     targetStrand:number[]
     combinationStrategy:((strandA:DNAStrand, strandB:DNAStrand) => DNAStrand)
     mutationRate:number;
+    fitness_smudge:number;
 
-    constructor(components:number[], target:number[], mutationRate:number = 0.1) {
+    constructor(components:number[], target:number[], mutationRate:number = 0.01) {
         this.validBases = components
         this.targetStrand = target
         this.combinationStrategy = DNA.swapHalves
         this.mutationRate = mutationRate;
+        this.fitness_smudge = 0.01;
     }
 
     static convertPhraseToDNAStrand(phrase:string):number[] {
@@ -22,12 +22,15 @@ class DNA {
         return [...phrase].map((element) => element.charCodeAt(0))
     }
 
+    //a-z, A-Z, . and space. 
     static createNewASCIISchema(targetPhrase:string) {
-        const minValue = 65
-        const maxValue = 122
-        let values = arrayRange(minValue, maxValue, 1)
-        values.push(32)
-        values.push(46)
+        // const minValue = 65
+        // const maxValue = 122
+        const upper = arrayRange(65, 90, 1);
+        const lower = arrayRange(97, 122, 1);
+        let values = upper.concat(lower);
+        values.push(32) //space
+        values.push(46) //.
         DNA.convertPhraseToDNAStrand(targetPhrase);
         return new DNA(values, DNA.convertPhraseToDNAStrand(targetPhrase))
     }
@@ -59,14 +62,21 @@ class DNA {
         return bases.map((element) => {  return String.fromCharCode(element)}).join("")
     }
 
-    fitness(strand:DNAStrand) {
+    fitness(strand:DNAStrand):number {
     //Plan B    
     //    let strand_vector = new Vector(...strand.bases);
     //    let phrase_vector = new Vector(...this.targetStrand);
     //    return 1/strand_vector.magSquaredTo(phrase_vector);
-       const score = strand.bases.filter((component, index) => (this.targetStrand[index] == component)).length
-       //const targetLength = this.targetStrand.length
-       return score*score;  
+    //    const score = strand.bases.filter((component, index) => (this.targetStrand[index] == component)).length / this.targetStrand.length
+    //    return score*score + this.fitness_smudge;
+
+    //return strand.bases.filter((component, index) => (this.targetStrand[index] == component)).length / this.targetStrand.length
+    
+    const percentCorrect = strand.bases.filter((component, index) => (this.targetStrand[index] == component)).length / this.targetStrand.length
+    
+    
+    return percentCorrect ** 2;
+
     }
 
     combineParents(strandA:DNAStrand, strandB:DNAStrand):DNAStrand {
@@ -103,7 +113,7 @@ class DNA {
         let newBases:number[] = [];
         for (let i = 0; i < strand.bases.length; i++) {
           if (Math.random() < this.mutationRate) {
-            newBases.push(this.newBase()) ; //This provides some diversity because it can be anything allowable. 
+            newBases.push(this.newBase()) ; //This provides some diversity because it can be anything allowable? 
           } else {
             newBases.push(strand.bases[i])
           }
@@ -114,24 +124,9 @@ class DNA {
 }
 class DNAStrand {
     bases:number[]
-    // fitness:number
-    // diversity:number
-    //dna_rules:DNA
 
     constructor(bases:number[]) {
-        //this.dna_rules = DNA_style
         this.bases = bases
     }
-
-    // static createRandomStrand(length:number, DNA_style:DNA) {
-    //     const dna_rules = DNA_style
-    //     let bases:number[] = []
-
-    //     for (let i=0; i<length; i++) {
-    //         bases.push(dna_rules.newBase())
-    //     }
-    //     return new DNAStrand(bases, dna_rules)
-    // }
-
 
 }
