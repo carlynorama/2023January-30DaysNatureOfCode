@@ -1,0 +1,1 @@
+First attempt at implementing the To Be or Not To Be sketch more or less as written in the video. Different syntax and organization, same otherwise.
