@@ -100,5 +100,5 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["global","src/28-genetic-algorithms/02-to-be-full-normal"]
+  "include": ["global","src/28-genetic-algorithms/03-diversity-score"]
 }
