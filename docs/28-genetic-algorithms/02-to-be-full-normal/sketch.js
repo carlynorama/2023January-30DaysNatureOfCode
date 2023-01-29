@@ -18,26 +18,32 @@ let foundFlag = false;
 function setup() {
     controller = new ControlledCanvas(400, 400);
     colorMode(HSB);
-    // background(0, 0, 80);
+    background(0, 0, 80);
     //testSuite();
     population = Population.createInitialPopulation("To be or not to be.", 1000);
-    //@ts-expect-error
-    bestPhrase = createP("Best phrase:");
-    //bestPhrase.position(10,10);
-    //@ts-expect-error
-    bestPhrase.class("best");
-    //@ts-expect-error
-    allPhrases = createP("All phrases:");
-    //@ts-expect-error
-    allPhrases.position(600, 10);
-    //@ts-expect-error
-    allPhrases.class("all");
-    //@ts-expect-error
-    stats = createP("Stats");
-    //stats.position(10,200);
-    //@ts-expect-error
-    stats.class("stats");
-    displayInfo(population);
+    if (!controller.embedded) {
+        //@ts-expect-error
+        bestPhrase = createP("Best phrase:");
+        //bestPhrase.position(10,10);
+        //@ts-expect-error
+        bestPhrase.class("best");
+        //@ts-expect-error
+        allPhrases = createP("Phrases sample:");
+        //@ts-expect-error
+        allPhrases.position(600, 100);
+        //@ts-expect-error
+        allPhrases.class("all");
+        //@ts-expect-error
+        stats = createP("Stats");
+        //stats.position(10,200);
+        //@ts-expect-error
+        stats.class("stats");
+        displayInfo(population);
+    }
+    else {
+        let answer = population.bestMember();
+        foundFlag = answer.isTarget;
+    }
     console.log("------------ END SETUP! -------------");
     //noLoop();
 }
@@ -49,14 +55,18 @@ function draw() {
 }
 function makeNewGeneration() {
     population = Population.createChildPopulation(population);
-    displayInfo(population);
+    if (!controller.embedded) {
+        displayInfo(population);
+    }
+    else {
+        let answer = population.bestMember();
+        foundFlag = answer.isTarget;
+    }
     stroke(population.generation % 360, 50, 50);
     drawFitnesses(1.00, population.fitnesses());
 }
 function keyPressed() {
     controller.keyPressed();
-    if (key == "t") {
-    }
 }
 // ------------------------------------------------------------------------------- HTML
 function displayInfo(population) {

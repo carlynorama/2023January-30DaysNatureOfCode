@@ -10,7 +10,7 @@
 //It appears to be most helpful as written in the early states if the population stages is small.
 
 
-let controller:ControlledCanvas;
+let controller: ControlledCanvas;
 
 //DOM items
 let bestPhrase: Element;
@@ -18,39 +18,45 @@ let allPhrases: Element;
 let stats: Element;
 
 //Population 
-let population:Population
+let population: Population
 let foundFlag = true;
 
 function setup() {
   controller = new ControlledCanvas(400, 400);
   colorMode(HSB);
-  // background(0, 0, 80);
+  background(0, 0, 80);
 
   //testSuite();
 
   population = Population.createInitialPopulation("To be or not to be.", 100);
 
-  //@ts-expect-error
-  bestPhrase = createP("Best phrase:");
-  //bestPhrase.position(10,10);
-  //@ts-expect-error
-  bestPhrase.class("best");
+  if (!controller.embedded) {
+    //@ts-expect-error
+    bestPhrase = createP("Best phrase:");
+    //bestPhrase.position(10,10);
+    //@ts-expect-error
+    bestPhrase.class("best");
 
-  //@ts-expect-error
-  allPhrases = createP("Phrases sample:");
-  //@ts-expect-error
-  allPhrases.position(600, 10);
-  //@ts-expect-error
-  allPhrases.class("all");
+    //@ts-expect-error
+    allPhrases = createP("Phrases sample:");
+    //@ts-expect-error
+    allPhrases.position(600, 100);
+    //@ts-expect-error
+    allPhrases.class("all");
 
-  //@ts-expect-error
-  stats = createP("Stats");
-  //stats.position(10,200);
-  //@ts-expect-error
-  stats.class("stats");
+    //@ts-expect-error
+    stats = createP("Stats");
+    //stats.position(10,200);
+    //@ts-expect-error
+    stats.class("stats");
 
+    displayInfo(population);
 
-  displayInfo(population);
+  } else {
+    let answer = population.bestMember();
+    foundFlag = answer.isTarget
+  }
+
 
   console.log("------------ END SETUP! -------------");
   //noLoop();
@@ -58,17 +64,23 @@ function setup() {
 
 
 function draw() {
-    //background(0, 0, 80);
-    if (!foundFlag) {
-      makeNewGeneration();
-    }
-    
- 
+  //background(0, 0, 80);
+  if (!foundFlag) {
+    makeNewGeneration();
+  }
+
+
 }
 
 function makeNewGeneration() {
   population = Population.createChildPopulation(population);
-  displayInfo(population);
+  if (!controller.embedded) {
+    displayInfo(population);
+  } else {
+    let answer = population.bestMember();
+    foundFlag = answer.isTarget
+  }
+
   stroke(population.generation % 360, 50, 50)
   drawFitnesses(1.00, population.fitnesses());
   //drawFitnesses(1.00, population.fnScores());
@@ -77,21 +89,17 @@ function makeNewGeneration() {
 
 function keyPressed() {
   controller.keyPressed();
-  if (key == "t") {
-    
-    
-  }
 }
 
 // ------------------------------------------------------------------------------- HTML
 
-function displayInfo(population:Population) {
+function displayInfo(population: Population) {
   // Display current status of population
   let answer = population.bestMember();
 
   let novel = population.mostNovel()
 
-   foundFlag = answer.isTarget
+  foundFlag = answer.isTarget
 
   //@ts-expect-error
   bestPhrase.html("Best phrase:<br>" + DNA.toPhrase(answer.bestFit.
@@ -100,10 +108,10 @@ function displayInfo(population:Population) {
   let statstext =
     "total generations:     " + population.generation + "<br>";
   statstext +=
-   "average fitness:       " + nf(population.averageFitness()) + "<br>";
+    "average fitness:       " + nf(population.averageFitness()) + "<br>";
   statstext += "total population:      " + population.strands.length + "<br>";
   statstext +=
-  "novelty preference:       " + nf(population.noveltyPreference) + "<br>";
+    "novelty preference:       " + nf(population.noveltyPreference) + "<br>";
   statstext += "mutation rate:         " + floor(population.DNARules.mutationRate * 100) + "%";
 
   //@ts-expect-error
@@ -113,7 +121,7 @@ function displayInfo(population:Population) {
   allPhrases.html("All phrases:<br>" + strandsText(population.strands));
 }
 
-function strandsText(strands:DNAStrand[]):string {
+function strandsText(strands: DNAStrand[]): string {
   let everything = "";
 
   let displayLimit = min(strands.length, 50);
@@ -129,41 +137,41 @@ function strandsText(strands:DNAStrand[]):string {
 //--------------------------------------------------------------------------------- Shapes 
 
 let epsilon = 0.00001
-function testWeights(weights:number[], valuesLength:number) {
-  if (weights.length != valuesLength) { throw new Error("did not provide a weight for every value")}
+function testWeights(weights: number[], valuesLength: number) {
+  if (weights.length != valuesLength) { throw new Error("did not provide a weight for every value") }
   const aboveZero = weights.filter((element) => element >= 0)
-  if (aboveZero.length != weights.length) {throw new Error("some weights are below zero")}
+  if (aboveZero.length != weights.length) { throw new Error("some weights are below zero") }
   const sum = aboveZero.reduce((acc, current) => acc + current, 0);
-  if (!(Math.abs(1-sum) < epsilon)) { throw new Error("weights do not add up to be close enough 1")}
+  if (!(Math.abs(1 - sum) < epsilon)) { throw new Error("weights do not add up to be close enough 1") }
 }
 
 //Questions: 
 //This algorithm assumes array in random order every time or a sorted order? 
-function selectSample_limitedFast<T>(weights:number[], values:T[]):T | null {
-// - Obtain a sample y from distribution Y and a sample u from Unif(0,1) (the uniform distribution over the unit interval).
-// - Check whether or not u < f(y)/Mg(y)  //(f(y)/M *g(y)) is the normalized probability
-//   - if this holds, accept y as a sample drawn from f
-//   - if not, reject the value of y and return to the sampling step.
-// The algorithm will take an average of M
+function selectSample_limitedFast<T>(weights: number[], values: T[]): T | null {
+  // - Obtain a sample y from distribution Y and a sample u from Unif(0,1) (the uniform distribution over the unit interval).
+  // - Check whether or not u < f(y)/Mg(y)  //(f(y)/M *g(y)) is the normalized probability
+  //   - if this holds, accept y as a sample drawn from f
+  //   - if not, reject the value of y and return to the sampling step.
+  // The algorithm will take an average of M
   let selectionNumber = Math.random();
   //console.log(selectionNumber);
-  for (let i = 0; i<weights.length; i++) {
+  for (let i = 0; i < weights.length; i++) {
     const weight = weights[i]
     //console.log(weight, i);
-      if(selectionNumber < weight) {
-        //console.log("found one", values[i]);
-        return values[i]
-      } else { selectionNumber -= weight }
+    if (selectionNumber < weight) {
+      //console.log("found one", values[i]);
+      return values[i]
+    } else { selectionNumber -= weight }
   }
   return null //shouldn't happen. 
-} 
+}
 
 
 
 
 
 function testSuite() {
-  
+
   console.log(DNA.convertPhraseToDNAStrand("A"));
   let dna_example = DNA.createNewASCIISchema("To be or not to be.")
   console.log(dna_example.validBases)
@@ -179,11 +187,11 @@ function testSuite() {
   console.log("rules strategy", DNA.toPhrase(child_c.bases));
 
   let mutatedChildren = []
-  for (let i = 0; i < 100; i ++) {
+  for (let i = 0; i < 100; i++) {
     mutatedChildren.push(dna_example.mutatedBases(child_c));
     console.log(DNA.toPhrase(mutatedChildren[i]));
     //console.log("mutated", DNA.toPhrase(mutated_child), mutated_child)
-  } 
+  }
 
   let testPopulation = Population.createInitialPopulation("To be or not to be.", 100);
   const fitnesses = testPopulation.fitnesses();
@@ -195,11 +203,11 @@ function testSuite() {
   const bestMember_asWritten = testPopulation.bestMember().bestFit
   const bestMember_recheck = testPopulation.strands.find((value) => testPopulation.DNARules.fitness(value) == maxFitness)
 
-  console.log("best members", 
-              DNA.toPhrase(bestMember_asWritten.bases), 
-              DNA.toPhrase(bestMember_recheck!.bases), 
-              bestMember_asWritten.bases.every((v,i)=> v === bestMember_recheck!.bases[i]));
-  
+  console.log("best members",
+    DNA.toPhrase(bestMember_asWritten.bases),
+    DNA.toPhrase(bestMember_recheck!.bases),
+    bestMember_asWritten.bases.every((v, i) => v === bestMember_recheck!.bases[i]));
+
   // const recalcFitness = (values:number[], baseLine:number[]) => {
   //   let counter = 0;
   //   for (let i = 0; i < values.length; i++) {
@@ -232,10 +240,10 @@ function testSuite() {
   const bestMember_asWritten2 = testPopulation.bestMember().bestFit
   const bestMember_recheck2 = testPopulation.strands.find((value) => testPopulation.DNARules.fitness(value) == maxFitness2)
 
-  console.log("best members", 
-  DNA.toPhrase(bestMember_asWritten2.bases), 
-    DNA.toPhrase(bestMember_recheck2!.bases), 
-  bestMember_asWritten2.bases.every((v,i)=> v === bestMember_recheck2!.bases[i]));
+  console.log("best members",
+    DNA.toPhrase(bestMember_asWritten2.bases),
+    DNA.toPhrase(bestMember_recheck2!.bases),
+    bestMember_asWritten2.bases.every((v, i) => v === bestMember_recheck2!.bases[i]));
 
   //stroke(100, 50, 50);
   //drawFitnesses(maxF, fitnesses2);
@@ -257,24 +265,24 @@ function testSuite() {
   // }
 
   // console.log(testPopulation);
- 
+
 
 }
 
-function drawFitnesses(maxPossible:number, fitnesses:number[]) {
-    const length = fitnesses.length
-    const xShift = width/length
-    for (let i = 0; i < length; i++) {
-      const x = i * xShift;
-      const y = height - ((fitnesses[i] / maxPossible) * height);
+function drawFitnesses(maxPossible: number, fitnesses: number[]) {
+  const length = fitnesses.length
+  const xShift = width / length
+  for (let i = 0; i < length; i++) {
+    const x = i * xShift;
+    const y = height - ((fitnesses[i] / maxPossible) * height);
 
-      circle(x, y, 3);
-    }
+    circle(x, y, 3);
+  }
 
-    const average = fitnesses.reduce((acc, element) => acc + element, 0)/length
-    const y = height - ((average / maxPossible) * height);
+  const average = fitnesses.reduce((acc, element) => acc + element, 0) / length
+  const y = height - ((average / maxPossible) * height);
 
-    line(0, y, width, y);
+  line(0, y, width, y);
 
 
 }

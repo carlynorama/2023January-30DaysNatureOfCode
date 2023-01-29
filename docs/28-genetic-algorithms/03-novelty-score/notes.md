@@ -1,3 +1,3 @@
 This sketch builds on previous sketch but tries to add a boost for members or the population that are distant from the average.
 
-It appears to be most helpful as written in the early states if the population stages is small.
+It appears to be most helpful as written in the early states if the population stages is small? Not sure if it helps or hurts otherwise. Probably makes shortest generation higher but may prevent wheel spinning in a local maxima? Ran some tests but probably not at high enough n to really tell. 

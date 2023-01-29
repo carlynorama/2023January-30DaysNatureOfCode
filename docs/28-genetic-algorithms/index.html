@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="daypage.css">
+  <title>carlynorama | 2023 Jan 29</title>
+</head>
+
+<body>
+  <main>
+    <p><a href="../">TOC</a></p>
+    <H1>Day 29: Genetic Algorithms</H1>
+    <p><a href="https://github.com/carlynorama/2023January-30DaysNatureOfCode/tree/main/docs/28-genetic-algorithms">Repo
+        for Day 29</a></p>
+
+    <p>Kicking of Genetic Algorithms in earnest combing through the <a href="">To Be of Not To Be</a> example</p>
+
+    <ol>
+      <li><a href="01-to-be-refactor">01-to-be-refactor</a>: different syntax and organization, same otherwise.</li>
+      <li><a href="02-to-be-full-normal">02-to-be-full-normal</a>: removed shuffle compensation and fully normalized the weights.</li>
+      <li><a href="03-novelty-score">03-novelty-score</a>: tried to add a novelty bonus for guesses distant from the average. Not sure if it helps or hurts. Probably makes shortest generation higher but may prevent wheel spinning in a local maxima? Ran some tests but probably not at high enough n to really tell. </li>
+    </ol>
+
+    <h3>References</h3>
+    <h4>Videos</h4>
+    <ul>
+      <li>Chapter 9 Playlist <a
+          href="https://www.youtube.com/watch?v=9zfeTw-uFCw&amp;list=PLRqwX-V7Uu6bJM3VgzjNV5YxVxUwzALHV">https://www.youtube.com/watch?v=9zfeTw-uFCw&amp;list=PLRqwX-V7Uu6bJM3VgzjNV5YxVxUwzALHV</a>
+      </li>
+      <li>Computerphile episode <a
+          href="https://www.youtube.com/watch?v=MacVqujSXWE">https://www.youtube.com/watch?v=MacVqujSXWE</a></li>
+      <li>MIT 6.034 Lecture <a
+          href="https://www.youtube.com/watch?v=kHyNqSnzP8Y">https://www.youtube.com/watch?v=kHyNqSnzP8Y</a>, I liked
+        the phrase "simulated annealing"</li>
+    </ul>
+    <h4>Code Example</h4>
+    <ul>
+      <li>https://editor.p5js.org/codingtrain/sketches/6-rGiDsPD</li>
+    </ul>
+
+    <p>Hover the mouse over a sketch to make it run. Hue is based on generation count. The dots represent the fitness of a member of the population. The line is the generations average fitness.</p>
+
+
+
+    <div class="grid-container">
+      <iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+        src="01-to-be-refactor/embed.html"></iframe>
+      <iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+        src="02-to-be-full-normal/embed.html"></iframe>
+      <iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+        src="03-novelty-score/embed.html"></iframe>
+    </div>
+
+
+  </main>
+</body>
+
+</html>
