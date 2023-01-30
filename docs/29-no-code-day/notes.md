@@ -18,6 +18,7 @@ Kept watching....
 - <https://en.wikipedia.org/wiki/Perceptron>
 - Make Your Own Neural Network, Tariq Rashid <https://amzn.to/3HjjzOm>
 - Has Perceptron: <https://github.com/nature-of-code/NOC-S17-2-Intelligence-Learning/tree/master/week4-neural-networks>
+- William Flake, The Computational Beauty of Nature: Computer Explorations of Fractals, Chaos, Complex Systems, and Adaptation <https://amzn.to/3JIw2hJ>
 
 ### Other
 
