@@ -27,6 +27,7 @@ Kept watching....
     - <https://github.com/mnielsen/neural-networks-and-deep-learning>
     - <https://colah.github.io/>
     - <https://distill.pub/>
+    - <http://yann.lecun.com/exdb/mnist/>
 - MIT 6.034 2015 supplement video 12a <https://www.youtube.com/watch?v=uXt8qF2Zzfo>
 - MIT MIT RES.LL-005 Mathematics of Big Data and Machine Learning, IAP 2020 <https://www.youtube.com/watch?v=t4K6lney7Zw>
     - <https://ocw.mit.edu/courses/res-ll-005-mathematics-of-big-data-and-machine-learning-january-iap-2020/>
