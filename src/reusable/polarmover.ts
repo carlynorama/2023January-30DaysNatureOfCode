@@ -24,29 +24,29 @@
     }
 
     static createPolarMover(angle:number, magnitude:number) {
-      return new PolarMover(Vector.createAngleVector(angle, magnitude));
+      return new PolarMover(Vector.create2DAngleVector(angle, magnitude));
     }
 
     updateVelocity() {
-      this.velocity = this.position.subtracted(this.lastPosition);
+      this.velocity = this.position.subtracting(this.lastPosition);
     }
 
     updatePosition(dTheta:number, dMagnitude:number) {
         //createAngleVector can handle negative magnitude
-        let change = Vector.createAngleVector(dTheta, dMagnitude);
+        let change = Vector.create2DAngleVector(dTheta, dMagnitude);
         this.lastPosition = this.position.copy();
-        this.position = this.position.added(change);
+        this.position = this.position.addedTo(change);
         this.updateVelocity();
     }
 
     setPosition(theta:number, magnitude:number) {
       this.lastPosition = this.position.copy();
-      this.position = Vector.createAngleVector(theta, magnitude);
+      this.position = Vector.create2DAngleVector(theta, magnitude);
       this.updateVelocity();
     }
 
     needsCartesian(callback: (x: number, y:number, a:number) => void) {
-      callback(this.position.x, this.position.y, this.velocity.angle());
+      callback(this.position.x, this.position.y, this.velocity.angle2D());
     }
 
     pretty():string {

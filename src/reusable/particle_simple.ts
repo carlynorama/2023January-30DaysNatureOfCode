@@ -24,18 +24,18 @@ class Particle {
       this.dampening = 0.99;
     }
   
-    get heading()  { return this.velocity.angle }
+    get heading()  { return this.velocity.angle2D }
   
     applyForce(force:Vector) {
       let n = force.scaledBy(1/this.mass);
-      this.acceleration = this.acceleration.added(n);
+      this.acceleration = this.acceleration.addedTo(n);
     }
   
     // Method to update position
     update() {
       this.velocity.scaledBy(this.dampening);
-      this.velocity = this.velocity.added(this.acceleration);
-      this.position = this.position.added(this.velocity);
+      this.velocity = this.velocity.addedTo(this.acceleration);
+      this.position = this.position.addedTo(this.velocity);
       this.acceleration = new Vector(0,0);
     }
   

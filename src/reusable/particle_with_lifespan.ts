@@ -8,7 +8,7 @@
 // The Coding Train / Daniel Shiffman
 // https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/4-particles/1-particle-system
 
-class Particle {
+class Particle_Finite {
   acceleration: Vector;
   velocity: Vector;
   position: Vector;
@@ -28,24 +28,24 @@ class Particle {
       let acceleration = new Vector(0, 0);
       let velocity = new Vector(0, 0);
       let position = new Vector(x, y);
-      return new Particle(position, velocity, acceleration)
+      return new Particle_Finite(position, velocity, acceleration)
     }
 
     static createRandomVelocityParticle(x:number, y:number) {
       let acceleration = new Vector(0, 0);
       let velocity = Vector.random2D();
       let position = new Vector(x, y);
-      return new Particle(position, velocity, acceleration)
+      return new Particle_Finite(position, velocity, acceleration)
     }
 
     get finished() { return this.health < 0; }
     get x() { return this.position.x; }
     get y() { return this.position.y; }
-    get heading()  { return this.velocity.angle }
+    get heading()  { return this.velocity.angle2D }
   
     applyForce(force:Vector) {
       let n = force.scaledBy(1/this.mass);
-      this.acceleration = this.acceleration.added(n);
+      this.acceleration = this.acceleration.addedTo(n);
     }
 
     weakenByAmount(amount:number) {
@@ -58,9 +58,9 @@ class Particle {
     // Method to update position
     update() {
       
-      this.velocity = this.velocity.added(this.acceleration);
+      this.velocity = this.velocity.addedTo(this.acceleration);
       this.velocity.scaledBy(this.dampening);
-      this.position = this.position.added(this.velocity);
+      this.position = this.position.addedTo(this.velocity);
       //console.log(this.position.x, this.position.y);
       this.acceleration = new Vector(0,0);
     }

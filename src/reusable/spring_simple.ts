@@ -23,10 +23,12 @@ class Spring {
     }
   
     update() {
-      let force = Vector.subtracted(this.b.position, this.a.position);
+      let force = Vector.subtracting(this.b.position, this.a.position);
       //console.log("force in", force.x, force.y);
       let x = force.magnitude() - this.restLength;
       //console.log("displacement", x);
+      //WARNING: If zero vector possibly undefined.
+      //@ts-expect-error
       let n = force.normalized().scaledBy(this.k * x);
       //console.log("normalized and scaled", n.x, n.y);
       this.a.applyForce(n);
