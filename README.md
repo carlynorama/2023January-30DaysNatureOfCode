@@ -1,5 +1,7 @@
 # 2023 January Project
 
+REPO WEBSITE: <https://carlynorama.github.io/2023January-30DaysNatureOfCode/>
+
 There is an official [Genuary](https://genuary.art) process that involves lots of really cool prompts, etc, but I'm too rusty. What better way to get back into the creative coding groove than follow along with Daniel Shiffman's Nature of Code 2 playlist? 
 
 - Nature of Code 2 Playlist: <https://www.youtube.com/playlist?list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM>
