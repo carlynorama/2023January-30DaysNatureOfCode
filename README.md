@@ -85,4 +85,22 @@ It has its own repo [small-ssg](https://github.com/carlynorama/small-ssg)
 29. [29-no-code-day](docs/29-no-code-day): No coding for me today, but lots of sleeping and watching. Links provided.
 30. Days 30 & 31: More sleep and repo clean up. 
 
+## Reusable TypeScript Classes
 
+	- [controller.ts](src/reusable/controller.ts)
+	- [datatypes.ts](src/reusable/datatypes.ts)
+	- [emitter_simple.ts](src/reusable/emitter_simple.ts)
+	- [follower.ts](src/reusable/follower.ts)
+	- [mover.ts](src/reusable/mover.ts)
+	- [noiseloop.ts](src/reusable/noiseloop.ts)
+	- [noisemaker.ts](src/reusable/noisemaker.ts)
+	- [particle-template.ts](src/reusable/particle-template.ts)
+	- [particle_simple.ts](src/reusable/particle_simple.ts)
+	- [particle_with_lifespan.ts](src/reusable/particle_with_lifespan.ts)
+	- [path.ts](src/reusable/path.ts)
+	- [pendulum.ts](src/reusable/pendulum.ts)
+	- [polarmover.ts](src/reusable/polarmover.ts)
+	- [spring_simple.ts](src/reusable/spring_simple.ts)
+	- [tpmover.ts](src/reusable/tpmover.ts)
+	- [vector.ts](src/reusable/vector.ts)
+	- [vehicle.ts](src/reusable/vehicle.ts)
