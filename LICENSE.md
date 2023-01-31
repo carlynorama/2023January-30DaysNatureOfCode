@@ -1,6 +1,6 @@
 
 
-Turning any of this in as a response to an academic assignment or competition of any type is not allowed unless properly cited as per institutional requirements. 
+Should go without saying, but turning any of this in as a response to an academic assignment or competition of any type is not allowed unless properly cited as per institutional requirements. 
 
 Further:
 
