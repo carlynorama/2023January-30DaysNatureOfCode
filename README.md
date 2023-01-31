@@ -91,6 +91,7 @@ It has its own repo [small-ssg](https://github.com/carlynorama/small-ssg)
     - [vector.ts](src/reusable/vector.ts)
     - [datatypes.ts](src/reusable/datatypes.ts)
     - [particle-template.ts](src/reusable/particle-template.ts)
+	- [quadtree.js](src/reusable/quadtree.js)
 	
 	- [emitter_simple.ts](src/reusable/emitter_simple.ts)
 	- [follower.ts](src/reusable/follower.ts)
