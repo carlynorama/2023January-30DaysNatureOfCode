@@ -1,4 +1,11 @@
 "use strict";
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// src/reusable/mover.ts
+// calynorama 2023 Jan 
+//
 class Mover {
     // r: number;
     // diameter: number;

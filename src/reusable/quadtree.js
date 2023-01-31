@@ -1,3 +1,11 @@
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// src/reusable/quadtree.js
+// calynorama 2023 Jan 31
+//
+
 class QuadTree {
 
   // --------------------------------------------------------------------------- MAKING
