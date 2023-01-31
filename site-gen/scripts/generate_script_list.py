@@ -13,18 +13,18 @@ def get_script_list(script_dir, suffix):
     return script_names
 
 def script_list_html(script_names, directory):
-    script_string = ''
+    script_string = '<ol>'
     directory_text = Path(directory).stem + "/"
     for item in script_names:
-            script_string += '\n\t\t<a href="{}{}">{}</a>'.format(directory_text, item, item)
-    #print(script_string)
+            script_string += '\n\t\t<li><a href="{}{}">{}</a></li>'.format(directory_text, item, item)
+    script_string += '</ol>'
     return script_string
 
 def script_list_md(script_names, directory):
     script_string = ''
     directory_text = Path(directory).stem + "/"
     for item in script_names:
-            script_string += '\n\t[{}]({}{})'.format(item, directory_text, item)
+            script_string += '\n\t- [{}]({}{})'.format(item, directory_text, item)
     #print(script_string)
     return script_string
 
