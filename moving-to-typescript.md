@@ -44,11 +44,11 @@
     * no, you have to do at least `npm install @types/p5`, but you can leave off installing p5 if you're including it in docs folder by hand. 
 * add `global.d.ts` to the src folder or other location included in the `tsconfig.json` 
 * `npm run http-server` to confirm old files are still navigable.
-* create a proof of concept sketch.ts (src/11-first-day-of-type-script/01)
+* create a proof of concept `sketch.ts` (`src/11-first-day-of-type-script/01`)
 * ran `npm run tsc` to generate a folder at the same location in docs, copied in the needed html files. 
 * New files exist! 
 
-* Note: I will be using the `src` folder as a staging area. Changing the name on the the subfolders will generate a new destination <code>docs</code>directory. That means the TypeScript might not be preserved in stages like the JavaScript, but I think that's okay
+* Note: I will be using the `src` folder as a staging area. Changing the name on the the subfolders will generate a new destination `docs` directory. That means the TypeScript might not be preserved in stages like the JavaScript, but I think that's okay
 
 I temporarily installed ESLint before I realized that linter lives inside typescript as well? Those steps:
 * `npm install --save-dev eslint`,  //On next install see if can just do second line?
