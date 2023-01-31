@@ -1,3 +1,11 @@
+  //
+  // 2023 January Creative Coding Journal
+  // https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+  //
+  // src/reusable/mover.ts
+  // calynorama 2023 Jan 
+  //
+  
   class Mover {
     static G = 0.01;
     position: Vector;
@@ -27,11 +35,11 @@
   
     applyForce(force:Vector) {
       let f:Vector = Vector.scaledBy(force, 1/this.mass);
-      this.acceleration = this.acceleration.added(f);
+      this.acceleration = this.acceleration.addedTo(f);
     }
   
     attract(mover:Mover) {
-      let force = this.position.subtracted(mover.position);
+      let force = this.position.subtracting(mover.position);
       let distanceSq = constrain(force.magnitudeSquared(), 100, 1000);
       
       let strength = Mover.G * ((this.mass * mover.mass)) / distanceSq;
@@ -40,9 +48,9 @@
     }
   
     update() {
-      this.velocity = this.velocity.added(this.acceleration);
-      this.angle = this.velocity.angle();
-      this.position = this.position.added(this.velocity);
+      this.velocity = this.velocity.addedTo(this.acceleration);
+      this.angle = this.velocity.angle2D();
+      this.position = this.position.addedTo(this.velocity);
       this.acceleration = Vector.zero2D();    
       
     }

@@ -11,7 +11,7 @@
 
 class Emitter {
     origin: Vector;
-    particles:Particle[];
+    particles:Particle_Finite[];
     constructor(x:number, y:number) {
       this.origin = new Vector(x, y);
       this.particles = [];
@@ -20,7 +20,7 @@ class Emitter {
   
     addParticle(qty: number) {
       for (let i = 0; i < qty; i++) {
-        this.particles.push(Particle.createRandomVelocityParticle(this.origin.x, this.origin.y));
+        this.particles.push(Particle_Finite.createRandomVelocityParticle(this.origin.x, this.origin.y));
       }
     }
 

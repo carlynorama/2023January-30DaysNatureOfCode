@@ -1,3 +1,11 @@
+//
+// 2023 January Creative Coding Journal
+// https://github.com/carlynorama/2023January-30DaysNatureOfCode/
+//
+// 2023January-30DaysNatureOfCode/src/reusable/particle.js
+// calynorama 2023 Jan
+//
+
 class Particle {
   constructor(x, y) {
     this.x = x;

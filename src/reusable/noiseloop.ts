@@ -44,8 +44,8 @@ class NoiseLoop {
   
     //TODO: Redo for n length.   
     loopValue = (at:number) => {
-        let vector = Vector.createAngleVector(at, this.radius)
-        .added(this.root) // move to root
+        let vector = Vector.create2DAngleVector(at, this.radius)
+        .addedTo(this.root) // move to root
         .addedValues(this.radius, this.radius); // perlin noise function can only accept positive values
 
         //P5JS Dependency
@@ -68,7 +68,7 @@ class NoiseLoop {
     // }
 
     loopValueWithSlide = (at:number, slide:number) => {
-        let vector = Vector.createAngleVector(at, this.diameter).added(this.root);
+        let vector = Vector.create2DAngleVector(at, this.diameter).addedTo(this.root);
         return noise(vector.x, vector.y, slide);
     }
 

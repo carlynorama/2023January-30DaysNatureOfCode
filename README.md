@@ -1,5 +1,7 @@
 # 2023 January Project
 
+REPO WEBSITE: <https://carlynorama.github.io/2023January-30DaysNatureOfCode/>
+
 There is an official [Genuary](https://genuary.art) process that involves lots of really cool prompts, etc, but I'm too rusty. What better way to get back into the creative coding groove than follow along with Daniel Shiffman's Nature of Code 2 playlist? 
 
 - Nature of Code 2 Playlist: <https://www.youtube.com/playlist?list=PLRqwX-V7Uu6ZV4yEcW3uDwOgGXKUUsPOM>
@@ -83,4 +85,29 @@ It has its own repo [small-ssg](https://github.com/carlynorama/small-ssg)
 29. [29-no-code-day](docs/29-no-code-day): No coding for me today, but lots of sleeping and watching. Links provided.
 30. Days 30 & 31: More sleep and repo clean up. 
 
+## Reusable TypeScript Classes
 
+    - [controller.ts](src/reusable/controller.ts)
+    - [vector.ts](src/reusable/vector.ts)
+    - [datatypes.ts](src/reusable/datatypes.ts)
+    - [particle-template.ts](src/reusable/particle-template.ts)
+	- [quadtree.js](src/reusable/quadtree.js)
+	
+	- [emitter_simple.ts](src/reusable/emitter_simple.ts)
+	- [follower.ts](src/reusable/follower.ts)
+	- [fractaltree.ts](src/reusable/fractaltree.ts)
+	- [kochline.ts](src/reusable/kochline.ts)
+	- [mover.ts](src/reusable/mover.ts)
+	- [noiseloop.ts](src/reusable/noiseloop.ts)
+	- [noisemaker.ts](src/reusable/noisemaker.ts)
+	- [particle_simple.ts](src/reusable/particle_simple.ts)
+	- [particle_with_lifespan.ts](src/reusable/particle_with_lifespan.ts)
+	- [path.ts](src/reusable/path.ts)
+	- [pendulum.ts](src/reusable/pendulum.ts)
+	- [polarmover.ts](src/reusable/polarmover.ts)
+	- [population.ts](src/reusable/population.ts)
+        - [dna.ts](src/reusable/dna.ts)
+        - [array_helpers.ts](src/reusable/array_helpers.ts)
+	- [spring_simple.ts](src/reusable/spring_simple.ts)
+	- [tpmover.ts](src/reusable/tpmover.ts)
+	- [vehicle.ts](src/reusable/vehicle.ts)

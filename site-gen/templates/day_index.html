@@ -4,20 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="daypage.css">
-  <title>carlynorama | ${year_month} ${day_num}</title>
+  <title>carlynorama | ${year_month} ${day_num} (${day_title})</title>
 </head>
 
 <body>
   <main>
     <p><a href="../">TOC</a></p>
-    <H1>Day ${day_num}: HELLO_MAKE_A_TITLE</H1>
+    <H1>Day ${day_num}: ${day_title}</H1>
     <p><a href="https://github.com/carlynorama/2023January-30DaysNatureOfCode/tree/main/docs/${day_dir_name}">Repo for Day ${day_num}</a></p>
+
+    ${sketch_nav}
 
     ${notes}
 
     ${instructions}
 
-    ${sketch_links_and_embeds}
+    ${sketch_embeds}
 
   </main>
 </body>
