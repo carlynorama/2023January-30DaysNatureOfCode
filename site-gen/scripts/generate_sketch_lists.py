@@ -34,9 +34,9 @@ def write_embed_links(folder_names, directory):
         f.close() 
 
 
-def write_sketch_nav_from_markdown(directory):
-    markdown_file_name = directory + '/' + 'directory_list.md'
-    html_file_name = directory + '/' + 'sketch-links.html'
+def write_html_from_markdown(directory, markdown_file_name):
+    markdown_file_name = directory + '/' + markdown_file_name
+    html_file_name = directory + '/' + 'generated-from-markdown.html'
     markdown.markdownFromFile(input=markdown_file_name, output=html_file_name)
 
 def write_sketch_nav(folder_names, directory):
