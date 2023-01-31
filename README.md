@@ -16,7 +16,7 @@ Other resources are listed on the individual day pages.
 
 JavaScript remains the lingua franca of the web-front-end, and therefore the most sharable of the languages to do creative coding in. That I really value, so it was worth it to flex those muscles again. 
 
-The limited time frame of a 30 day binge format helped convince me to do this because I don't enjoy JavaScript. TypeScript gave JavaScript some complier like "guard rails", as they say, and that helped me a lot. However that added significant overhead to the setup, so my drop-dead simple little repo now has `node.js` all up in it.  Trade-offs. ¯\_(ツ)_/¯
+The limited time frame of a 30 day binge format helped convince me to do this because I don't enjoy JavaScript. TypeScript gave JavaScript some complier like "guard rails", as they say, and that helped me a lot. However that added significant overhead to the setup, so my drop-dead simple little repo now has `node.js` all up in it.  Trade-offs. `¯\_(ツ)_/¯`
 
 A 30 day binge doesn't really give breathing room to the concepts. It's just enough to get a tweak on the examples working but not much further. Would recommend a week at least per chapter as per the course syllabus. 
 
