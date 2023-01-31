@@ -6,7 +6,8 @@ import shutil
 from string import Template
 import datetime
 import markdown
-import generate_sketch_list
+import generate_sketch_lists
+import parse_name
 
 
 # ${ year_month } ${ day_num }
@@ -17,9 +18,14 @@ import generate_sketch_list
 
 
 #one level only. for recursive use os.walk.
-def get_sketch_list(directory):
-    generate_sketch_list.write_list_to_files(directory)
-    html_file_name = directory + '/' + 'directory-list.html'
+def get_sketch_nav(directory):
+    html_file_name = directory + '/' + 'sketch-links.html'
+    with open(html_file_name) as f:
+        temp_str = f.read()
+    return temp_str
+
+def get_sketch_embeds(directory):
+    html_file_name = directory + '/' + 'sketch-embeds.html'
     with open(html_file_name) as f:
         temp_str = f.read()
     return temp_str
@@ -69,17 +75,22 @@ def date_string():
 
 def create_from_directory(day, day_folder):
     #sketch_folder = "../content/sketch_example"
-    sketch_links_and_embeds = get_sketch_list(day_folder)
+    generate_sketch_lists.write_sketch_resource_files(day_folder)
+    sketch_links =  get_sketch_nav(day_folder)
+    sketch_embeds = get_sketch_embeds(day_folder)
     folder_name = Path(day_folder).stem
     year_month = date_string()
     day_num = day
+    day_title = parse_name.get_directory_as_title(day_folder)
     notes = make_notes_html(day_folder)
     instructions = make_instructions_html()
     dictionary = {'year_month': year_month,
                 'day_num': day_num,
+                'day_title': day_title,
                 'day_dir_name': folder_name,
+                'sketch_nav': sketch_links,
                 'notes': notes,
-                'sketch_links_and_embeds': sketch_links_and_embeds,
+                'sketch_embeds': sketch_embeds,
                 'instructions': instructions,
                 }
     full_html = load_into_template("../templates/day_index.html", dictionary)

@@ -2,7 +2,7 @@
 
 import generate_sketch_embed
 import generate_sketch_index
-import generate_sketch_list
+import generate_sketch_lists
 import generate_day_index
 import datetime
 import sys
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         directory = input ("Directory to Scan: ")
         day_num = datetime.datetime.now().strftime("%d")
     
-    sketch_list = generate_sketch_list.get_directory_names(directory)
+    sketch_list = generate_sketch_lists.get_directory_names(directory)
     per_sketch(day_num, directory, sketch_list)
     generate_day_index.create_from_directory(day_num, directory)
     generate_day_index.check_and_move_css(["daypage.css", "embed.css"], directory)
