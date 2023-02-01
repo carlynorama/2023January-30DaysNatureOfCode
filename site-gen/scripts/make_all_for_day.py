@@ -28,7 +28,7 @@ if __name__ == "__main__":
     sketch_list = generate_sketch_lists.get_directory_names(directory)
     per_sketch(day_num, directory, sketch_list)
     generate_day_index.create_from_directory(day_num, directory)
-    generate_day_index.check_and_move_css(["daypage.css", "embed.css"], directory)
+    #generate_day_index.check_and_move_css(["daypage.css", "embed.css"], directory) 
     
     
 
