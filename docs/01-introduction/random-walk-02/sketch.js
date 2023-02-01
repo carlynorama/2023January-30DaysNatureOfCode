@@ -9,15 +9,17 @@
 let pos;
 let prev;
 
+let controller;
+
 function setup() {
-  createCanvas(400, 400);
+  controller = createControlledCanvas(400, 400);
   pos = createVector(width/2, height/2);
   prev = pos.copy();
   background(51);
 }
 
 function draw() {
-
+  if (runFlag) {
   stroke(0,204,204);
   strokeWeight(1);
   fill(204,204,204);
@@ -44,5 +46,5 @@ function draw() {
   } else {
     pos = createVector(width/2, height/2);
   }
-
+  }
 }
