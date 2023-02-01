@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="front_index.css">
   <title>carlynorama | 2023 January</title>
 
 </head>
@@ -11,8 +12,8 @@
 <body>
   <main>
     <h1>2023 January Project</h1>
-    <p>REPO WEBSITE: <a
-        href="https://carlynorama.github.io/2023January-30DaysNatureOfCode/">https://carlynorama.github.io/2023January-30DaysNatureOfCode/</a>
+    <p>REPO: <a
+        href="https://github.com/carlynorama/2023January-30DaysNatureOfCode/">https://github.com/carlynorama/2023January-30DaysNatureOfCode</a>
     </p>
     <p>There is an official <a href="https://genuary.art">Genuary</a> process that involves lots of really cool prompts,
       etc, but I'm too rusty. What better way to get back into the creative coding groove than follow along with Daniel
@@ -30,49 +31,6 @@
         course taught at NYU/ITP</li>
     </ul>
     <p>Other resources are listed on the individual day pages. </p>
-    <h2>Take-Aways from the Process</h2>
-    <p>JavaScript remains the lingua franca of the web-front-end, and therefore the most sharable of the languages to do
-      creative coding in. That I really value, so it was worth it to flex those muscles again. </p>
-    <p>The limited time frame of a 30 day binge format helped convince me to do this because I don't enjoy JavaScript.
-      TypeScript gave JavaScript some complier like "guard rails", as they say, and that helped me a lot. However that
-      added significant overhead to the setup, so my drop-dead simple little repo now has <code>node.js</code> all up in
-      it. Trade-offs. <code>¯\_(ツ)_/¯</code></p>
-    <p>A 30 day binge doesn't really give breathing room to the concepts. It's just enough to get a tweak on the
-      examples working but not much further. Would recommend a week at least per chapter as per the course syllabus.
-    </p>
-    <ul>
-      <li>Favorite Nature of Code things: using noise to create motion, the quadtree, boids. </li>
-      <li>Favorite Meta: The little static site generator, getting a TypeScript workflow up and running, having a coding
-        journal. </li>
-    </ul>
-    <h2>About this Repo / Using P5js</h2>
-    <p>Under most circumstances, don't follow my example. Instead use the fabulous online editors:</p>
-    <ul>
-      <li><a href="https://editor.p5js.org">https://editor.p5js.org</a></li>
-      <li><a href="https://openprocessing.org/">https://openprocessing.org/</a></li>
-    </ul>
-    <p>That said, I prefer to have my tool chains be functional offline so I made a repo. Originally the whole repo was
-      only what is now in the <code>docs</code> folder. On my computer I'd <code>cd</code> into the the directory that
-      had the repo, type <code>python3 -m http.server</code> and browse away. Since it already was a website, I enabled
-      git-hub pages.</p>
-    <ul>
-      <li><a
-          href="https://carlynorama.github.io/2023January-30DaysNatureOfCode/">https://carlynorama.github.io/2023January-30DaysNatureOfCode/</a>
-      </li>
-    </ul>
-    <h3>TypeScript</h3>
-    <p>In the beginning weeks (wow, did I say weeks, it was really 10 days &amp; a Quadtree) I really really really was
-      missing working in a strongly typed language so I decided to migrate to TypeScript. The bulk of the files now live
-      in the docs folder, with JUST the <code>.ts</code> files living in the <code>src</code> folder.</p>
-    <p><a href="moving-to-typescript.md">Steps I took to convert the repo</a>.</p>
-    <p>To avoid typescript complaining about redeclarations of <code>draw</code>, <code>sketch</code>, etc. my current
-      process is that every time I start a new sketch I point the <code>include</code> line at the end of
-      <code>.tsconfig</code> to that sketch e.g. </p>
-    <p><code>"include": ["global","src/28-genetic-algorithms/03-novelty-score"]</code></p>
-    <h3>site-gen (python)</h3>
-    <p>Making the HTML files for every sketch and and every day was getting kind of irritating, so I wrote a small
-      static site generator. </p>
-    <p>It has its own repo <a href="https://github.com/carlynorama/small-ssg">small-ssg</a></p>
     <h2>Full Day List</h2>
     <p></p>
     <ul>
@@ -123,8 +81,121 @@
         a "novelty bonus."</li>
       <li><a href="29-no-code-day/">Day 29</a>: No coding for me today, but lots of sleeping and watching. Links
         provided.</li>
-      <li><a href="29-no-code-day/">Days 30 & 31</a>: Repo clean up.</li>
+      <li>Days 30 & 31: Repo clean up.</li>
     </ul>
+    <h2>Selected Sketches</h2>
+
+    <div class="grid-container">
+
+
+      <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+        src="01-introduction/random-walk-02/embed.html"></iframe>
+      <p><a href="01-introduction/">Day 1</a>: <a href="01-introduction/random-walk-02/">Random walker.</a></p>
+    </div>
+    <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+        src="04-forces/force2-01-simpledrag/embed.html"></iframe>
+      <p><a href="04-forces/">Day 4</a>: <a href="04-forces/force2-01-simpledrag/">Simple drag force.</a></p>
+    </div>
+    <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+        src="06-quadtree-and-bounds/step02b_allows_catchup/embed.html"></iframe>
+      <p><a href="06-quadtree-and-bounds/">Day 06</a>: <a href="06-quadtree-and-bounds/step02b_allows_catchup/">Bounds detection "game."</a> Making sure I have bounds detection working with my Bounds class. Move the smaller box into the bigger box and see what happens.</p>
+    </div>
+
+
+      <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+          src="09-quadtree-update/03_clear_circular_region/embed.html"></iframe>
+        <p><a href="09-quadtree-update/">Day 9</a>: <a href="09-quadtree-update/03_clear_circular_region/">Quadtree,
+            mover clears circular region.</a></p>
+      </div>
+      <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+          src="12-circular-motion/06-polar-mover-plus-blobby/embed.html"></iframe>
+        <p><a href="12-circular-motion/">Day 12</a>: <a href="12-circular-motion/06-polar-mover-plus-blobby/">Polar
+            coordinates x 2D noise motion.</a></p>
+      </div>
+      <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+          src="17-springs/04-chained-springs-refined/embed.html"></iframe>
+        <p><a href="17-springs/">Day 17</a>: <a href="17-springs/04-chained-springs-refined/">Connected springs. </a>
+          the green disc by clicking on it and swirl it around while holding down the mouse.</p>
+      </div>
+      <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+          src="20-simple-vehicles/03-skirts/embed.html"></iframe>
+        <p><a href="20-simple-vehicles/">Day 20</a>: <a href="20-simple-vehicles/03-skirts/"> Attraction and
+            repulsion.</a> Move the mouse over the
+          sketch to watch the objects move away from the mouse, then return home.</p>
+      </div>
+      <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+          src="21-wanderer/02-path-recording/embed.html"></iframe>
+        <p><a href="21-simple-vehicles/">Day 21</a>: <a href="21-wanderer/02-path-recording/">Wanderer.</a></p>
+      </div>
+      <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+          src="23-path-following/03-closed-path-follower/embed.html"></iframe>
+        <p><a href="23-path-following/">Day 23</a>: <a href="23-path-following/03-closed-path-follower/">Path
+            follower.</a></p>
+      </div>
+      <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+          src="24-cellular-automata/03-glider-example/embed.html"></iframe>
+        <p><a href="24-cellular-automata/">Day 24</a>: <a href="24-cellular-automata/03-glider-example/">Cellular
+            Automata.</a> A contrived example that starts with known stable examples on paths that won't collide.</p>
+      </div>
+      <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+          src="26-branching-fractals/03-tree-object/embed.html"></iframe>
+        <p><a href="26-branching-fractals/">Day 26</a>: <a href="26-branching-fractals/03-tree-object/">Branching
+            tree.</a> Type "t" to get the tree to grow. May require clicking on the sketch to give it focus.</p>
+      </div>
+      <div><iframe style="visibility:hidden;" onload="this.style.visibility='visible';"
+          src="28-genetic-algorithms/02-to-be-full-normal/embed.html"></iframe>
+        <p><a href="28-genetic-algorithms/">Day 29</a>: <a href="28-genetic-algorithms/02-to-be-full-normal/">Generational fitness visualization.</a> Code "evolves" the phrase "To be or not to be." The colors are the generation count. The y postion the dota and the lines come from the fitness of the guess (dot) or the generations average(line).</p>
+      </div>
+
+    </div>
+
+
+
+    <h2>Take-Aways from the Process</h2>
+    <p>JavaScript remains the lingua franca of the web-front-end, and therefore the most sharable of the languages to do
+      creative coding in. That I really value, so it was worth it to flex those muscles again. </p>
+    <p>The limited time frame of a 30 day binge format helped convince me to do this because I don't enjoy JavaScript.
+      TypeScript gave JavaScript some complier like "guard rails", as they say, and that helped me a lot. However that
+      added significant overhead to the setup, so my drop-dead simple little repo now has <code>node.js</code> all up in
+      it. Trade-offs. <code>¯\_(ツ)_/¯</code></p>
+    <p>A 30 day binge doesn't really give breathing room to the concepts. It's just enough to get a tweak on the
+      examples working but not much further. Would recommend a week at least per chapter as per the course syllabus.
+    </p>
+    <ul>
+      <li>Favorite Nature of Code things: using noise to create motion, the quadtree, boids. </li>
+      <li>Favorite Meta: The little static site generator, getting a TypeScript workflow up and running, having a coding
+        journal. </li>
+    </ul>
+    <h2>About this Repo / Using P5js</h2>
+    <p>Under most circumstances, don't follow my example. Instead use the fabulous online editors:</p>
+    <ul>
+      <li><a href="https://editor.p5js.org">https://editor.p5js.org</a></li>
+      <li><a href="https://openprocessing.org/">https://openprocessing.org/</a></li>
+    </ul>
+    <p>That said, I prefer to have my tool chains be functional offline so I made a repo. Originally the whole repo was
+      only what is now in the <code>docs</code> folder. On my computer I'd <code>cd</code> into the the directory that
+      had the repo, type <code>python3 -m http.server</code> and browse away. Since it already was a website, I enabled
+      git-hub pages.</p>
+    <ul>
+      <li><a
+          href="https://carlynorama.github.io/2023January-30DaysNatureOfCode/">https://carlynorama.github.io/2023January-30DaysNatureOfCode/</a>
+      </li>
+    </ul>
+    <h3>TypeScript</h3>
+    <p>In the beginning weeks (wow, did I say weeks, it was really 10 days &amp; a Quadtree) I really really really was
+      missing working in a strongly typed language so I decided to migrate to TypeScript. The bulk of the files now live
+      in the docs folder, with JUST the <code>.ts</code> files living in the <code>src</code> folder.</p>
+    <p><a href="moving-to-typescript.md">Steps I took to convert the repo</a>.</p>
+    <p>To avoid typescript complaining about redeclarations of <code>draw</code>, <code>sketch</code>, etc. my current
+      process is that every time I start a new sketch I point the <code>include</code> line at the end of
+      <code>.tsconfig</code> to that sketch e.g.
+    </p>
+    <p><code>"include": ["global","src/28-genetic-algorithms/03-novelty-score"]</code></p>
+    <h3>site-gen (python)</h3>
+    <p>Making the HTML files for every sketch and and every day was getting kind of irritating, so I wrote a small
+      static site generator. </p>
+    <p>It has its own repo <a href="https://github.com/carlynorama/small-ssg">small-ssg</a></p>
+
 
     <h2>Misc Reusable Classes</h2>
     <ul>
@@ -149,13 +220,14 @@
       <li><a href="reusable/pendulum.js">pendulum.ts</a></li>
       <li><a href="reusable/polarmover.js">polarmover.ts</a></li>
       <li><a href="reusable/population.js">population.ts</a></li>
-        <ul>
-          <li><a href="reusable/dna.js">dna.ts</a></li>
-          <li><a href="reusable/array_helpers.js">array_helpers.ts</a></li>
-        </ul>
+      <ul>
+        <li><a href="reusable/dna.js">dna.ts</a></li>
+        <li><a href="reusable/array_helpers.js">array_helpers.ts</a></li>
+      </ul>
       <li><a href="reusable/spring_simple.js">spring_simple.ts</a></li>
       <li><a href="reusable/tpmover.js">tpmover.ts</a></li>
-      <li><a href="reusable/vehicle.js">vehicle.ts</a></li></ul>
+      <li><a href="reusable/vehicle.js">vehicle.ts</a></li>
+    </ul>
 
   </main>
 </body>
