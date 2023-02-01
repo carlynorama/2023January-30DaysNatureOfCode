@@ -4,6 +4,8 @@ Most of the heavy lifting on this was already done because had `projectOn` and `
 - Note: `angleToAxis(0)` and `angleBetween` don't preserve directionality b/c `acos`.
     - Solution: `directionalAngleToAxis(angleAxis, directionAxis)` can now be used in Rn space.
 
+NOTE: Redid in pure p5js <https://editor.p5js.org/carlynorama/sketches/1jKb1LlGA>
+
 ### Video Info
 
 - coding train link: <https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/5-autonomous-agents/6-scalar-projection>
