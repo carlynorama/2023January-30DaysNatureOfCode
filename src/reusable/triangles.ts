@@ -1,4 +1,5 @@
-
+//https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle/9755252#9755252
+//https://math.stackexchange.com/questions/51326/determining-if-an-arbitrary-point-lies-inside-a-triangle-defined-by-three-points/4624564#4624564
 
 // ----------------------------------------------------------- APPROACH 1 CROSS PRODUCTS 
 // Define the vectors 𝐴𝐵, 𝐵𝐶 and 𝐶𝐴 and the vectors 𝐴𝑃, 𝐵𝑃 and 𝐶𝑃. 
@@ -96,12 +97,14 @@ function triangleContains_NotMixingDirections(point:{x:number, y:number}, a:{x:n
     const CP = {x:(point.x - c.x), y:(point.y - c.y)}
     const thirdTermCAxCPisPositive = CA.x * CP.y - CA.y * CP.x > 0
 
-    return (thirdTermCAxCPisPositive != thirdTermABxAPisPositive);
+    return (thirdTermCAxCPisPositive == thirdTermABxAPisPositive);
 
 }
 
 
 // ----------------------------------------------------------- APPROACH 2 DETERMINATE
+
+// Maybe doesn't work? in some cases?
 
   function triangleContains_usesDeterminant(point: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }, c: { x: number; y: number }) {
     let det = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
@@ -113,8 +116,29 @@ function triangleContains_NotMixingDirections(point:{x:number, y:number}, a:{x:n
       det * ((a.x - c.x) * (point.y - c.y) - (a.y - c.y) * (point.x - c.x)) >= 0
     );
   }
+
+
+  //--------------------------------------------------------- APPROACH 3 BARYCENTRIC
+  //https://stackoverflow.com/a/34093754/5946596
+  //https://math.stackexchange.com/questions/51326/determining-if-an-arbitrary-point-lies-inside-a-triangle-defined-by-three-points/1884485#1884485
   
-  
+  function triangleContains_(point:{x:number, y:number}, a:{x:number, y:number}, b:{x:number, y:number}, c:{x:number, y:number}) {
+    var dX = point.x-c.x;
+    var dY = point.y-c.y;
+    var dXCB = c.x-b.x;
+    var dYBC = b.y-c.y;
+    var D = dYBC*(a.x-c.x) + dXCB*(a.y-c.y);
+    var s = dYBC*dX + dXCB*dY;
+    var t = (c.y-a.y)*dX + (a.x-c.x)*dY;
+    if (D<0) return s<=0 && t<=0 && s+t>=D;
+    return s>=0 && t>=0 && s+t<=D;  
+
+    //Note in a comment to check
+    //Try triangle (-1,-1), (1,-1), (0,1) and point (0,-1). Returns false when it should return true because s(2) + t(2) > d (2). Something wrong with the math on edges of the triangle, it seems, as the point p is right on the border between p0 and p1 and it's not a simple matter of converting a < to a <= or something like that.
+    //Acually, after further study, it DOES appear that it can be easily fixed. Changing the last line of ptInTriangle to
+    // "return s >= 0.0 && t >= 0.0 && (s + t) <= 2.0 * A * sgn" seems to work.
+    
+}
 
 
 

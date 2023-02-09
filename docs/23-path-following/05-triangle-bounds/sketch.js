@@ -46,7 +46,7 @@ function draw() {
     //drawPath(path);
     let testPoint = new Vector(mouseX, mouseY);
     triangles.forEach((t) => {
-        const test = triangleContains_terse(testPoint, t.A, t.B, t.C);
+        const test = triangleContains_NotMixingDirections(testPoint, t.A, t.B, t.C);
         //fill(test ? 90 : 270, 80, 60);
         fill(test ? 0 : 180, 80, 60);
         drawTriangle(t);
@@ -155,4 +155,20 @@ function triangleContains_usesDeterminant(point, a, b, c) {
     return (det * ((b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x)) >= 0 &&
         det * ((c.x - b.x) * (point.y - b.y) - (c.y - b.y) * (point.x - b.x)) >= 0 &&
         det * ((a.x - c.x) * (point.y - c.y) - (a.y - c.y) * (point.x - c.x)) >= 0);
+}
+function triangleContains_NotMixingDirections(point, a, b, c) {
+    const AP = { x: point.x - a.x, y: point.y - a.y };
+    const AB = { x: (b.x - a.x), y: (b.y - a.y) };
+    const thirdTermABxAPisPositive = AB.x * AP.y - AB.y * AP.x > 0;
+    const BC = { x: (c.x - b.x), y: (c.y - b.y) };
+    const BP = { x: (point.x - b.x), y: (point.y - b.y) };
+    const thirdTermBCxBPisPositive = BC.x * BP.y - BC.y * BP.x > 0;
+
+    if (thirdTermBCxBPisPositive != thirdTermABxAPisPositive)
+        return false;
+
+    const CA = { x: (a.x - c.x), y: (a.y - c.y) };
+    const CP = { x: (point.x - c.x), y: (point.y - c.y) };
+    const thirdTermCAxCPisPositive = CA.x * CP.y - CA.y * CP.x > 0;
+    return (thirdTermCAxCPisPositive == thirdTermABxAPisPositive);
 }
