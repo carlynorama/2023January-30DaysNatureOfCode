@@ -38,7 +38,7 @@ function setup() {
     background(0, 0, 80);
     ellipseMode(CENTER);
     colorMode(HSB);
-    console.log("-------- DONE SETUP --------");
+    console.log("-------- DONE SETUP 2 --------");
 }
 //let counter = 270;
 function draw() {
@@ -46,7 +46,7 @@ function draw() {
     //drawPath(path);
     let testPoint = new Vector(mouseX, mouseY);
     triangles.forEach((t) => {
-        const test = triangleContains_NotMixingDirections(testPoint, t.A, t.B, t.C);
+        const test = triangleContains_barycentric(testPoint, t.A, t.B, t.C);
         //fill(test ? 90 : 270, 80, 60);
         fill(test ? 0 : 180, 80, 60);
         drawTriangle(t);
@@ -171,4 +171,37 @@ function triangleContains_NotMixingDirections(point, a, b, c) {
     const CP = { x: (point.x - c.x), y: (point.y - c.y) };
     const thirdTermCAxCPisPositive = CA.x * CP.y - CA.y * CP.x > 0;
     return (thirdTermCAxCPisPositive == thirdTermABxAPisPositive);
+}
+
+function triangleContains_barycentric(point, a, b, c) {
+    const dx_pc = point.x-c.x;
+    const dy_pc = point.y-c.y;
+    const dx_cb = c.x-b.x;
+    const dy_bc = b.y-c.y;
+    const dx_ac = a.x-c.x;
+    const dy_ac = a.y-c.y;
+    const dy_ca = c.y-a.y;
+
+
+    const D = dy_bc * dx_ac + dx_cb * dy_ac;
+    const s = dy_bc * dx_pc + dx_cb * dy_pc;
+    const t = dy_ca * dx_pc + dx_ac * dy_pc;
+    if (D<0) return s<=0 && t<=0 && s+t>=D;
+    return s>=0 && t>=0 && s+t<=D; 
+
+    // var dX = point.x-c.x;
+    // var dY = point.y-c.y;
+    // var dXCB = c.x-b.x;
+    // var dYBC = b.y-c.y;
+    // var D = dYBC*(a.x-c.x) + dXCB*(a.y-c.y);
+    // var s = dYBC*dX + dXCB*dY;
+    // var t = (c.y-a.y)*dX + (a.x-c.x)*dY;
+    // if (D<0) return s<=0 && t<=0 && s+t>=D;
+    // return s>=0 && t>=0 && s+t<=D;  
+
+    //Note in a comment to check
+    //Try triangle (-1,-1), (1,-1), (0,1) and point (0,-1). Returns false when it should return true because s(2) + t(2) > d (2). Something wrong with the math on edges of the triangle, it seems, as the point p is right on the border between p0 and p1 and it's not a simple matter of converting a < to a <= or something like that.
+    //Acually, after further study, it DOES appear that it can be easily fixed. Changing the last line of ptInTriangle to
+    // "return s >= 0.0 && t >= 0.0 && (s + t) <= 2.0 * A * sgn" seems to work.
+    
 }

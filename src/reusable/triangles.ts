@@ -123,13 +123,18 @@ function triangleContains_NotMixingDirections(point:{x:number, y:number}, a:{x:n
   //https://math.stackexchange.com/questions/51326/determining-if-an-arbitrary-point-lies-inside-a-triangle-defined-by-three-points/1884485#1884485
   
   function triangleContains_(point:{x:number, y:number}, a:{x:number, y:number}, b:{x:number, y:number}, c:{x:number, y:number}) {
-    var dX = point.x-c.x;
-    var dY = point.y-c.y;
-    var dXCB = c.x-b.x;
-    var dYBC = b.y-c.y;
-    var D = dYBC*(a.x-c.x) + dXCB*(a.y-c.y);
-    var s = dYBC*dX + dXCB*dY;
-    var t = (c.y-a.y)*dX + (a.x-c.x)*dY;
+    const dx_pc = point.x-c.x;
+    const dy_pc = point.y-c.y;
+    const dx_cb = c.x-b.x;
+    const dy_bc = b.y-c.y;
+    const dx_ac = a.x-c.x;
+    const dy_ac = a.y-c.y;
+    const dy_ca = c.y-a.y;
+
+
+    const D = dy_bc * dx_ac + dx_cb * dy_ac;
+    const s = dy_bc * dx_pc + dx_cb * dy_pc;
+    const t = dy_ca * dx_pc + dx_ac * dy_pc;
     if (D<0) return s<=0 && t<=0 && s+t>=D;
     return s>=0 && t>=0 && s+t<=D;  
 
@@ -139,6 +144,12 @@ function triangleContains_NotMixingDirections(point:{x:number, y:number}, a:{x:n
     // "return s >= 0.0 && t >= 0.0 && (s + t) <= 2.0 * A * sgn" seems to work.
     
 }
+
+//Interesting sheer bounding box test example
+//https://stackoverflow.com/a/21510010/5946596
+
+//http://math-physics-psychology.blogspot.com/2015/01/earlish-determination-that-point-is.html
+
 
 
 
