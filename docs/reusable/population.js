@@ -6,6 +6,7 @@
 // 28-genetic-algorithms/02-to-be-full-normal/population.ts
 // calynorama 2023 Jan 28
 //
+// needs dna.ts and array_helpers.ts
 class Population {
     constructor(rules, strands, generation) {
         this.fitnesses = () => {
